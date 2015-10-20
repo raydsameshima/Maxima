@@ -1,0 +1,9 @@
+/*
+Srednicki.mac
+eq.(3.32)
+*/
+assume(m > 0);
+assume(Lambda > 0);
+E0(Lambda):=integrate((1/2)*(2*%pi)^-3*4*%pi*k^2*sqrt(k^2+m^2),k,0,Lambda);
+E0(Lambda);
+limit(E0(Lambda),m,0);
