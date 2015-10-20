@@ -1,0 +1,12 @@
+/*
+Weinberg qft eq.(2.5.29)
+to use this file with Maxima, 
+  batch("filepath/filename.mac");
+
+to save the interactive inputs,
+  stringout("filepath/filename.mac", input);
+
+*/
+z(a,b):=(a^2+b^2)/2;
+S(a,b):=matrix([1,0,-a,a],[0,1,-b,b],[a,b,1-z(a,b),z(a,b)],[a,b,-z(a,b),1+z(a,b)]);
+is(equal(S(a1,b1) . S(a2,b2),S(a1+a2,b1+b2)));
