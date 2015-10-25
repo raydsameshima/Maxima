@@ -2,4 +2,14 @@
 IntroductionToMaxima_01.mac
 http://web.csulb.edu/~woollett/mbe1intro.pdf
 
+To save all Maxima inputs in a batch file,
+  stringout("filepath/filename.mac", input);
+and to use that kinds of batch files
+  batch("filepath/filename.mac");
+
+To find the working (not the current) directory 
+  maxima_userdir;
+
 */
+print("Hello, Maxima!")$
+integrate(x^2,x);
