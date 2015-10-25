@@ -13,3 +13,54 @@ To find the working (not the current) directory
 */
 print("Hello, Maxima!")$
 integrate(x^2,x);
+/*
+Function ev
+ev is a "jack-of-all-trades swiss army knife" which is frequently useful, occasionally dangerous, and complex to describe.
+
+(%i17) map(f, [x,y,z]);
+(%o17)                        [f(x), f(y), f(z)]
+
+The single quote operator ''' prevents evaluation.
+
+(%i19) f(w):= 2*w-1;
+(%o19)                          f(w) := 2 w - 1
+(%i22) 'map(f, [x,y,z]);
+(%o22)                         map(f, [x, y, z])
+(%i24) map(f, [x,y,z]);
+(%o24)                    [2 x - 1, 2 y - 1, 2 z - 1]
+*/
+/*
+The function 
+  zeroequiv( expr, var)
+uses a series of randomly chosen value of the variable to test if expression is equivalent to zero.
+An alternative (and complementary) approach is to plot both expressions on the same plot.
+*/
+kill(all);
+print("1.8.16: zeroequiv");
+e1(x):= cos(x-1)^2;
+e2(x):= 1/2 * (1 + sin(2)*sin(2*x) + cos(2)*cos(2*x));
+zeroequiv (e1(x)-e2(x),x);
+plot2d([e1(x),e2(x)],[x,0,2*%pi]);
+/*
+A function which takes a derivative
+To handle the derivative as a function, use
+  define(f1(x), diff(f(x),x));
+*/
+kill(all);
+print("A function which takes a derivative");
+f(x) := x^3 + 2*x^2;
+fp(x) := diff(f(x),x);
+define(f1(x), diff(f(x),x));
+f1(1);
+/*
+fp(1);
+(%i6) fp(1)
+diff: second argument must be a variable; found 1
+#0: fp(x=1)(IntroductionToMaxima_01.mac line 40)
+ -- an error. To debug this try: debugmode(true);
+The following is so called quote-quote method.
+It is available only in interactive use, and won't work inside another function.
+*/
+print("quote-quote method, only for interactive mode");
+f2(x) := ''(diff(f(x),x));
+f2(1);
