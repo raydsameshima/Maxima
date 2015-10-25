@@ -11,12 +11,18 @@ To find the working (not the current) directory
   maxima_userdir;
 
 */
-print("Hello, Maxima!")$
+print("*****     Hello, Maxima!     *****")$
 integrate(x^2,x);
 /*
-Function ev
+1.8.2 Function ev
 ev is a "jack-of-all-trades swiss army knife" which is frequently useful, occasionally dangerous, and complex to describe.
-
+*/
+kill(all);
+print("***   1.8.2 Function ev   ***")$
+ev(x+y, x=a+y);
+print("ev(x+y, x=a+y) is the same as x+y,x=a+y in interactive mode ")$
+x+y, x=a+y;
+/*
 (%i17) map(f, [x,y,z]);
 (%o17)                        [f(x), f(y), f(z)]
 
@@ -29,6 +35,12 @@ The single quote operator ''' prevents evaluation.
 (%i24) map(f, [x,y,z]);
 (%o24)                    [2 x - 1, 2 y - 1, 2 z - 1]
 */
+kill(all);
+print("*** 1.8.5 map function of Maxima ***");
+map(f,[x,y,z]);
+f(w):= 2*w+1;
+'map(f,[x,y,z]);
+map(f,[x,y,z]);
 /*
 The function 
   zeroequiv( expr, var)
@@ -36,7 +48,7 @@ uses a series of randomly chosen value of the variable to test if expression is 
 An alternative (and complementary) approach is to plot both expressions on the same plot.
 */
 kill(all);
-print("1.8.16: zeroequiv");
+print("***   1.8.16: zeroequiv   ***");
 e1(x):= cos(x-1)^2;
 e2(x):= 1/2 * (1 + sin(2)*sin(2*x) + cos(2)*cos(2*x));
 zeroequiv (e1(x)-e2(x),x);
@@ -48,7 +60,7 @@ To handle the derivative as a function, use
 */
 kill(all);
 print("A function which takes a derivative");
-print("define(f1(x), diff(f(x),x));");
+print("***** to define the derivation, use define(f1(x), diff(f(x),x)); *****")$
 f(x) := x^3 + 2*x^2;
 fp(x) := diff(f(x),x);
 define(f1(x), diff(f(x),x));
@@ -65,6 +77,9 @@ It is available only in interactive use, and won't work inside another function.
 print("quote-quote method, only for interactive mode");
 f2(x) := ''(diff(f(x),x));
 f2(1);
+/**/
+kill(all);
+print("***   1.8.6 subst   ***")$
 /*
 1.8.7
 */
