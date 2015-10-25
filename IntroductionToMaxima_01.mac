@@ -48,6 +48,7 @@ To handle the derivative as a function, use
 */
 kill(all);
 print("A function which takes a derivative");
+print("define(f1(x), diff(f(x),x));");
 f(x) := x^3 + 2*x^2;
 fp(x) := diff(f(x),x);
 define(f1(x), diff(f(x),x));
@@ -64,3 +65,11 @@ It is available only in interactive use, and won't work inside another function.
 print("quote-quote method, only for interactive mode");
 f2(x) := ''(diff(f(x),x));
 f2(1);
+/*
+1.8.7
+*/
+kill(all);
+ex1 : a1*(b+c/2)^2 + a2*(d+e/3)^3,expand;
+collectterms (ex1,a1);
+collectterms (ex1,a1,a2);
+map(factor, %);
