@@ -41,6 +41,9 @@ map(f,[x,y,z]);
 f(w):= 2*w+1;
 'map(f,[x,y,z]);
 map(f,[x,y,z]);
+print("*** higher order (?) function: map and apply ***")$
+map('f, [x,y,z]);
+apply("+",%);
 /*
 The function 
   zeroequiv( expr, var)
@@ -88,3 +91,10 @@ ex1 : a1*(b+c/2)^2 + a2*(d+e/3)^3,expand;
 collectterms (ex1,a1);
 collectterms (ex1,a1,a2);
 map(factor, %);
+print("***** recursive functions *****");
+myFac(n) := if n = 0 
+            then 1
+            else n*myFac(n-1);
+trace(myFac);
+myFac(4);
+untrace(myFac);
