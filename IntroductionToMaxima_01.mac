@@ -10,6 +10,11 @@ and to use that kinds of batch files
 To find the working (not the current) directory 
   maxima_userdir;
 
+To save the processes as it is,
+  writefile("filename.extension");
+    ... try and error
+  closefile();
+
 */
 print("***   Hello, Maxima!   ***")$
 integrate(x^2,x);
