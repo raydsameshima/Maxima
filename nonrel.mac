@@ -1,0 +1,18 @@
+/*
+Srednicki QFT eq.(11.42) of non-rel limit
+*/
+assume(m > 0);
+print(" This is eq.(11.7) ")$
+T(s,t,u):=1/(m^2-s)+1/(m^2-t)+1/(m^2-u);
+rT(s,t,u):=ev(T(s,t,u),m = 1);
+rTT(s):=ev(rT(s,t,u),t = ((4-s)*(1-cos(theta)))/2,u = ((4-s)*(1+cos(theta)))/2);
+print(" Above s is indeed (s-4*m^2)/m^2, and the next step is for taylor ")$
+rTTT(sp):=ev(rTT(x),x = sp+4);
+taylor(rTTT(sp),sp,0,4);
+print(" Pick up first few terms ")$
+nonrelT(sp):=(3/5)*taylor(rTTT(sp),sp,0,4);
+nonrelT(sp);
+coeff(nonrelT(sp),sp,0);
+coeff(nonrelT(sp),sp,1);
+coeff(nonrelT(sp),sp,2);
+25/90;
