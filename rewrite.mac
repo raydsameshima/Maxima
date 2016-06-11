@@ -1,0 +1,6 @@
+/* rewrite.mac */
+lhs:makelist(concat("y_",i),i,4);
+rhs:makelist(sum(concat("z_",j,i,"*e_",i),i,1,4),j,4);
+rule:fullmap(parse_string,map("=",lhs,rhs));
+func:y_4/2+y_1*y_3*y_4^2+4*y_2+y_1^2;
+subst(rule,func);
