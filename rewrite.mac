@@ -1,6 +1,32 @@
 /* rewrite.mac */
-lhs:makelist(concat("y_",i),i,4);
-rhs:makelist(sum(concat("z_",j,i,"*e_",i),i,1,4),j,4);
-rule:fullmap(parse_string,map("=",lhs,rhs));
-func:y_4/2+y_1*y_3*y_4^2+4*y_2+y_1^2;
-subst(rule,func);
+/* This is an example of how to generate a list of rewriting rules. */
+lhs: makelist(concat("y_",i),i,4);
+rhs: makelist(sum(concat("z_",j,i,"*e_",i),i,1,4),j,4);
+rule: fullmap(parse_string,map("=",lhs,rhs));
+func: y_4/2+y_1*y_3*y_4^2+4*y_2+y_1^2;
+subst(rule, func);
+/*
+
+(%i11) lhs:makelist(concat("y_",i),i,4)
+(%o11) ["y_1","y_2","y_3","y_4"]
+(%i12) rhs:makelist(sum(concat("z_",j,i,"*e_",i),i,1,4),j,4)
+(%o12) ["z_14*e_4"+"z_13*e_3"+"z_12*e_2"+"z_11*e_1",
+        "z_24*e_4"+"z_23*e_3"+"z_22*e_2"+"z_21*e_1",
+        "z_34*e_4"+"z_33*e_3"+"z_32*e_2"+"z_31*e_1",
+        "z_44*e_4"+"z_43*e_3"+"z_42*e_2"+"z_41*e_1"]
+(%i13) rule:fullmap(parse_string,map("=",lhs,rhs))
+(%o13) [y_1 = e_4*z_14+e_3*z_13+e_2*z_12+e_1*z_11,
+        y_2 = e_4*z_24+e_3*z_23+e_2*z_22+e_1*z_21,
+        y_3 = e_4*z_34+e_3*z_33+e_2*z_32+e_1*z_31,
+        y_4 = e_4*z_44+e_3*z_43+e_2*z_42+e_1*z_41]
+(%i14) func:y_1^2+4*y_2+y_1*y_3*y_4^2+y_4/2
+(%o14) y_1*y_3*y_4^2+y_4/2+4*y_2+y_1^2
+(%i15) subst(rule,func)
+(%o15) (e_1*z_11+e_2*z_12+e_3*z_13+e_4*z_14)
+ *(e_1*z_31+e_2*z_32+e_3*z_33+e_4*z_34)
+ *(e_1*z_41+e_2*z_42+e_3*z_43+e_4*z_44)^2
+ +(e_4*z_44+e_3*z_43+e_2*z_42+e_1*z_41)/2
+ +4*(e_1*z_21+e_2*z_22+e_3*z_23+e_4*z_24)
+ +(e_1*z_11+e_2*z_12+e_3*z_13+e_4*z_14)^2
+
+*/
