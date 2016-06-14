@@ -67,6 +67,6 @@ black_eqn: T = aa*exp(-r*t)+bb;
 /* Need to chose clever initial points. */
 lsquares_estimates(black_matrix,[t,T],black_eqn,[r,aa,bb],initial=[0.024,62.5,17],iprint=[-1,0]);
 black_fit : rhs(black_eqn), %;
-plot2d( [ black_fit ,[discrete,black_data] ],[t,0,50],[style, [lines,5], [points,2,2,6]]);
-]
+plot2d( [ black_fit ,[discrete,black_data] ],[t,0,50],[style, [lines,5], [points,2,2,6]],[xlabel, "temprature"],[ylabel, "black_fit"]);
+
 
