@@ -2,6 +2,48 @@
 Chapter 2
 http://web.csulb.edu/~woollett/mbe2plotfit.pdf
 
-plot2d(object-list, draw-parameter-list, other-option-lists)
-
 */
+/* 2.3 Least Squares Fit to Experimental Data */
+load(lsquares);
+/* This is a given data. */
+dataL: [[1,1],[2,7/4],[3,11/4],[4,13/4]];
+dataM: apply(matrix, dataL);
+/* Find the fit parameters of y=a*x^b+c. */
+lsquares_estimates(dataM,[x,y],y=a*x^b+c,[a,b,c],initial=[1,1,1],iprint=[-1,0]);
+myFitEquation: a*x^b+c, %;
+plot2d([myFitEquation, [discrete, dataL]],[x,0,5],[style,[lines,5],[points,4,2,1]], [legend,"my fitting", "discrete data"],[gnuplot_preamble,"set key bottom;"]);
+/*
+To read a date file on the same directory as a matrix form.
+0 82.3  68.8
+2 78.5  64.8
+4 74.3  62.1
+6 70.7  59.9
+8 67.6  57.7
+10  65.0  55.9
+12  62.5  53.9
+14  60.1  52.3
+16  58.1  50.8
+18  56.1  49.5
+20  54.3  48.1
+22  52.8  46.8
+24  51.2  45.9
+26  49.9  44.8
+28  48.6  43.7
+30  47.2  42.6
+32  46.1  41.7
+34  45.0  40.8
+36  43.9  39.9
+38  43.0  39.3
+40  41.9  38.6
+42  41.0  37.7
+44  40.1  37.0
+46  39.5  36.4
+*/
+rawData: read_matrix ("coffee.dat", space);
+/* To create (time, temperature) list from above matrix data. */
+black_data: makelist( [rawData[i][1], rawData[i][2]], i,1,length(rawData));
+black_matrix: apply(matrix, black_data);
+/* To see the behavior, plot this discrete points. */
+plot2d([discrete,black_data],[style,[points,2,2,6]]);
+black_eqn: T = 82.3*(1- exp(-r*t)) + b; 
+/* Need to fit above function to the given data. */
