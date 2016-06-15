@@ -1,0 +1,8 @@
+/*
+OrdinaryDifferentialEquationTools_03.mac
+
+*/
+/* first, last, length */
+fll(x) := [first(x), last(x), length(x)]$
+declare(fll, evfun)$
+

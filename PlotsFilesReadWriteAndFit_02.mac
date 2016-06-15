@@ -1,5 +1,6 @@
 /*
 PlotsFilesReadWriteAndFit_02.mac
+
 Chapter 2
 http://web.csulb.edu/~woollett/mbe2plotfit.pdf
 
@@ -24,8 +25,8 @@ plot2d(stepFunction(u), [u,-2,1.5],[x,-3,3],[y,-0.5,2],[style,[lines,5]],[ylabel
 /* 2.3 Least Squares Fit to Experimental Data */
 load(lsquares);
 /* This is a given data. */
-dataL: [[1,1],[2,7/4],[3,11/4],[4,13/4]];
-dataM: apply(matrix, dataL);
+dataL: [[1,1],[2,7/4],[3,11/4],[4,13/4]]$
+dataM: apply(matrix, dataL)$
 /* Find the fit parameters of y=a*x^b+c. */
 lsquares_estimates(dataM,[x,y],y=a*x^b+c,[a,b,c],initial=[1,1,1],iprint=[-1,0]);
 myFitEquation: a*x^b+c, %;
@@ -59,8 +60,8 @@ To read a date file on the same directory as a matrix form.
 */
 rawData: read_matrix ("coffee.dat", space);
 /* To create (time, temperature) list from above matrix data. */
-black_data: makelist( [rawData[i][1], rawData[i][2]], i,1,length(rawData));
-black_matrix: apply(matrix, black_data);
+black_data: makelist( [rawData[i][1], rawData[i][2]], i,1,length(rawData))$
+black_matrix: apply(matrix, black_data)$
 /* To see the behavior, plot this discrete points. */
 plot2d([discrete,black_data],[style,[points,2,2,6]]);
 black_eqn: T = aa*exp(-r*t)+bb;
@@ -68,5 +69,14 @@ black_eqn: T = aa*exp(-r*t)+bb;
 lsquares_estimates(black_matrix,[t,T],black_eqn,[r,aa,bb],initial=[0.024,62.5,17],iprint=[-1,0]);
 black_fit : rhs(black_eqn), %;
 plot2d( [ black_fit ,[discrete,black_data] ],[t,0,50],[style, [lines,5], [points,2,2,6]],[xlabel, "temprature"],[ylabel, "black_fit"]);
-
-
+/* The white coffee version. */
+white_data: makelist( [rawData[i][1], rawData[i][3]], i,1,length(rawData))$
+white_matrix: apply(matrix, white_data)$
+/* To see the behavior, plot this discrete points. */
+plot2d([discrete,white_data],[style,[points,2,2,6]]);
+white_eqn: T = aaa*exp(-rrr*t)+bbb;
+/* Need to chose clever initial points. */
+lsquares_estimates(white_matrix,[t,T],white_eqn,[rrr,aaa,bbb],iprint=[-1,0]);
+lsquares_estimates(white_matrix,[t,T],white_eqn,[rrr,aaa,bbb],initial=[0.02,50,12],iprint=[-1,0]);
+white_fit : rhs(white_eqn), %;
+plot2d( [ white_fit ,[discrete,white_data] ],[t,0,50],[style, [lines,5], [points,2,2,6]],[xlabel, "temprature"],[ylabel, "white_fit"]);
