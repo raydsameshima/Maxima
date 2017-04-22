@@ -1,0 +1,60 @@
+/* exgcd.mac */
+
+/* from wikipedia, division-base
+
+function gcd(a,b)
+  while b /= 0
+    t := b;
+    b := a mod b;
+    a := t;
+  return a;
+
+*/
+
+mygcd1(a,b) := 
+block( [a : abs(a), b : abs(b)]
+     , while b # 0 do [a,b] : [b, mod(a,b)]
+     , a 
+     );
+
+/* subtraction-base
+
+function gcd(a,b)
+  while a /= b
+    if a > b
+      then a := a-b
+      else b := b-a
+  return a;      
+
+*/
+
+/* EXTREAMLY SLOW */
+mygcd2(a,b) := 
+block( [a : abs(a), b : abs(b)]
+     , while a # b do if a>b 
+                        then a : a-b
+                        else b : b-a
+     , a                    
+     );
+
+/* recursive version 
+
+function gcd(a,b)
+  if b = 0
+    return a;
+  else
+    return gcd(b, a mod b);
+
+*/
+
+/* as good as mygcd1 */
+mygcd3(a,b) := 
+block( [a : abs(a), b : abs(b)]
+     , if b=0 
+         then return(a) 
+         else return(mygcd3(b, mod(a,b)))
+     );
+
+/* Extended Euclidean Algorithm
+
+*/
