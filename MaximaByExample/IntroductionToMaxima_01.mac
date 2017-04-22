@@ -1,0 +1,122 @@
+/*
+IntroductionToMaxima_01.mac
+http://web.csulb.edu/~woollett/mbe1intro.pdf
+
+To save all Maxima inputs in a batch file,
+  stringout("filepath/filename.mac", input);
+and to use that kinds of batch files
+  batch("filepath/filename.mac");
+
+To find the working (not the current) directory 
+  maxima_userdir;
+
+To save the processes as it is,
+  writefile("filename.extension");
+    ... try and error
+  closefile();
+
+*/
+print("***   Hello, Maxima!   ***")$
+integrate(x^2,x);
+print("***  1.3.1 ratsimp   ***");
+(x+2)*(x-2);
+%, ratsimp;
+print("***  1.3.1 fullratsimp   ***");
+expr: (x^(a/2)+1)^2 *(x^(a/2)-1)^2/(x^a-1);
+expr, ratsimp;
+ev(expr, fullratsimp);
+/*
+1.8.2 Function ev
+ev is a "jack-of-all-trades swiss army knife" which is frequently useful, occasionally dangerous, and complex to describe.
+*/
+kill(all);
+print("***   1.8.2 Function ev   ***")$
+ev(x+y, x=a+y);
+print("ev(x+y, x=a+y) is the same as x+y,x=a+y in interactive mode ")$
+x+y, x=a+y;
+equations: [-2*x-3*y=3, -3*x+2*y=-4];
+solutions: solve(equations);
+equations, solutions;
+solve(a^4+1);
+%, rectrofm;
+%, ratsimp;
+%^4,ratsimp;
+/*
+1.8.5 Examples of map, fullmap, apply, grind and args
+(%i17) map(f, [x,y,z]);
+(%o17)                        [f(x), f(y), f(z)]
+
+The single quote operator ''' prevents evaluation.
+
+(%i19) f(w):= 2*w-1;
+(%o19)                          f(w) := 2 w - 1
+(%i22) 'map(f, [x,y,z]);
+(%o22)                         map(f, [x, y, z])
+(%i24) map(f, [x,y,z]);
+(%o24)                    [2 x - 1, 2 y - 1, 2 z - 1]
+*/
+kill(all);
+print("*** 1.8.5 map function of Maxima ***");
+map(f,[x,y,z]);
+f(w):= 2*w+1;
+'map(f,[x,y,z]);
+map(f,[x,y,z]);
+print("*** higher order (?) function: map and apply ***")$
+map('f, [x,y,z]);
+apply("+",%);
+print("***   We can create a list of equations from two lists   ***")$
+map("=", [x,y,z], [A,B,C]);
+/*
+The function 
+  zeroequiv( expr, var)
+uses a series of randomly chosen value of the variable to test if expression is equivalent to zero.
+An alternative (and complementary) approach is to plot both expressions on the same plot.
+*/
+kill(all);
+print("***   1.8.16: zeroequiv   ***");
+e1(x):= cos(x-1)^2;
+e2(x):= 1/2 * (1 + sin(2)*sin(2*x) + cos(2)*cos(2*x));
+zeroequiv (e1(x)-e2(x),x);
+plot2d([e1(x),e2(x)],[x,0,2*%pi]);
+/*
+A function which takes a derivative
+To handle the derivative as a function, use
+  define(f1(x), diff(f(x),x));
+*/
+kill(all);
+print("A function which takes a derivative");
+print("***   to define the derivation, use define(f1(x), diff(f(x),x));   ***")$
+f(x) := x^3 + 2*x^2;
+fp(x) := diff(f(x),x);
+define(f1(x), diff(f(x),x));
+f1(1);
+/*
+fp(1);
+(%i6) fp(1)
+diff: second argument must be a variable; found 1
+#0: fp(x=1)(IntroductionToMaxima_01.mac line 40)
+ -- an error. To debug this try: debugmode(true);
+The following is so called quote-quote method.
+It is available only in interactive use, and won't work inside another function.
+*/
+print("quote-quote method, only for interactive mode");
+f2(x) := ''(diff(f(x),x));
+f2(1);
+/**/
+kill(all);
+print("***   1.8.6 subst   ***")$
+/*
+1.8.7
+*/
+kill(all);
+ex1 : a1*(b+c/2)^2 + a2*(d+e/3)^3,expand;
+collectterms (ex1,a1);
+collectterms (ex1,a1,a2);
+map(factor, %);
+print("***** recursive functions *****");
+myFac(n) := if n = 0 
+            then 1
+            else n*myFac(n-1);
+trace(myFac);
+myFac(4);
+untrace(myFac);
