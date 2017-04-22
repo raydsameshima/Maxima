@@ -1,0 +1,7 @@
+/* degree.mac */
+degree(f,x) := block( [q,i,j],
+  q : f,
+  for i:0 while (q # 0) do
+    (j : i, q : quotient(q,x)),
+  return(j)
+);

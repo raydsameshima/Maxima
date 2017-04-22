@@ -1,0 +1,7 @@
+/* evalf.mac */
+evalf([x]) := block([fpprec],
+  if length(x) = 1 then
+    bfloat(x[1])
+  else
+    (fpprec:x[2], bfloat(x[1]))
+);
