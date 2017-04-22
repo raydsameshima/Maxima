@@ -58,3 +58,24 @@ block( [a : abs(a), b : abs(b)]
 /* Extended Euclidean Algorithm
 
 */
+
+extended_gcd(a,b) :=
+block( [a, b, s:0, old_s:1, t:1, old_t:0, r:b, old_r:a, x]
+     , while r # 0 do
+         ( x : r                    /* x is temp */
+         , [q,r] : divide(old_r, r)
+         , old_r : x
+
+         , x : s
+         , s : old_s - q*x
+         , old_s : x
+
+         , x : t
+         , t : old_t - q*x
+         , old_t : x
+         )
+     , [ old_r          /* gcd */
+       , [old_s, old_t] /* Bezout coefficients */ 
+       ]
+);
+
