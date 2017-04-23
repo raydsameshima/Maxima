@@ -1,0 +1,50 @@
+/* finite_fields.mac */
+
+extended_gcd(a,b) :=
+block( [s:0, old_s:1, t:1, old_t:0, r:b, old_r:a, q, x],
+  while r # 0 do (
+    x : r,                    /* x is temp */
+    [q,r] : divide(old_r, r),
+    old_r : x,
+
+    x : s,
+    s : old_s - q*x,
+    old_s : x,
+
+    x : t,
+    t : old_t - q*x,
+    old_t : x
+    ),
+         
+  [ old_r          /* gcd */
+  , [old_s, old_t] /* Bezout coefficients */ 
+  ]
+);
+
+/* inversep returns (-1) when arguments are not coprime. */
+inversep(a,p) :=
+catch(
+  block( [g,s,t],
+    [g,[s,t]] : extended_gcd(a,p),
+    if g = 1 then 
+      return(mod(s,p))
+    else 
+      throw(-1)
+  )
+);
+
+/* genmod return (-1) when the inverse of q is not well-defined. */
+genmod(q,p) :=
+catch(
+  block( [n,d,di],
+    n : num(q),
+    d : denom(q),
+    di: inversep(d,p),
+    if di = (-1) then
+      throw(-1)
+    else
+      mod(n*di, p)
+  )
+);
+
+
