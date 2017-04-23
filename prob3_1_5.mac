@@ -5,10 +5,7 @@ z1:(4*(1-sin(theta)+%i*cos(theta)))/(1-sin(theta)+(-%i)*cos(theta));
 abs(part(z0,1));
 abs(part(z0,2));
 trigrat(%);
-carg(part(z0,2));
-/*
-trigrat(%);
+carg(part(z0,1));
 trigrat(z1);
-abs(%);
-polarform(trigrat(z1));
-*/
+factor(%);
+polarform(trigrat(z1/z0));
