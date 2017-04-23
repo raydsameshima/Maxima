@@ -1,0 +1,11 @@
+/* prob3_1_1.mac */
+kill(all);
+f:x^2-3*x-1;
+sol:solve(f = 0,x);
+ev(a:x,sol[2]);
+ev(b:x,sol[1]);
+is(a > b);
+fix(a);
+fix(b);
+a+1/a, ratsimp, algebraic:true;
+a^3+1/a^3, ratsimp, algebraic:true;

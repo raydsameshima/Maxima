@@ -1,0 +1,25 @@
+/* prob3_1_4.mac */
+kill(all);
+average(x) :=
+  sum(x[i],i,1,length(x))/length(x)$
+sigma(x) :=
+  average( (makelist((x[i]-average(x))^2,i,1,length(x))) )$
+x:[3,4,5,4,4];
+y:[7,9,10,8,6];
+sigma(x);
+z:makelist(y[i]-average(y),i,1,length(y));
+average(%);
+"direct solution"$
+ts:makelist(y[i]-t,i,1,length(y));
+solve(average(ts),t);
+
+covariance(x,y) := block( [x0,y0,a,l],
+    l  : length(x), /* assuming they have the same length */
+    a  : average(x),
+    x0 : makelist(x[i]-a, i, 1, l),
+    a  : average(y),
+    y0 : makelist(y[i]-a, i, 1, l),
+    average(x0*y0) /* term by term product */
+)$
+correlation(x,y) := covariance(x,y)/sqrt( sigma(x) * sigma(y))$
+correlation(x,y)^2;

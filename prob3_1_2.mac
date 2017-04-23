@@ -1,0 +1,15 @@
+/* prob3_1_2.mac */
+kill(all);
+A:x^3+p*x^2+q*x+r;
+B:x^2-3*x+2;
+solve(quotient(A,B) = x-1,p);
+solve(coeff(remainder(A,B),x,0), r);
+s:divide(A,B);
+con1:solve(coeff(s[1],x,1) = coeff(s[2],x,1),q);
+con2:ev(solve(coeff(s[1],x,0) = coeff(s[2],x,0),r),%);
+ev(q+r,con1, con2);
+"An alternative solution."$
+divide(A,B,x);
+%[2] - %[1];
+solve([coeff(%,x,0), coeff(%,x,1)],[p,q,r]);
+%[1][2] + %[1][3];

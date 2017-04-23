@@ -1,0 +1,14 @@
+/* prob3_1_3.mac */
+kill(all);
+S(n):=(-n^2)+24*n;
+a(n):=S(n)-S(n-1);
+a(n), expand;
+a(1);
+a(2);
+for n while a(n) >= 0 do ans:n;
+ans;
+a(12);
+a(13);
+sum(abs(a(i)),i,1,40);
+"double check"$
+sum(a(i),i,1,12) - sum(a(i),i,13,40);
