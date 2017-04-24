@@ -21,6 +21,21 @@ block( [s:0, old_s:1, t:1, old_t:0, r:b, old_r:a, q, x],
   ]
 );
 
+extended_gcd_list(a,b) := /* if b>a then extended_gcd_list(b,a) else */
+block( [i:2, rs:[a,b], ss:[1,0], ts:[0,1], r, q],
+  while rs[i] # 0 do (
+    [q,r] : divide(rs[i-1], rs[i]),
+    rs : endcons(r, rs),
+    ss : endcons(ss[i-1] - q*ss[i], ss),
+    ts : endcons(ts[i-1] - q*ts[i], ts),
+
+    i : i+1
+  ),
+  
+  [rs,ss,ts]
+);
+
+
 /* inversep returns (-1) when arguments are not coprime. */
 inversep(a,p) :=
 catch(
