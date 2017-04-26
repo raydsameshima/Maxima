@@ -1,0 +1,10 @@
+/* spinone.mac */
+genmatrix(lambda([m,n], M[-m,-n]),1,1,-1,-1);
+phasematrix : genmatrix(lambda([m,n],exp(-%i*(-m*a-n*g))),1,1,-1,-1);
+d1(b) := matrix(
+  [(1+cos(b))/2  ,(-sin(b))/sqrt(2),(1-cos(b))/2     ],
+  [sin(b)/sqrt(2),cos(b)           ,(-sin(b))/sqrt(2)],
+  [(1-cos(b))/2  ,sin(b)/sqrt(2)   ,(1+cos(b))/2     ]
+);
+"* is the operator for component-wise multiplication"$
+phasematrix*d1(b);

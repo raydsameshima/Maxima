@@ -35,7 +35,6 @@ block( [i:2, rs:[a,b], ss:[1,0], ts:[0,1], r, q],
   [rs,ss,ts]
 );
 
-
 /* inversep returns (-1) when arguments are not coprime. */
 inversep(a,p) :=
 catch(
@@ -61,5 +60,3 @@ catch(
       mod(n*di, p)
   )
 );
-
-
