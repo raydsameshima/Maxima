@@ -138,3 +138,155 @@ read and interpret file: /Users/rds/Documents/Maxima/spinone.mac
                                             [ ------------------------------- ]
                                             [                2                ]
 (%o7)               /Users/rds/Documents/Maxima/spinone.mac
+Maxima 5.37.2 http://maxima.sourceforge.net
+using Lisp SBCL 1.3.11
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir:  /Users/rds/.maxima 
+(%i1) batch("spinone.mac")
+
+read and interpret file: /Users/rds/Documents/Maxima/spinone.mac
+(%i2) index_convension:lambda([m,n],M[-m,-n])
+(%o2)                      lambda([m, n], M        )
+                                           - m, - n
+(%i3) genmatrix(index_convension,1,1,-1,-1)
+                        [  M        M        M        ]
+                        [   1, 1     1, 0     1, - 1  ]
+                        [                             ]
+(%o3)                   [  M        M        M        ]
+                        [   0, 1     0, 0     0, - 1  ]
+                        [                             ]
+                        [ M        M        M         ]
+                        [  - 1, 1   - 1, 0   - 1, - 1 ]
+(%i4) phase:lambda([m,n],exp(-%i*((-m*a)-n*b)))
+(%o4)              lambda([m, n], exp(- %i ((- m a) - n b)))
+(%i5) phasematrix:genmatrix(phase,1,1,-1,-1)
+               [   - %i (a + b)    - %i a      - %i (a - b)   ]
+               [ %e              %e          %e               ]
+               [                                              ]
+(%o5)          [      - %i b                       %i b       ]
+               [    %e              1            %e           ]
+               [                                              ]
+               [   - %i (b - a)     %i a     - %i ((- a) - b) ]
+               [ %e               %e       %e                 ]
+(%i6) d1(b):=matrix([(1+cos(b))/2,(-sin(b))/sqrt(2),(1-cos(b))/2],
+         [sin(b)/sqrt(2),cos(b),(-sin(b))/sqrt(2)],
+         [(1-cos(b))/2,sin(b)/sqrt(2),(1+cos(b))/2])
+                          [ cos(b) + 1  - sin(b)  1 - cos(b) ]
+                          [ ----------  --------  ---------- ]
+                          [     2       sqrt(2)       2      ]
+                          [                                  ]
+                          [  sin(b)                - sin(b)  ]
+(%o6)            d1(b) := [  -------     cos(b)    --------  ]
+                          [  sqrt(2)               sqrt(2)   ]
+                          [                                  ]
+                          [ 1 - cos(b)  sin(b)    cos(b) + 1 ]
+                          [ ----------  -------   ---------- ]
+                          [     2       sqrt(2)       2      ]
+(%i7) phasematrix*d1(b)
+               [   - %i (a + b)              ]
+               [ %e             (1 + cos(b)) ]         [     - %i a        ]
+               [ --------------------------- ]         [   %e       sin(b) ]
+               [              2              ]         [ - --------------- ]
+               [                             ]         [       sqrt(2)     ]
+               [         - %i b              ]         [                   ]
+(%o7)  Col 1 = [       %e       sin(b)       ] Col 2 = [      cos(b)       ]
+               [       ---------------       ]         [                   ]
+               [           sqrt(2)           ]         [     %i a          ]
+               [                             ]         [   %e     sin(b)   ]
+               [   - %i (b - a)              ]         [   -------------   ]
+               [ %e             (1 - cos(b)) ]         [      sqrt(2)      ]
+               [ --------------------------- ]
+               [              2              ]
+                                            [     - %i (a - b)                ]
+                                            [   %e             (1 - cos(b))   ]
+                                            [   ---------------------------   ]
+                                            [                2                ]
+                                            [                                 ]
+                                            [             %i b                ]
+                                    Col 3 = [           %e     sin(b)         ]
+                                            [         - -------------         ]
+                                            [              sqrt(2)            ]
+                                            [                                 ]
+                                            [   - %i ((- a) - b)              ]
+                                            [ %e                 (1 + cos(b)) ]
+                                            [ ------------------------------- ]
+                                            [                2                ]
+(%o7)               /Users/rds/Documents/Maxima/spinone.mac
+Maxima 5.37.2 http://maxima.sourceforge.net
+using Lisp SBCL 1.3.11
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir:  /Users/rds/.maxima 
+(%i1) batch("spinone.mac")
+
+read and interpret file: /Users/rds/Documents/Maxima/spinone.mac
+(%i2) index_convension:lambda([m,n],M[-m,-n])
+(%o2)                      lambda([m, n], M        )
+                                           - m, - n
+(%i3) genmatrix(index_convension,1,1,-1,-1)
+                        [  M        M        M        ]
+                        [   1, 1     1, 0     1, - 1  ]
+                        [                             ]
+(%o3)                   [  M        M        M        ]
+                        [   0, 1     0, 0     0, - 1  ]
+                        [                             ]
+                        [ M        M        M         ]
+                        [  - 1, 1   - 1, 0   - 1, - 1 ]
+(%i4) phase:lambda([m,n],exp(-%i*((-m*a)-n*b)))
+(%o4)              lambda([m, n], exp(- %i ((- m a) - n b)))
+(%i5) phasematrix:genmatrix(phase,1,1,-1,-1)
+               [   - %i (a + b)    - %i a      - %i (a - b)   ]
+               [ %e              %e          %e               ]
+               [                                              ]
+(%o5)          [      - %i b                       %i b       ]
+               [    %e              1            %e           ]
+               [                                              ]
+               [   - %i (b - a)     %i a     - %i ((- a) - b) ]
+               [ %e               %e       %e                 ]
+(%i6) d1(b):=matrix([(1+cos(b))/2,(-sin(b))/sqrt(2),(1-cos(b))/2],
+         [sin(b)/sqrt(2),cos(b),(-sin(b))/sqrt(2)],
+         [(1-cos(b))/2,sin(b)/sqrt(2),(1+cos(b))/2])
+                          [ cos(b) + 1  - sin(b)  1 - cos(b) ]
+                          [ ----------  --------  ---------- ]
+                          [     2       sqrt(2)       2      ]
+                          [                                  ]
+                          [  sin(b)                - sin(b)  ]
+(%o6)            d1(b) := [  -------     cos(b)    --------  ]
+                          [  sqrt(2)               sqrt(2)   ]
+                          [                                  ]
+                          [ 1 - cos(b)  sin(b)    cos(b) + 1 ]
+                          [ ----------  -------   ---------- ]
+                          [     2       sqrt(2)       2      ]
+(%i7) phasematrix*d1(b)
+               [   - %i (a + b)              ]
+               [ %e             (1 + cos(b)) ]         [     - %i a        ]
+               [ --------------------------- ]         [   %e       sin(b) ]
+               [              2              ]         [ - --------------- ]
+               [                             ]         [       sqrt(2)     ]
+               [         - %i b              ]         [                   ]
+(%o7)  Col 1 = [       %e       sin(b)       ] Col 2 = [      cos(b)       ]
+               [       ---------------       ]         [                   ]
+               [           sqrt(2)           ]         [     %i a          ]
+               [                             ]         [   %e     sin(b)   ]
+               [   - %i (b - a)              ]         [   -------------   ]
+               [ %e             (1 - cos(b)) ]         [      sqrt(2)      ]
+               [ --------------------------- ]
+               [              2              ]
+                                            [     - %i (a - b)                ]
+                                            [   %e             (1 - cos(b))   ]
+                                            [   ---------------------------   ]
+                                            [                2                ]
+                                            [                                 ]
+                                            [             %i b                ]
+                                    Col 3 = [           %e     sin(b)         ]
+                                            [         - -------------         ]
+                                            [              sqrt(2)            ]
+                                            [                                 ]
+                                            [   - %i ((- a) - b)              ]
+                                            [ %e                 (1 + cos(b)) ]
+                                            [ ------------------------------- ]
+                                            [                2                ]
+(%o7)               /Users/rds/Documents/Maxima/spinone.mac
