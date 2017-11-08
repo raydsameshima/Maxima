@@ -35,6 +35,19 @@ block( [i:2, rs:[a,b], ss:[1,0], ts:[0,1], r, q],
   [rs,ss,ts]
 );
 
+/* slightly slow? */
+extended_gcd_list2(a,b) :=
+block( [rs:[b,a], ss:[0,1], ts:[1,0], r, q],
+  while first(rs) # 0 do (
+    [q,r] : divide(rs[2], rs[1]),
+    rs : cons(r, rs),
+    ss : cons(ss[2] - q*ss[1], ss),
+    ts : cons(ts[2] - q*ts[1], ts)
+  ),
+  
+  [reverse(rs), reverse(ss), reverse(ts)]
+);
+
 /* inversep returns (-1) when arguments are not coprime. */
 inversep(a,p) :=
 catch(
