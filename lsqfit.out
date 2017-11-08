@@ -1,0 +1,38 @@
+
+NIL
+(%o10)                               done
+(%i11) 
+read and interpret file: /Users/rds/Documents/Maxima/lsqfit.mac
+(%i12) load(lsquares)
+(%i13) print(" Here is the data ")
+ Here is the data  
+(%i14) data:read_nested_list("em.cvs",comma)
+(%o14) [[1.764e-4, 134], [2.025e-4, 140], [2.5e-4, 172], [2.756e-4, 190], 
+                                                               [3.025e-4, 212]]
+(%i15) mtx:read_matrix("em.cvs",comma)
+                               [ 1.764e-4  134 ]
+                               [               ]
+                               [ 2.025e-4  140 ]
+                               [               ]
+(%o15)                         [  2.5e-4   172 ]
+                               [               ]
+                               [ 2.756e-4  190 ]
+                               [               ]
+                               [ 3.025e-4  212 ]
+(%i16) cond:lsquares_estimates(mtx,[x,y],y = a*x+b,[a,b],initial = [1,1])
+                            338720000000      45481808
+(%o16)                [[a = ------------, b = --------]]
+                               535751         2678755
+(%i17) print(" This is the best fit: ")
+ This is the best fit:  
+(%i18) ev(f:a*x+b,cond)
+                           338720000000 x   45481808
+(%o18)                     -------------- + --------
+                               535751       2678755
+(%i19) plot2d([[discrete,data],f],[x,1.5e-4,3.5e-4],[y,100,240],
+              [style,[points,2,1,1],[lines,1]],
+              [legend,"data","lsqare_estimates"],
+              [gnuplot_preamble,"set key bottom;"])
+(%o19)                 [/Users/rds/maxout.gnuplot_pipes]
+(%o19)              /Users/rds/Documents/Maxima/lsqfit.mac
+(%i20) 

@@ -1,0 +1,33 @@
+/* least square fit */
+/* The given data is in the following .cvs form:
+$ cat em.cvs 
+1.764E-4, 134
+2.025E-4, 140
+2.5E-4,   172
+2.756E-4, 190
+3.025E-4, 212
+*/
+load(lsquares)$
+print(" Here is the data ")$
+data:read_nested_list("em.cvs",comma);
+mtx:read_matrix("em.cvs",comma);
+/*
+plot2d([discrete,data]
+      ,[x,1.5e-4,3.5e-4]
+      ,[y,100,240]
+      ,[style,[points,2,1,1]]
+      );
+*/
+cond:lsquares_estimates(mtx
+                       ,[x,y]
+                       ,y = b+a*x
+                       ,[a,b]
+                       ,initial = [1,1]);
+print(" This is the best fit: ")$
+ev(f:b+a*x,cond);
+plot2d([[discrete,data],f]
+       ,[x,1.5e-4,3.5e-4]
+       ,[y,100,240]
+       ,[style,[points,2,1,1],[lines,1]]
+       ,[legend,"data","lsqare_estimates"]
+       ,[gnuplot_preamble,"set key bottom;"]);
