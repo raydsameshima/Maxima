@@ -1,0 +1,49 @@
+
+NIL
+(%o1)                                done
+(%i2) 
+read and interpret file: /Users/raysameshima/Documents/Maxima/refraction.mac
+(%i3) kill(all)
+(%o0)                                done
+(%i1) data:read_nested_list("glass.cvs",comma)
+(%o1) [[0.122, 0.1736], [0.225, 0.342], [0.358, 0.5], [0.423, 0.64], 
+            [0.5045, 0.766], [0.5664, 0.866], [0.616, 0.9396], [0.646, 0.9848]]
+(%i2) scf()
+(%o2)                                scf()
+(%i3) plot2d([discrete,data],[style,[points,2,1,1]],
+             [gnuplot_preamble,"set term x11 0"])
+(%o3)             [/Users/raysameshima/maxout.gnuplot_pipes]
+(%i4) load(lsquares)
+(%o4) /usr/local/Cellar/maxima/5.37.2/share/maxima/5.37.2/share/lsquares/lsqua\
+res.mac
+(%i5) mtx:read_matrix("glass.cvs",comma)
+                              [ 0.122   0.1736 ]
+                              [                ]
+                              [ 0.225   0.342  ]
+                              [                ]
+                              [ 0.358    0.5   ]
+                              [                ]
+                              [ 0.423    0.64  ]
+(%o5)                         [                ]
+                              [ 0.5045  0.766  ]
+                              [                ]
+                              [ 0.5664  0.866  ]
+                              [                ]
+                              [ 0.616   0.9396 ]
+                              [                ]
+                              [ 0.646   0.9848 ]
+(%i6) cond:lsquares_estimates(mtx,[x,y],y = b+a*x,[a,b],initial = [1,1],
+                              iprint = [-1,0])
+                           307997320        2129862259
+(%o6)                [[a = ---------, b = - -----------]]
+                           197979687        98989843500
+(%i7) ev(ev(f:b+a*x,cond),float)
+(%o7)              1.555701621045597 x - 0.02151596753458854
+(%i8) plot2d([[discrete,data],f],[x,0,1],[y,0,1],
+             [style,[points,2,1,1],[lines,1]],
+             [gnuplot_preamble,"set key bottom;"],
+             [gnuplot_preamble,"set term x11 2"])
+plot2d: some values were clipped.
+(%o8)             [/Users/raysameshima/maxout.gnuplot_pipes]
+(%o8)         /Users/raysameshima/Documents/Maxima/refraction.mac
+(%i9) 
