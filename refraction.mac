@@ -1,0 +1,16 @@
+kill(all);
+data: read_nested_list ("glass.cvs",comma);
+scf();
+plot2d([discrete,data]
+      ,[style,[points,2,1,1]]
+      ,[gnuplot_preamble,"set term x11 0"] /* first window */
+      );
+load(lsquares);
+mtx: read_matrix ("glass.cvs",comma);
+cond:lsquares_estimates(mtx,[x,y],y = a*x+b,[a,b],initial = [1,1],iprint=[-1,0]);
+ev(f:a*x+b,cond), float;
+plot2d([[discrete,data],f],[x,0,1],[y,0,1]
+      ,[style,[points,2,1,1],[lines,1]]
+      ,[gnuplot_preamble,"set key bottom;"]
+      ,[gnuplot_preamble,"set term x11 2"] /* second window*/
+      );
