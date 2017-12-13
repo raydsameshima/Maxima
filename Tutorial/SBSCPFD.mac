@@ -3,9 +3,11 @@ Step-By-Step Computation of a Partial Fraction Decomposition
 
 http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/StepwisePF0001.htm
 
+https://www.muskmelon.jp/maxima/pro-maxima-20080303.pdf
 */
 kill(all);
-partfrac( 1/(x^2 * (x^2 + 1)), x);
+r: 1/(x^2 * (x^2 + 1));
+partfrac(r, x);
 "Let us show this outcom step-by-step."$
 "The components must be the following three rational functions:"$
 p1: a/x;
@@ -29,3 +31,29 @@ solve( [ coeff(n,x,3) = 0
 ev(ps, sol[1]);
 "We can also use the function first."$
 ev(ps, first(sol));
+"This works, but completely manually."$
+"We explore a better algorithm, first extract each term in numerator:"$
+terms: maplist(lambda([item], item), n);
+"We transform the list of terms into a list of eqs:"$
+map( lambda( [t]
+           , coeff(t,x,hipow(t,x)) = coeff(r,x,hipow(t,x))
+           )
+   , terms
+   );
+"Clearly, this does not work since hipow returns 0 if t has no x."$
+"Let us try the follwoing degree function (pro-maxima-20080303.pdf):"$
+degree(f, x) := block([q, i, j],
+  q: f,
+  for i: 0 while (q # 0) do (j: i, q: quotient(q, x)), 
+  return(j)
+);
+map( lambda( [t]
+           , coeff(t,x,degree(t,x)) = coeff(r,x,degree(t,x))
+           )
+   , terms
+   );
+"Nope, we need b=1."$
+/*
+solve(%, [a,b,c,d]);
+at(p1+p2+p3,first(%));
+*/
