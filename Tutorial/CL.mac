@@ -1,0 +1,17 @@
+/*
+Computation of Limits
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/limits0001.htm
+
+*/
+kill(all);
+limit((x^2-1)/(x^2+1), x,inf);
+f: (x^2+x-6)/(x^4 + x^3 -19*x^2 + 11*x + 30);
+limit(f, x, 2);
+factor(f);
+%, x=2;
+limit(tan(x),x, %pi/2);
+limit(tan(x),x, %pi/2, plus);
+limit(tan(x),x, %pi/2, minus);
+limit (tan(3*x)/tan(x), x, %pi/2);
+limit (sin(3*x)/sin(x), x, 0);
