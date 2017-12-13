@@ -1,0 +1,10 @@
+/*
+Polynomial Arithmetic with Rests
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/PArithRests0001.htm
+
+*/
+kill(all);
+poly: x^6 + 19*x^5 + x^4 - 14*x^3 - x^2 - 3*x + 1;
+mod(poly, 11);
+"Nope, it does not work."$
