@@ -1,0 +1,39 @@
+/*
+Line Integrals
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/lineint0001.htm
+
+*/
+kill(all)$
+"Consider the following integrand,"$
+integrand: x^2 * y*diff(x) + y*z*diff(y) + z*x*diff(z);
+"and the following path:"$
+path: [x = cos(t), y = sin(t), z = sin(t)];
+"Along with this path, the integrand becomes"$
+line_integrand: sublis(path, integrand);
+"i.e., we take parallel-substitution."$
+"Taking differential, and substituting del(t)=1, we have the follwoing form of integrand."$
+ev(line_integrand, diff);
+ev(%, del(t)=1);
+integrate(%,t,0,2*%pi);
+"Thus, we can take the normal(parametric) definite integral."$
+"We define these processes into a function:"$
+line_integral(f, path, parameter, p0, p1) := 
+  block( [substituded_f, x, xx]
+       , substituded_f: sublis(path, f)
+       , x: ev(substituded_f, diff)
+       , xx: subst(1, diff(parameter), x)
+       , integrate(xx, parameter, p0, p1) 
+       )$
+line_integral( integrand
+             , [x = cos(t), y = sin(t), z = sin(t)]
+             , t
+             , 0
+             , 2*%pi
+             );
+line_integral( (x^2 - y)*diff(x) + (y^2 + x)*diff(y)
+            , [x = t, y=t^2+1]
+            , t
+            , 0
+            , 1
+            );
