@@ -1,0 +1,21 @@
+/* 
+Solutions of Univariate Polynomials 
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/ZeroesOfUnivarPol.htm
+
+*/
+kill(all);
+poly: x^2-x-12;
+solutions: solve(poly,x);
+"Let us check the solution"$
+ev(poly,solutions[1]);
+ev(poly,solutions[2]);
+"OK, next will be the lambda expression:"$
+"We would like to convert these equation-form into term:"$
+map(lambda([eq], lhs(eq)-rhs(eq)), solutions);
+"We can also define it as a function:"$
+fromEq2Term(s) := map(lambda([eq], lhs(eq)-rhs(eq)), s);
+terms: fromEq2Term(solutions);
+"Let us double-check:"$
+apply("*", terms);
+expand(%);

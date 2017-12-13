@@ -1,0 +1,14 @@
+/*
+Trigonometric Transformations
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/TrigTrans0001.htm
+
+*/
+kill(all);
+"To reduce sine and cosine functions as a finite Fourier sum, use trigreduce"$
+expr: trigreduce( sin(x)^3 * cos(x));
+expr1: trigexpand(expr);
+"trigsimp can simplify with the famous identity sin(x)^2+cos(x)^2=1"$
+trigsimp(expr1);
+"In the original site, the following must be a difficult problem, but now is solved!"$
+result: integrate(9/cos(7*x)^2,x);

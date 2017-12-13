@@ -1,0 +1,31 @@
+/*
+Step-By-Step Computation of a Partial Fraction Decomposition
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/StepwisePF0001.htm
+
+*/
+kill(all);
+partfrac( 1/(x^2 * (x^2 + 1)), x);
+"Let us show this outcom step-by-step."$
+"The components must be the following three rational functions:"$
+p1: a/x;
+p2: b/x^2;
+p3: (c*x+d)/(x^2+1);
+"The partial fraction decomposition is the sum of them."$
+ps: p1+p2+p3;
+"Let us take this numerator."$
+ratsimp(ps);
+n: num(%);
+"OK, let us solve this numerator is 1:"$
+sol: 
+solve( [ coeff(n,x,3) = 0
+       , coeff(n,x,2) = 0
+       , coeff(n,x,1) = 0
+       , coeff(n,x,0) = 1
+       ]
+     ,
+     [a,b,c,d]
+     );
+ev(ps, sol[1]);
+"We can also use the function first."$
+ev(ps, first(sol));

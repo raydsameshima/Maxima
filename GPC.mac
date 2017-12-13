@@ -1,0 +1,41 @@
+/*
+Geometry: Planar Curves
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/FnDef0001.htm
+
+*/
+kill(all);
+"Let us define a parametric curve:"$
+alpha(t) := [sin(t), cos(t)];
+"That is, alpha is the unit circle."$
+plot2d( [parametric,alpha(t)[1],alpha(t)[2]]
+      , [t,0,2*%pi]
+      ,[gnuplot_preamble,"set term x11 0"] 
+      );
+"The derivation is,"$
+define(d(t), diff(alpha(t),t));
+"Define a function, so called the complex structure:"$
+J(a) := [-a[2], a[1]];
+J(alpha(y));
+"Geometrically, this is just pi/2-rotation."$
+"Therefore, the scalar product of alpha(z) and J(alpha(z)) must be zero:"$
+alpha(z) . J(alpha(z));
+"Define the curvature of a plane curve:"$
+kappa(f, t) :=
+  diff(f(t),t,2) . J(diff(f(t),t)) / ((diff(f(t),t) . diff(f(t),t))^(3/2));
+k: kappa(alpha,t);
+trigsimp(k);
+"This implies that the unit circle has constant(-1) curvature."$
+"Let us examine another example."$
+eight(t) := [sin(t), sin(t) * cos(t)];
+plot2d( [parametric, eight(t)[1], eight(t)[2]]
+      , [t, -%pi, %pi]
+      , [gnuplot_preamble, "set term x11 1"]
+);
+"Literally this is eight."$
+kappa(eight, z);
+trigsimp(%);
+plot2d( kappa(eight, z)
+      , [z,-%pi, %pi]
+      , [gnuplot_preamble, "set term x11 2"]
+      );
