@@ -1,0 +1,95 @@
+/*
+Differential Equations - Symbolic Solutions
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/ODE0001.htm
+
+*/
+kill(all)$
+eq1: 'diff(y,x) = -y;
+ss1: ode2(eq1, y, x);
+"To put initial condition for 1st order ode, use ic1:"$
+sol1: ic1(ss1, x=1, y=8);
+plot2d(rhs(sol1),[x,0,4],[y,0,10]);
+eq2: 'diff(y,x,2) + y = 0;
+ss2: ode2(eq2,y,x);
+sol2: ic2(ss2, x=0,y=2, 'diff(y,x)=1);
+"We check the given initial conditions:"$
+ev(rhs(sol2),x=0);
+define(d2(x), diff(rhs(sol2),x));
+d2(0);
+plot2d( [rhs(sol2),d2(x)]
+      , [x,0,1]
+      , [legend, "solution", "first derivative"]
+      , [gnuplot_preamble, "set term x11 0"]
+      );
+"For boundary condition, use bc2:"$
+sol3: bc2(ss2,x=0,y=2, x=2,y=-1);
+ev(rhs(sol3), x=0);
+ev(rhs(sol3), x=2);
+plot2d( rhs(sol3)
+      , [x,0,2]
+      , [gnuplot_preamble, "set term x11 1"]
+      );
+"With Laplace transform:"$
+assume(w>0);
+laplace(exp(-b*t) * cos(w*t),t,s);
+ilt(%,s,t);
+"Let us use these new items."$
+ode: 'diff(y(t),t,2) + 5*'diff(y(t),t) + 4*y(t) = t;
+atvalue(y(t), t=0, 0);
+atvalue('diff(y(t),y,1), t=0, 0);
+y(0);
+ev('diff(y(t),y),t=0);
+lap_ode: laplace(ode,t,s);
+sol: solve(%, 'laplace(y(t),t,s));
+map( lambda([eq], ilt(eq,s,t)), sol);
+ode2(ode,y(x),x);
+"We must, of course, use ode2:"$
+kill(y);
+ode: 'diff(y(t),t,2) + 5*'diff(y(t),t) + 4*y(t) = t;
+ode2(ode,y,t);
+sol: ic2(%, x=0, y=0, 'diff(y,x)=0);
+"I do not know, but it seems not working so far..."$
+/*
+kill(y);
+eq: 'diff(y,x,2) + 5*'diff(y,x) + 4*y = x;
+ode2(eq, y, x);
+sol: ic2(%, x=0, y(x)=0, diff(y,x)=0);
+*/
+kill(all);
+"Consider the following system of ODE:"$
+assume(s>0);
+diff_eq1: 'diff(f(x),x,2) + 'diff(g(x),x) + 3*f(x) = 15*exp(-x);
+diff_eq2: 'diff(g(x), x, 2) - 4*'diff(f(x), x) + 3*g(x) = 15*sin(2*x);
+"with the initial conditions:"$
+atvalue (f(x), x=0, 35);
+atvalue ('diff(f(x),x),x=0, -48);
+atvalue (g(x), x=0, 27);
+atvalue ('diff(g(x), x), x=0, -55);
+"Compute the Laplace transforms:"$
+lap_eq1:laplace(diff_eq1,x,s);
+lap_eq2:laplace(diff_eq2,x,s);
+"Are they linear eq's? YES!"$
+ls: linsolve([lap_eq1,lap_eq2],['laplace(f(x),x,s),'laplace(g(x),x,s)]);
+"Let us factor both numerator and denominator,"$
+"since inverse Laplace transform requires the denominators are "$
+"decomposed into linear or quadratic factors:"$
+factored: map(lambda([eq], factor(eq)), ls);
+sol: map(lambda( [eq], ilt(eq, s, x)), factored);
+"So far, these are solution."$
+"To check, or even to prove, we substitute these solution into ode:"$
+ode_system: [diff_eq1, diff_eq2];
+substitued: ode_system, sol;
+"Then perform diff in both equations."$
+map (lambda( [eq], ev(eq, diff)), substitued);
+trigsimp(%);
+"I.e., we've had tautology."$
+"With desolve function:"$
+diff_eq1: 'diff(f(x),x,2) + 'diff(g(x),x) + 3*f(x) = 15*exp(-x);
+diff_eq2: 'diff(g(x), x, 2) - 4*'diff(f(x), x) + 3*g(x) = 15*sin(2*x);
+ode_system: [diff_eq1, diff_eq2];
+atvalue (f(x), x=0, 35);
+atvalue ('diff(f(x),x),x=0, -48);
+atvalue (g(x), x=0, 27);
+atvalue ('diff(g(x), x), x=0, -55);
+desolve(ode_system, [f(x),g(x)]);
