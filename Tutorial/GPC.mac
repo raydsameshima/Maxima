@@ -56,9 +56,15 @@ cross1(u,v) :=
 cross([a,b,c],[x,y,z]);
 cross1([a,b,c],[x,y,z]);
 "Next, tangent and binormal."$
+/*
 tangent(f,x) :=
-/*  diff(f(x),x) / ((diff(f(x),x) . diff(f(x),x))^(1/2)); */
   diff(f(x),x) / radcan(trigsimp(((diff(f(x),x) . diff(f(x),x))^(1/2))));
+*/
+tangent(f,x) :=
+block( [df : diff(f(x),x)] /* we do not need compute 3 times! */
+     , df / radcan(trigsimp((df . df)^(1/2)))
+     );
+/*
 binormal(f,x) :=
   trigsimp(cross( diff(f(x), x)
                 , diff(f(x), x, 2)
@@ -66,11 +72,16 @@ binormal(f,x) :=
           ) /
     radcan(
       trigsimp(
-        ( cross(diff(f(x),x ), diff(f(x), x, 2))
-        . cross(diff(f(x),x ), diff(f(x), x, 2))
+        ( cross(diff(f(x), x), diff(f(x), x, 2))
+        . cross(diff(f(x), x), diff(f(x), x, 2))
         ) ^(1/2)
       )
     );
+*/
+binormal(f,x) :=
+block( [ c : cross(diff(f(x),x), diff(f(x),x,2)) ]
+     , trigsimp(c) / radcan(trigsimp((c . c)^(1/2)))
+     );
 normal(f, x) :=
   radcan(trigsimp(cross(binormal(f,x), tangent(f,x))));
 tube(f,r,t,phi) :=
@@ -78,6 +89,7 @@ tube(f,r,t,phi) :=
 helix(x) := [5*cos(x), 5*sin(x), 3*x];
 tangent(helix,t);
 binormal(helix,t);
+/*
 normal(helix,t);
 w(x) := [2*t^2-t, t^2, 2*t^2+4*t];
 plot3d( tube(helix,1,t,r)
@@ -86,3 +98,4 @@ plot3d( tube(helix,1,t,r)
       , [grid,50,10]
       , [gnuplot_preamble,"set term x11 3"]
       );
+*/
