@@ -1,0 +1,15 @@
+/*
+Computation of Finite and Infinite Sums
+
+http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/sum01.htm
+
+*/
+kill(all)$
+sum(i, i, 1, 100);
+sum(1/i^2,i,1,inf);
+sum(1/i^2,i,1,inf), simpsum=true;
+sum1: sum(1/j^2, j, 1, inf);
+sum2:sum(1/k^3, k, 1, inf);
+sum1 + sum2;
+sumcontract(%);
+ev (%, simpsum=true);
