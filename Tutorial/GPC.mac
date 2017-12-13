@@ -10,7 +10,7 @@ alpha(t) := [sin(t), cos(t)];
 "That is, alpha is the unit circle."$
 plot2d( [parametric,alpha(t)[1],alpha(t)[2]]
       , [t,0,2*%pi]
-      ,[gnuplot_preamble,"set term x11 0"] 
+      , [gnuplot_preamble,"set term x11 0"]
       );
 "The derivation is,"$
 define(d(t), diff(alpha(t),t));
@@ -30,7 +30,7 @@ trigsimp(k);
 eight(t) := [sin(t), sin(t) * cos(t)];
 plot2d( [parametric, eight(t)[1], eight(t)[2]]
       , [t, -%pi, %pi]
-      , [gnuplot_preamble, "set term x11 1"]
+      , [gnuplot_preamble, "set term x11 1"] 
 );
 "Literally this is eight."$
 kappa(eight, z);
@@ -38,4 +38,51 @@ trigsimp(%);
 plot2d( kappa(eight, z)
       , [z,-%pi, %pi]
       , [gnuplot_preamble, "set term x11 2"]
+      );
+"Define cross product, with a trick:"$
+cross(v1, v2) :=
+  determinant(matrix([[1,0,0]
+                     ,[0,1,0]
+                     ,[0,0,1]]
+                    , v1
+                    , v2
+                    ));
+"OK, OK, step by step."$
+"rotateLeft: pick the leftmost element and insert to right."$
+rotateLeft(v1) :=
+  append(rest(v1,1), cons(first(v1),[]));
+cross1(u,v) :=
+  rotateLeft( u * rotateLeft(v) - v * rotateLeft(u));
+cross([a,b,c],[x,y,z]);
+cross1([a,b,c],[x,y,z]);
+"Next, tangent and binormal."$
+tangent(f,x) :=
+/*  diff(f(x),x) / ((diff(f(x),x) . diff(f(x),x))^(1/2)); */
+  diff(f(x),x) / radcan(trigsimp(((diff(f(x),x) . diff(f(x),x))^(1/2))));
+binormal(f,x) :=
+  trigsimp(cross( diff(f(x), x)
+                , diff(f(x), x, 2)
+                )
+          ) /
+    radcan(
+      trigsimp(
+        ( cross(diff(f(x),x ), diff(f(x), x, 2))
+        . cross(diff(f(x),x ), diff(f(x), x, 2))
+        ) ^(1/2)
+      )
+    );
+normal(f, x) :=
+  radcan(trigsimp(cross(binormal(f,x), tangent(f,x))));
+tube(f,r,t,phi) :=
+  f(t) + r*(cos(phi) * normal(f,t) + sin(phi) * binormal(f,t));
+helix(x) := [5*cos(x), 5*sin(x), 3*x];
+tangent(helix,t);
+binormal(helix,t);
+normal(helix,t);
+w(x) := [2*t^2-t, t^2, 2*t^2+4*t];
+plot3d( tube(helix,1,t,r)
+      , [t,-2*%pi,2*%pi]
+      , [r,0,2*%pi]
+      , [grid,50,10]
+      , [gnuplot_preamble,"set term x11 3"]
       );
