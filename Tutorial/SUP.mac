@@ -19,3 +19,18 @@ terms: fromEq2Term(solutions);
 "Let us double-check:"$
 apply("*", terms);
 expand(%);
+"Next, 3rd order polynomial:"$
+poly1: x^3 + x^2 - 8*x -12;
+sol1: solve(poly1,x);
+"From this, we can not reconstruct the original poly:"$
+fromEq2Term(sol1);
+"There must be double root, but which one?"$
+m: multiplicities;
+"Here is a generalized version of fromEq2Term:"$
+fromEq2Term(s) := 
+  map(lambda([eq, exponent], (lhs(eq)-rhs(eq))^exponent)
+     , s
+     , multiplicities
+     );
+fromEq2Term(sol1);
+expand(apply("*",%));
