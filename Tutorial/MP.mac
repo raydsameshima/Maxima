@@ -70,6 +70,7 @@ block( []
 );
 "To see how inefficient this naive recursion, use trace:"$
 trace(Legendre1);
+showtime:all$
 Legendre1(7,z); 
 "Due to the recursion, the performance is not so great, so let us avoid it."$
 Legendre2(n,x) :=
@@ -91,4 +92,46 @@ block( [p0,p1,pn,cnt]
 );
 trace(Legendre2);
 Legendre2(7,z); 
+"So far we wrote definitions that constructed seuences of polynomials of increasing degree, but not all of them is needed."$
+Legendre3(n,x) :=
+block( [cnt,pn,c0,c1,c2,olds]
+     , if n = 0
+         then return(1)
+         else if n = 1
+                then return(x)
+     , c0: makelist(0,x,0,n) /* makelist (<expr>, <i>, <i_0>, <i_max>) */
+     , c1: makelist(0,x,0,n)
+     , c2: makelist(0,x,0,n)
+     , c0[1]: 1
+     , c1[2]: 1
+     , cnt: 2
+     , while cnt <= n do
+         ( c2[1]: -c0[1]*(cnt-1)/cnt
+         , for idx:2 thru cnt+1 do
+             c2[idx]: ((2*cnt-1)*c1[idx-1] - (cnt-1)*c0[idx])/cnt
+         , olds: c0
+         , c0: c1
+         , c1: c2
+         , c2: olds
+         , cnt: cnt+1
+         )
+     , pn:0
+     , for idx:1 thru n+1 do
+         pn: pn + c1[idx]*x^(idx-1)
+     , pn /* This is the return. */          
+);
+/* 
+Legendre2(100,z);
+Evaluation took 0.1210 seconds (0.1560 elapsed) using 40.617 MB.
+Legendre3(100,z);
+Evaluation took 0.0810 seconds (0.1150 elapsed) using 18.621 MB. 
+
+Using untrace, we also have
+
+(%i48) Legendre3(400,z)$
+Evaluation took 1.2970 seconds (1.3010 elapsed) using 372.963 MB.
+(%i49) Legendre2(400,z)$
+Evaluation took 2.9430 seconds (2.9560 elapsed) using 832.375 MB.
+*/
+
 
