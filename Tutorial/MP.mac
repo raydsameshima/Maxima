@@ -4,4 +4,91 @@ Maxima Programming
 http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Pages/Programming0001.htm
 
 */
+kill(all)$
+op(a+b+c);
+args(a+b+c);
+op(sin(3*x));
+args(sin(3*x));
+op(f(a,b,g(c),d));
+args(f(a,b,g(c),d));
+"Note that Maxima replace exp(x) by %e^x:"$
+op(exp(2*x));
+args(exp(2*x));
+"OK, let us construct a function which collects the operators of an expression."$
+all_ops(expr) :=
+block( []
+     , all_ops_priv(expr, [])
+);
+/* Here is a recursive definition of a function. */
+all_ops_priv(expr, op_list) :=
+block( [x, args, new_list]
+     , if atom(expr)
+         then op_list
+         else
+           ( x: op(expr)
+           , args: args(expr)
+           , new_list: if member(x, op_list)
+                         then op_list
+                         else cons(x, op_list)
+           , for arg in args do
+               new_list: all_ops_priv(arg, new_list)
+           , new_list 
+           )
+);
+contains_op(expr, op_list) :=
+block( [x, args, found]
+     , if atom(expr)
+         then false
+         else
+           ( x: op(expr)
+           , args: args(expr)
+           , if member(x, op_list)
+               then true
+               else
+                 ( found: false
+                 , for arg in args while (not found) do
+                     found : contains_op(arg, op_list)
+                 , found
+                 )
+           )
+);
+"This does not work for +,*."$
+"Let us consider the Legendre polynomial."$
+"Here is the definition:"$
+"  P(0,x)   := 1"$
+"  P(1,x)   := x"$
+"  n*P(n,x) := (2*n-1)*x*P(n-1,x) -(n-1)*P(n-2,x)"$
+Legendre1(n,x) :=
+block( []
+     , if n=0
+         then 1
+         else
+           if n=1
+             then x
+             else expand((2*n-1)/n*x*Legendre1(n-1, x)) 
+                  - expand((n-1)/n*Legendre1(n-2,x))
+);
+"To see how inefficient this naive recursion, use trace:"$
+trace(Legendre1);
+Legendre1(7,z); 
+"Due to the recursion, the performance is not so great, so let us avoid it."$
+Legendre2(n,x) :=
+block( [p0,p1,pn,cnt]
+     , if n = 0 
+         then return(1)
+         else if n = 1
+                then return (x)
+     , p0 : 1
+     , p1 : x
+     , cnt: 2
+     , while cnt <= n do 
+         ( pn: expand(((2*cnt -1)*x*p1 - (cnt - 1)*p0) / cnt)
+         , p0: p1
+         , p1: pn
+         , cnt : cnt + 1
+         )
+     , pn
+);
+trace(Legendre2);
+Legendre2(7,z); 
 
