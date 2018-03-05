@@ -11,3 +11,15 @@ maxima --batch-string="batchload(\"filename\")$"
 
 ### time and space
 showtime : true;
+
+### multi plots
+```mac
+for n:1 thru 5 do
+  ( lst: concat("set term x11 ", n)
+  , plot2d( sin(n*x)
+          , [x,-%pi,%pi]
+          , [gnuplot_preamble, lst]
+          )
+  );
+```
+
