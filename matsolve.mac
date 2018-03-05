@@ -1,0 +1,51 @@
+/*
+https://themaximalist.org/2017/02/28/solving-the-matrix-vector-equation-axb-in-maxima/
+*/
+
+/* A solver of A.x=b for x. */
+matsolve(A,b) := block
+  ( [AugU]
+  , AugU : echelon(addcol(A,b))
+  , backsolve(AugU)
+  );
+
+backsolve(augU) := block
+  ( [i,j,m,n,b,x,klist,k,np,nosoln:false]
+  , [m,n] : matsize(augU)
+  , b : col(augU,n)
+  , klist : makelist(concat('%k,i),i,1,n-1) /* [%k1, %k2, ..] */
+  , k : 0
+  , x : transpose(matrix(klist))
+  , for i:m thru 1 step -1 do
+    ( np : pivot(row(augU,i))
+    , if is(equal(np,n)) then
+        ( nosoln : true
+        , return ()
+        )
+      else
+        if not(is(equal(np,0))) then
+          ( x[np] : b[i]
+          , for j:np+1 thru n-1 do
+            x[np] : x[np] - augU[i,j]*x[j]
+          )
+    )
+  , if nosoln then
+      return([])
+    else
+      return(expand(x))
+  )$
+
+matsize(A) := [length(A), length(transpose(A))]$        
+
+pivot(rr) := block
+  ( [i,rlen]
+  , p : 0
+  , rlen : length(tranpose(rr))
+  , for i:1 thru rlen do
+    ( if is(equal(part(rr,1,i),1)) then
+        ( p:i
+        , return()
+        )
+    )
+  , return(p)
+  )$
