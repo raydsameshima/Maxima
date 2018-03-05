@@ -1,0 +1,30 @@
+/*
+mat_operators.mac
+*/
+
+/* matrix -> [int,int] */
+my_matrix_size(A) := 
+  [ length(A)
+  , length(A[1])
+  ];
+
+/* matrix -> [number] */
+my_matrix_trace(A) := block
+  ( [m,n,i,s:0]
+  , [m,n] : my_matrix_size(A)
+  , if not(is(equal(m,n))) then /* if A is not square then returns [] */
+      return([]) 
+  , for i:1 thru m do
+    ( s: s+A[i][i] )
+  , return( [s] )
+  );
+
+/* matrix -> matrix */
+my_matrix_transpose(A) := block
+  ( [I,J,B]
+  , [I,J] : my_matrix_size(A)
+  , B[j,i] := A[i][j] /* define an array for genmatrix */
+  , C : genmatrix(B, J, I)
+  , return (C)
+  );
+

@@ -5,5 +5,9 @@ http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Conten
 ## few tips
 ### batch mode
 maxima -b file.mac >> output.out
+
+###
+maxima --batch-string="batchload(\"filename\")$"
+
 ### time and space
 showtime : true;
