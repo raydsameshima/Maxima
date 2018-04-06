@@ -1,0 +1,89 @@
+/* A note on Thermodynamics (H. B. Callen) by Ray D. Sameshima */
+kill(all)$
+"Chapter 1: Basic Concepts and Postulates"$
+"Postulate 1. 
+ There exists equilibrium states of simple systems that,
+ macroscopically, are characterized completely by the internal energy U,
+ the volume V, and the mole numbers N1, N2 ... Nr of the chemical
+ components."$
+"Postulate 2.
+ There exists the entropy function of the extensive parameters of any
+ composite system, defined for all equilibrium states and having the 
+ following property.
+ The values assumed by the extensive parameters in the absence of an 
+ internal constraint are those that maximize the entropy over the manifold
+ of constrained equilibrium states."$
+"Postulate 3.
+ The entropy of a composite system is additive over the constituent 
+ subsystem.
+   S(U,V,N) = N*S(U/N, V/N, 1)
+ The entropy is continuous and differentiable and is a monotonically 
+ increasing function of the energy."$
+"Postulate 4. (Nernst postulate or third law os TD)
+ The entropy of any system vanishes in the state for which
+   diff(U,S) = 0
+ that is, at the zero of temperature."$
+"Problem 1.9"$ 
+Sa(U,V,N)
+  := (U*V*N)^(1/3);
+is(equal(Sa(U,V,N), N*Sa(U/N, V/N, 1)));
+assume(U>0,V>0,N>0, S>0);
+define(U(S,V,N), ev(U, solve(Sa(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Thus this entropy function Sa satisfies both Postulate 3 and 4."$
+Sb(U,V,N)
+  := (N*U/V)^(2/3);
+is(equal(Sb(U,V,N), N*Sb(U/N, V/N, 1)));
+"Sb does not satisfy Postulate 3, the additivity, but"$
+define(U(S,V,N), ev(U, solve(Sb(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Sb satisfies 4th postulate."$
+Sc(U,V,N)
+  := (N*U - V^2)^(1/2);
+is(equal(Sc(U,V,N), N*Sc(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sc(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Thus this entropy function Sc satisfies both Postulate 3 and 4."$
+Sd(U,V,N)
+  := V^3/(N*U);
+is(equal(Sd(U,V,N), N*Sd(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sd(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Sd does not satisfy Postulate 4."$
+Se(U,V,N)
+  := (N^2*V*U^2)^(1/5);
+is(equal(Se(U,V,N), N*Se(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Se(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Se is true entropy function."$
+Sf(U,V,N)
+  := N*log(U*V/N^2);
+is(equal(Sf(U,V,N), N*Sf(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sf(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Sf does not follow 4th postulate."$
+Sg(U,V,N)
+  := (N*U)^(1/2) * exp(-V^2/N^2);
+is(equal(Sg(U,V,N), N*Sg(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sg(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Sg is an entropy function."$
+Sh(U,V,N)
+  := (N*U)^(1/2) * exp(-U*V/N);
+is(equal(Sh(U,V,N), N*Sh(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sh(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+"Sh can not be an entropy."$
+kill(all);
+assume(U>0,V>0,N>0, S>0);
+Ui(S,V,N)
+  := S^2/V * exp(S/N);
+solve(diff(Ui(S,V,N),S) = 0, S);
+"That is, Ui satisfies 4th postulate."$
+is(equal(Ui(S,V,N), N*Ui(S/N,V/N,1)));
+"Additivity is also ok."$
+Uj(S,V,N)
+  := N*V*(1 + S/N)*exp(-S/N);
+solve(diff(Uj(S,V,N),S) = 0, S);
+is(equal(Uj(S,V,N), N*Uj(S/N,V/N,1)));
+"Therefore, Sa, Sc, Se, Sg, and Ui are physically acceptable."$
