@@ -74,8 +74,10 @@ is(equal(Sh(U,V,N), N*Sh(U/N, V/N, 1)));
 define(U(S,V,N), ev(U, solve(Sh(U,V,N) = S, U)));
 solve(diff(U(S,V,N),S) = 0, S);
 "Sh can not be an entropy."$
-kill(all);
+/* 
+kill(all); 
 assume(U>0,V>0,N>0, S>0);
+*/
 Ui(S,V,N)
   := S^2/V * exp(S/N);
 solve(diff(Ui(S,V,N),S) = 0, S);
@@ -87,3 +89,74 @@ Uj(S,V,N)
 solve(diff(Uj(S,V,N),S) = 0, S);
 is(equal(Uj(S,V,N), N*Uj(S/N,V/N,1)));
 "Therefore, Sa, Sc, Se, Sg, and Ui are physically acceptable."$
+/*
+isValidEntropyAtAbsoluteZero(S) := 
+  block
+    ( [U, S0>0, s, flag ]
+    , define(U(S,V,N), ev(U, solve(S(U,V,N) = S0, U)))
+    , s: solve(diff(U(S,V,N),S) = 0,S)
+    , return
+        (
+          rreduce("or", map(lambda([x],is(ev(S,x)=0)), s))
+        )
+    );
+*/
+kill(all);
+"Chapter 2 The Conditions of Equilibrium"$
+U(S,V,N) := S^3/(N*V);
+is(equal(U(S,V,N), N*U(S/N,V/N,1)));
+T:   diff(U(S,V,N),S);
+P:   - diff(U(S,V,N),V);
+mu:  diff(U(S,V,N),N);
+kill(all);
+"Chapter 3 Some Formal Relationships"$
+Sa(U,V,N)
+  := (U*V*N)^(1/3);
+is(equal(Sa(U,V,N), N*Sa(U/N, V/N, 1)));
+assume(U>0,V>0,N>0, S>0);
+define(U(S,V,N), ev(U, solve(Sa(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+T:  diff(U(S,V,N),S);
+P:  - diff(U(S,V,N),V);
+mu: diff(U(S,V,N),N);
+is(equal(T*S -P*V+mu*N, U(S,V,N)));
+kill(U,T,P,mu);
+Sc(U,V,N)
+  := (N*U - V^2)^(1/2);
+is(equal(Sc(U,V,N), N*Sc(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sc(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+T:  diff(U(S,V,N),S);
+P:  - diff(U(S,V,N),V);
+mu: diff(U(S,V,N),N);
+is(equal(T*S -P*V+mu*N, U(S,V,N)));
+kill(U,T,P,mu);
+Se(U,V,N)
+  := (N^2*V*U^2)^(1/5);
+is(equal(Se(U,V,N), N*Se(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Se(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+T:  diff(U(S,V,N),S);
+P:  - diff(U(S,V,N),V);
+mu: diff(U(S,V,N),N);
+is(equal(T*S -P*V+mu*N, U(S,V,N)));
+kill(U,T,P,mu);
+Sg(U,V,N)
+  := (N*U)^(1/2) * exp(-V^2/N^2);
+is(equal(Sg(U,V,N), N*Sg(U/N, V/N, 1)));
+define(U(S,V,N), ev(U, solve(Sg(U,V,N) = S, U)));
+solve(diff(U(S,V,N),S) = 0, S);
+T:  diff(U(S,V,N),S);
+P:  - diff(U(S,V,N),V);
+mu: diff(U(S,V,N),N);
+is(equal(T*S -P*V+mu*N, U(S,V,N)));
+kill(U,T,P,mu);
+Ui(S,V,N)
+  := S^2/V * exp(S/N);
+solve(diff(Ui(S,V,N),S) = 0, S);
+is(equal(Ui(S,V,N), N*Ui(S/N,V/N,1)));
+T:  diff(Ui(S,V,N),S);
+P:  - diff(Ui(S,V,N),V);
+mu: diff(Ui(S,V,N),N);
+is(equal(T*S -P*V+mu*N, Ui(S,V,N)));
+
