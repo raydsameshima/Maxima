@@ -16,11 +16,12 @@
     *------------*-------------*    
           I1 ->    -> I3            
 "$                                  
-solve([ 0 = I1-I2-I3
-      , 0 = -E1+I2*R2+I1*R1
-      , 0 = E2+I3*R3-I2*R2
-      ]
-     ,[I1,I2,I3]);
+s1:solve
+  ([ 0 = I1-I2-I3
+   , 0 = -E1+I2*R2+I1*R1
+   , 0 = E2+I3*R3-I2*R2
+   ]
+  ,[I1,I2,I3]);
 /*
 for three loop circuit
 */
@@ -45,7 +46,7 @@ for three loop circuit
           <- I1   -> I5          I4 ->
 
 "$
-solve([ -I1+I2-I5
+s2:solve([ -I1+I2-I5
       , I3-I4+I5
       , E1-I2*R2-I1*R1
       , E2-I3*R3+I2*R2-E1
