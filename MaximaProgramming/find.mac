@@ -1,0 +1,32 @@
+/*
+find.mac
+
+https://themaximalist.org/2018/06/14/a-matlab-like-find-function-for-maxima/
+
+find function
+Returns the indices which are true for given predicate.
+The usage is like
+  A:[1,3,5,7,9];
+  find(A < 3); (= [1])
+  find(A >1 and A <= 7); (= [2,3,4])
+*/
+find(exp) := block(
+  [oo, lst, e1,e2],
+  oo : op(exp), /* op returns the main operator. */
+  lst : first(exp), /* a list */
+  if sequal(oo,"=") or sequal(oo,">" ) 
+                    or sequal(oo,">=")
+                    or sequal(oo,"<" )
+                    or sequal(oo,"<=")
+                    or sequal(oo,"#" )
+    then
+      sublist_indices(lst, lambda([x1], eval_string(simplode([x1,op(exp),last(exp)]))))
+    else if
+      sequal(oo, "and") or sequal(oo, "or")
+    then
+      ( e1: first(exp)
+      , e2: second(exp)
+      , sublist_indices(first(e1), lambda([x1], 
+          eval_string(simplode([x1, op(e1), last(e1), ascii(32), oo, ascii(32), x1, op(e2), last(e2)]))))
+      )
+);

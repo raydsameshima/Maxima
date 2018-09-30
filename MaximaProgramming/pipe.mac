@@ -1,0 +1,16 @@
+/*
+https://themaximalist.org/2018/07/10/ceci-est-une-pipe-for-maxima/
+
+pipe operator
+*/
+infix("%>%", 1, 1);
+"%>%" (a,b) := block(
+  [i, bb],
+  if atom(b)
+    then b(a) /* (a %>% b) is b(a) */
+    else
+      ( i: find(b=%P)
+      , bb: append(firstn(b,i[1] - 1), [a], rest(b, i[1]))
+      , apply(first(bb), rest(bb,1))
+      )
+);
