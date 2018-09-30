@@ -1,0 +1,49 @@
+/*
+Lab 3 
+Addition of Vectors
+*/
+kill(all);
+/* 
+Maxima uses radian for its default. 
+*/
+rad(angle) := angle*%pi/180;
+/* 
+Vectorial addition for (magnitude, angle) convention. 
+*/
+mag_deg2(ma,ta,mb,tb) :=
+  block([ax,ay,bx,by,x2,y2, mag, ang],
+    ax : ma*cos(rad(ta)),
+    ay : ma*sin(rad(ta)),
+    bx : mb*cos(rad(tb)),
+    by : mb*sin(rad(tb)),
+    x2 : (ax+bx)^2,
+    y2 : (ay+by)^2,
+    mag : ev(sqrt(x2 + y2),numer),
+    ang : if x2=0 
+            then mod(90*signum(ax),360) 
+            else ev(180*atan(sqrt(y2/x2))/%pi, numer),
+    return([mag, ang])
+);
+/*
+Using above mag_deg2, we can add aditional vector.
+*/
+mag_deg3(ma,ta,mb,tb,mc,tc) :=
+  block([mag2, ang2],
+    [mag2, ang2] : mag_deg2(ma,ta,mb,tb),
+    return(
+      mag_deg2(mag2,ang2,mc,tc)
+    )  
+);
+/*
+Examples
+*/ 
+print("Data table 3.1:")$
+print(mag_deg2(120,30,120,60));
+print(mag_deg2(120,50,140,90));
+print(mag_deg2(140,0, 100,0 ));
+print(mag_deg2(100,60,100,120));
+print("Data table 3.2:")$
+print(mag_deg3(100,30,100,60,100,90));
+print(mag_deg3(120,40,120,90,100,120));
+print(mag_deg3(120,0, 100,30,120,90));
+print(mag_deg3(100,0, 100,60,120,120));
