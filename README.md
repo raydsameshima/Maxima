@@ -2,6 +2,9 @@
 
 http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Contents.htm
 
+## Useful links
+https://themaximalist.org/
+
 ## few tips
 ### batch mode
 maxima -b file.mac >> output.out
