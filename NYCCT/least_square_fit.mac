@@ -1,0 +1,47 @@
+/*
+least_square_fit.mac
+Ray D. Sameshima
+*/
+
+load("lsquares");
+print("
+A list of functions:
+  best_fit(list_of_xys)
+  plot_data_and_fit(xys)
+
+")$
+
+/* Returns the best fit for the list of [[x1,y1],[x2,y2] ..] */
+best_fit(xys) := block(
+  [m, cond],
+  m: apply('matrix, xys),
+  cond: lsquares_estimates(
+          m,
+          [x,y],
+          y=a*x+b,
+          [a,b]),
+  return( ev(a*x+b, cond) )
+);
+
+/* Plots the discrete data and the best fit above. */
+plot_data_and_fit(xys) := block(
+  [n, xs,ys, xi,yi,xf,yf, m,f],
+  n: length(xys),
+  xs: makelist(xys[i][1],i,1,n),
+  ys: makelist(xys[i][2],i,1,n),
+  xi: lmin(xs),
+  xf: lmax(xs),
+  yi: lmin(ys),
+  yf: lmax(ys),
+  m: apply('matrix, xys),
+  f: best_fit(xys),
+  return( 
+    plot2d([[discrete, xys],f]
+           ,[x,xi,xf]
+           ,[y,yi,yf]
+           ,[style,[points,2,1,1],[lines,1]]
+           ,[legend,"data","lsqare estimates"] 
+           ,[gnuplot_preamble,"set key bottom;"]
+          )
+  )
+);
