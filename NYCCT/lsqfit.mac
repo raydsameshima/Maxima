@@ -24,7 +24,8 @@ cond:lsquares_estimates(mtx
                        ,[a,b]
                        ,initial = [1,1]);
 print(" This is the best fit: ")$
-ev(f:b+a*x,cond);
+/* ev(f:b+a*x,cond); */
+f: ev(b+a*x,cond);
 plot2d([[discrete,data],f]
        ,[x,1.5e-4,3.5e-4]
        ,[y,100,240]
