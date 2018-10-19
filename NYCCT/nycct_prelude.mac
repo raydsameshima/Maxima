@@ -4,15 +4,17 @@ nycct_prelude.mac
 NYCCT physics lab.
 */
 
-/* least square fit*/
-load("least_square_fit.mac"); 
-
 print("
+nycct_prelude.mac
+ 
 A list of formula:
   percent_err(ve, vst) 
   percent_diff(v1,v2)
 
 ");
+
+/* least square fit*/
+load("least_square_fit.mac"); 
 
 percent_err(ve, vst) := block(
   [num, den],

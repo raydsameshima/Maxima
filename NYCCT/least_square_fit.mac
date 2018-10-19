@@ -5,11 +5,13 @@ Ray D. Sameshima
 
 load("lsquares");
 print("
+least_square_fit.mac
+ 
 A list of functions:
   best_fit(list_of_xys)
   plot_data_and_fit(xys)
-
-")$
+ 
+");
 
 /* Returns the best fit for the list of [[x1,y1],[x2,y2] ..] */
 best_fit(xys) := block(
