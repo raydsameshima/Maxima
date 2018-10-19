@@ -13,7 +13,7 @@ A list of formula:
 
 ");
 
-/* least square fit*/
+/* least square fit */
 load("least_square_fit.mac"); 
 
 percent_err(ve, vst) := block(
