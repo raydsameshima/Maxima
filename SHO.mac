@@ -92,11 +92,15 @@ p: alpha*(L+R);
 x: %i*beta*(L-R);
 
 /* Expectation values and standard deviations: */
-expand( bra_s . x . ket_s );
-expand( bra_s . x . x . ket_s );
-expand( bra_s . x . x . ket_s - (bra_s . x . ket_s)^2);
+         expand( bra_s . x . ket_s );
+         expand( bra_s . x . x . ket_s );
+delta_x: expand( bra_s . x . x . ket_s - (bra_s . x . ket_s)^2);
 
-expand( bra_s . p . ket_s );
-expand( bra_s . p. p . ket_s );
-expand( bra_s . p. p . ket_s - (bra_s . p . ket_s)^2);
+         expand( bra_s . p . ket_s );
+         expand( bra_s . p. p . ket_s );
+delta_p: expand( bra_s . p. p . ket_s - (bra_s . p . ket_s)^2);
 
+ev(delta_x * delta_p, alpha: 1/sqrt(2/(mw*h)), beta: 1/sqrt(2*mw/h));
+
+x4: expand( bra(i) . ((L-R)^^4) . ket(j) );
+cs: factor( makelist( coeff(x4, kron_delta(i,j+t)), t, -4, 4, 2));
