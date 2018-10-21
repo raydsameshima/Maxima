@@ -1,0 +1,78 @@
+/*
+Simple Harmonic Oscillator in Maxima
+Ray D. Sameshima
+
+see
+  https://raoul.koalatux.ch/sites/ladderoperator/data/laddersimp.pdf
+
+*/
+kill(all);
+
+/* Dirac bra and ket */
+
+/* Let us assume [i,j,m,n] be integers. */
+declare( 
+  [i,j,m,n],
+  [integer, scalar]
+);
+
+/**/
+matchdeclare( 
+  [i,j,m,n],
+  lambda([x], featurep(x, integer))
+);
+
+/* Declare bra and ket be non scalar quantities. */
+declare(
+  [bra, ket],
+  [nonscalar]
+);
+
+/* Define bra and ket abstractly; they are orthonormal. */
+tellsimp(bra(m).ket(n), kron_delta(m,n));
+
+/* Ladder operators */
+
+declare(
+  [L,R],
+  [linear]
+);
+
+/* Define the ladder operators (creation and annihilation operators). */
+tellsimp(R.ket(n), sqrt(n+1) * ket(n+1));
+tellsimp(L.ket(n), sqrt(n  ) * ket(n-1));
+
+/* Impose canonical commutation relation */
+tellsimp(R.L, L.R - 1);
+
+/* The number operator. */
+tellsimp(N.ket(n), expand(R.L.ket(n)));
+
+declare(k, integer);
+matchdeclare(k, lambda([x], featurep(x, integer)));
+
+tellsimp( (N^^k).ket(n), (N^^(k-1)) . (N.ket(n)));
+
+/* Matrix representations */
+
+mat_rep(lo, size) := 
+  radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo. ket(j-1))), size, size));
+
+/* Example */
+H: N+1/2;
+
+ML: mat_rep(L,5);
+MR: mat_rep(R,5);
+ML.MR - MR.ML;
+mat_rep(L.R - R.L, 5);
+MH: mat_rep(H,5);
+
+/* Consider a superposition of states: */
+bra_s: sqrt(1/2)*(bra(1) + bra(2));
+ket_s: sqrt(1/2)*(ket(1) + ket(2));
+
+/* The expectation value of energy is 2: */
+expand( bra_s . H. ket_s );
+
+/* The standard deviation of energy is 1/2, i.e., we'll have 1/4 for the square: */
+expand( bra_s . H.H. ket_s - (bra_s . H. ket_s )^2 );
