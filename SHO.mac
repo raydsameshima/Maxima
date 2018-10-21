@@ -28,8 +28,11 @@ declare(
   [nonscalar]
 );
 
+/**/
+dotscrules: true;
+
 /* Define bra and ket abstractly; they are orthonormal. */
-tellsimp(bra(m).ket(n), kron_delta(m,n));
+tellsimp( bra(m).ket(n), kron_delta(m,n));
 
 /* Ladder operators */
 
@@ -42,16 +45,22 @@ declare(
 tellsimp(R.ket(n), sqrt(n+1) * ket(n+1));
 tellsimp(L.ket(n), sqrt(n  ) * ket(n-1));
 
-/* Impose canonical commutation relation */
-tellsimp(R.L, L.R - 1);
-
-/* The number operator. */
-tellsimp(N.ket(n), expand(R.L.ket(n)));
-
+/**/
 declare(k, integer);
 matchdeclare(k, lambda([x], featurep(x, integer)));
 
-tellsimp( (N^^k).ket(n), (N^^(k-1)) . (N.ket(n)));
+tellsimp((R^^k).ket(n), (R^^(k-1)) . (R.ket(n)));
+tellsimp((L^^k).ket(n), (L^^(k-1)) . (L.ket(n)));
+
+/* For later usage: */
+tellsimp(((L.R)^^k).ket(n), ((L.R)^^(k-1)) . (L.R.ket(n)));
+
+/* Impose canonical commutation relation */
+tellsimp(R.L, L.R - 1);
+
+/* The number operator is defined, with recursive simplification */
+tellsimp(N.ket(n), expand(R.L.ket(n)));
+tellsimp((N^^k).ket(n), (N^^(k-1)) . (N.ket(n)));
 
 /* Matrix representations */
 
@@ -76,3 +85,18 @@ expand( bra_s . H. ket_s );
 
 /* The standard deviation of energy is 1/2, i.e., we'll have 1/4 for the square: */
 expand( bra_s . H.H. ket_s - (bra_s . H. ket_s )^2 );
+
+/* Let us focus on x and p, here we've used the following convention: */
+declare([alpha, beta], [scalar]);
+p: alpha*(L+R);
+x: %i*beta*(L-R);
+
+/* Expectation values and standard deviations: */
+expand( bra_s . x . ket_s );
+expand( bra_s . x.x . ket_s );
+expand( bra_s . x.x . ket_s - (bra_s.x.ket_s)^2);
+
+expand( bra_s . p . ket_s );
+expand( bra_s . p.p . ket_s );
+expand( bra_s . p.p . ket_s - (bra_s.p.ket_s)^2);
+
