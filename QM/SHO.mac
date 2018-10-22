@@ -8,9 +8,9 @@ see
 */
 kill(all);
 
-/* 1. Dirac bra and ket */
+/* Dirac bra and ket */
 
-/* Let us assume [i,j,m,n] be integers. */
+/* Let us assume [i,j,m,n, k] be integers. */
 declare( 
   [i,j,m,n, k],
   [integer, scalar]
@@ -18,10 +18,11 @@ declare(
 
 /* If, for example, i is "tested", i returns featurep(i,integer),
    and this must be true since we've declare so above. 
-   Then this i is assigned in an equation.*/
+   Then this i is assigned in an equation.
+   Note that, since they are symbols, we can not use integerp. */
 matchdeclare( 
   [i,j,m,n, k],
-  lambda([x], featurep(x, integer)) /* Since they are simpbols, we can not use integerp.*/
+  lambda([x], featurep(x, integer))
 );
 
 /* Declare bra and ket be non scalar quantities. */
@@ -33,13 +34,16 @@ declare(
 /* To simplify scalar-multiplication as we expect. */
 dotscrules: true;
 
-/* Define bra and ket abstractly; they are orthonormal. */
+/* Define bra and ket abstractly; they are orthonormal. 
+   If both m and n are integer (as we've stated above), then we replace 
+   bra(m) . ket(n) by Kronecker's delta. */
 tellsimp( bra(m) . ket(n), kron_delta(m,n));
 
 /* Ladder operators */
 
+/* L of the left is annihilator and R of the right is creation operator. */
 declare(
-  [L,R],
+  [L, R],
   [linear]
 );
 
@@ -47,6 +51,7 @@ declare(
 tellsimp(R . ket(n), sqrt(n+1) * ket(n+1));
 tellsimp(L . ket(n), sqrt(n  ) * ket(n-1));
 
+/* Recursive simplification. */
 tellsimp((R^^k) . ket(n), (R^^(k-1)) . (R . ket(n)));
 tellsimp((L^^k) . ket(n), (L^^(k-1)) . (L . ket(n)));
 
@@ -62,45 +67,7 @@ tellsimp((N^^k) . ket(n), (N^^(k-1)) . (N . ket(n)));
 
 /* Matrix representations */
 
+/* Maxima's labeling starts from zero. */
 mat_rep(lo, size) := 
   radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo. ket(j-1))), size, size));
 
-
-
-/* Example */
-H: N+1/2;
-
-ML: mat_rep(L,5);
-MR: mat_rep(R,5);
-ML . MR - MR . ML;
-mat_rep(L . R - R . L, 5);
-MH: mat_rep(H,5);
-
-/* Consider a superposition of states: */
-bra_s: sqrt(1/2)*(bra(1) + bra(2));
-ket_s: sqrt(1/2)*(ket(1) + ket(2));
-
-/* The expectation value of energy is 2: */
-expand( bra_s . H. ket_s );
-
-/* The standard deviation of energy is 1/2, i.e., we'll have 1/4 for the square: */
-expand( bra_s . H . H . ket_s - (bra_s . H. ket_s )^2 );
-
-/* Let us focus on x and p, here we've used the following convention: */
-declare([alpha, beta], [scalar]);
-p: alpha*(L+R);
-x: %i*beta*(L-R);
-
-/* Expectation values and standard deviations: */
-         expand( bra_s . x . ket_s );
-         expand( bra_s . x . x . ket_s );
-delta_x: expand( bra_s . x . x . ket_s - (bra_s . x . ket_s)^2);
-
-         expand( bra_s . p . ket_s );
-         expand( bra_s . p. p . ket_s );
-delta_p: expand( bra_s . p. p . ket_s - (bra_s . p . ket_s)^2);
-
-ev(delta_x * delta_p, alpha: 1/sqrt(2/(mw*h)), beta: 1/sqrt(2*mw/h));
-
-x4: expand( bra(i) . ((L-R)^^4) . ket(j) );
-cs: factor( makelist( coeff(x4, kron_delta(i,j+t)), t, -4, 4, 2));

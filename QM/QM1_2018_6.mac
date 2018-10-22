@@ -1,0 +1,55 @@
+/*
+QM1_2018_6.mac
+2018 QM 1. Homework 6
+Ray D. Sameshima
+*/
+load("SHO.mac");
+"Problem 1 a) x and p in energy eigen space."$ 
+declare([m,w,h],[scalar]);
+sol: solve([L=1/sqrt(2*m*w*h)*(p-%i*m*w*x), R=1/sqrt(2*m*w*h)*(p+%i*m*w*x)],[x,p]);
+x: rhs( sol[1][1] );
+p: rhs( sol[1][2] );
+mat_rep(x, 4);
+mat_rep(p, 4);
+mat_rep(L+R, 4);
+mat_rep(L-R, 4);
+
+"Problem 1 b) Hamiltonian"$
+H: p^^2/(2*m) + m*w^2/2 * x^^2;
+mat_rep(H, 4);
+
+"CCR"$
+mat_rep(x.p - p.x, 4);
+
+"Problem 2 a) Define a state:"$
+/* Consider a superposition of states: */
+bra_s: sqrt(1/2)*(bra(1) + bra(2));
+ket_s: sqrt(1/2)*(ket(1) + ket(2));
+
+"Problem 2 b) Expectation value of energy, and the square of the standard deviation. "$
+expand( bra_s . H. ket_s );
+
+expand( bra_s . H . H . ket_s - (bra_s . H. ket_s )^2 );
+
+"Problem 2 c) Expectation values and standard deviations of x and p"$
+expand( bra_s . x . ket_s );
+expand( bra_s . x . x . ket_s );
+delta_x: expand( bra_s . x . x . ket_s - (bra_s . x . ket_s)^2);
+
+expand( bra_s . p . ket_s );
+expand( bra_s . p. p . ket_s );
+delta_p: expand( bra_s . p. p . ket_s - (bra_s . p . ket_s)^2);
+
+"The product is strictly greater than that of Robertson-Heisemberg uncertainty limit."$
+delta_x * delta_p;
+
+"Problem 3. The matrix elements for x^^4."$
+"Since x is essentially L-R, we can compute the following:"$
+x4: expand( bra(i) . ((L-R)^^4) . ket(j) );
+cs: factor( makelist( coeff(x4, kron_delta(i,j+t)), t, -4, 4, 2));
+cs[1];
+cs[2];
+cs[3];
+cs[4];
+cs[5];
+
