@@ -204,3 +204,224 @@ sqrt(j + 1) sqrt(j + 2) sqrt(j + 3) sqrt(j + 4)]
 (%i38) cs[5]
 (%o38)          sqrt(j + 1) sqrt(j + 2) sqrt(j + 3) sqrt(j + 4)
 (%o38)           /home/rds/Documents/Maxima/QM/QM1_2018_6.mac
+Maxima 5.41.0 http://maxima.sourceforge.net
+using Lisp SBCL 1.4.7
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("QM1_2018_6.mac")
+
+read and interpret file: /home/rds/Documents/Maxima/QM/QM1_2018_6.mac
+(%i2) load("SHO.mac")
+(%o0)                               SHO.mac
+(%i1) "Problem 1 a) x and p in energy eigen space."
+(%i2) declare([m,w,h],[scalar])
+(%o2)                                done
+(%i3) sol:factor(solve([L = (1/sqrt(2*m*w*h))*(p-%i*m*w*x),
+                        R = (1/sqrt(2*m*w*h))*(p+%i*m*w*x)],[x,p]))
+                   %i sqrt(h m w) (R - L)      sqrt(h m w) (R + L)
+(%o3)      [[x = - ----------------------, p = -------------------]]
+                        sqrt(2) m w                  sqrt(2)
+(%i4) x:ev(x,sol)
+                             %i sqrt(h m w) (R - L)
+(%o4)                      - ----------------------
+                                  sqrt(2) m w
+(%i5) p:ev(p,sol)
+                              sqrt(h m w) (R + L)
+(%o5)                         -------------------
+                                    sqrt(2)
+(%i6) "For indices lovers:"
+(%i7) factor(expand(bra(i) . x . ket(j)))
+(%o7) - (%i (kron_delta(i, j + 1) sqrt(j + 1) - kron_delta(i, j - 1) sqrt(j))
+                                                     sqrt(h m w))/(sqrt(2) m w)
+(%i8) factor(expand(bra(i) . p . ket(j)))
+(%o8) 
+  (kron_delta(i, j + 1) sqrt(j + 1) + kron_delta(i, j - 1) sqrt(j)) sqrt(h m w)
+  -----------------------------------------------------------------------------
+                                     sqrt(2)
+(%i9) "For matrix form lovers:"
+(%i10) mat_rep(x,4)
+                [             0             ]
+                [                           ]
+                [         %i sqrt(h)        ]
+                [ - ----------------------- ]
+(%o10)  Col 1 = [   sqrt(2) sqrt(m) sqrt(w) ]
+                [                           ]
+                [             0             ]
+                [                           ]
+                [             0             ]
+         [       %i sqrt(h)        ]         [             0             ]
+         [ ----------------------- ]         [                           ]
+         [ sqrt(2) sqrt(m) sqrt(w) ]         [        %i sqrt(h)         ]
+         [                         ]         [      ---------------      ]
+         [            0            ]         [      sqrt(m) sqrt(w)      ]
+ Col 2 = [                         ] Col 3 = [                           ]
+         [        %i sqrt(h)       ]         [             0             ]
+         [    - ---------------    ]         [                           ]
+         [      sqrt(m) sqrt(w)    ]         [     sqrt(3) %i sqrt(h)    ]
+         [                         ]         [ - ----------------------- ]
+         [            0            ]         [   sqrt(2) sqrt(m) sqrt(w) ]
+         [            0            ]
+         [                         ]
+         [            0            ]
+         [                         ]
+ Col 4 = [   sqrt(3) %i sqrt(h)    ]
+         [ ----------------------- ]
+         [ sqrt(2) sqrt(m) sqrt(w) ]
+         [                         ]
+         [            0            ]
+(%i11) mat_rep(p,4)
+                [            0            ]         [ sqrt(h) sqrt(m) sqrt(w) ]
+                [                         ]         [ ----------------------- ]
+                [ sqrt(h) sqrt(m) sqrt(w) ]         [         sqrt(2)         ]
+                [ ----------------------- ]         [                         ]
+(%o11)  Col 1 = [         sqrt(2)         ] Col 2 = [            0            ]
+                [                         ]         [                         ]
+                [            0            ]         [ sqrt(h) sqrt(m) sqrt(w) ]
+                [                         ]         [                         ]
+                [            0            ]         [            0            ]
+         [                0                ]
+         [                                 ]
+         [     sqrt(h) sqrt(m) sqrt(w)     ]
+         [                                 ]
+ Col 3 = [                0                ]
+         [                                 ]
+         [ sqrt(3) sqrt(h) sqrt(m) sqrt(w) ]
+         [ ------------------------------- ]
+         [             sqrt(2)             ]
+         [                0                ]
+         [                                 ]
+         [                0                ]
+         [                                 ]
+ Col 4 = [ sqrt(3) sqrt(h) sqrt(m) sqrt(w) ]
+         [ ------------------------------- ]
+         [             sqrt(2)             ]
+         [                                 ]
+         [                0                ]
+(%i12) "They are essentiall R+L and R-L, so let us compute them:"
+(%i13) mat_rep(R+L,4)
+                       [ 0     1        0        0    ]
+                       [                              ]
+                       [ 1     0     sqrt(2)     0    ]
+(%o13)                 [                              ]
+                       [ 0  sqrt(2)     0     sqrt(3) ]
+                       [                              ]
+                       [ 0     0     sqrt(3)     0    ]
+(%i14) mat_rep(R-L,4)
+                     [ 0    - 1        0          0     ]
+                     [                                  ]
+                     [ 1     0     - sqrt(2)      0     ]
+(%o14)               [                                  ]
+                     [ 0  sqrt(2)      0      - sqrt(3) ]
+                     [                                  ]
+                     [ 0     0      sqrt(3)       0     ]
+(%i15) "Problem 1 b) Hamiltonian"
+(%i16) H:p^^2/(2*m)+((m*w^2)/2)*x^^2
+                                   <2>              <2>
+                        h w (R + L)      h w (R - L)
+(%o16)                  -------------- - --------------
+                              4                4
+(%i17) mat_rep(H,4)
+                         [ h w                      ]
+                         [ ---    0      0      0   ]
+                         [  2                       ]
+                         [                          ]
+                         [      3 h w               ]
+                         [  0   -----    0      0   ]
+                         [        2                 ]
+(%o17)                   [                          ]
+                         [             5 h w        ]
+                         [  0     0    -----    0   ]
+                         [               2          ]
+                         [                          ]
+                         [                    7 h w ]
+                         [  0     0      0    ----- ]
+                         [                      2   ]
+(%i18) factor(expand(bra(i) . H . ket(j)))
+                        h kron_delta(i, j) (2 j + 1) w
+(%o18)                  ------------------------------
+                                      2
+(%i19) "CCR"
+(%i20) mat_rep(x . p-p . x,4)
+                          [ %i h   0     0     0   ]
+                          [                        ]
+                          [  0    %i h   0     0   ]
+(%o20)                    [                        ]
+                          [  0     0    %i h   0   ]
+                          [                        ]
+                          [  0     0     0    %i h ]
+(%i21) expand(bra(i) . (x . p-p . x) . ket(j))
+(%o21)                       %i h kron_delta(i, j)
+(%i22) "Problem 2 a) To see the possible outcome:"
+(%i23) expand(bra(i) . H . (ket(1)+ket(2)))
+                5 kron_delta(2, i) h w   3 kron_delta(1, i) h w
+(%o23)          ---------------------- + ----------------------
+                          2                        2
+(%i24) "Define a state:"
+(%i25) bra_s:sqrt(1/2)*(bra(1)+bra(2))
+                                bra(2) + bra(1)
+(%o25)                          ---------------
+                                    sqrt(2)
+(%i26) ket_s:sqrt(1/2)*(ket(1)+ket(2))
+                                ket(2) + ket(1)
+(%o26)                          ---------------
+                                    sqrt(2)
+(%i27) "Problem 2 b) Expectation value of energy, and the square of the standard deviation. "
+(%i28) expand(bra_s . H . ket_s)
+(%o28)                               2 h w
+(%i29) expand(bra_s . H . H . ket_s-(bra_s . H . ket_s)^2)
+                                      2  2
+                                     h  w
+(%o29)                               -----
+                                       4
+(%i30) "Problem 2 c) Expectation values and standard deviations of x and p"
+(%i31) expand(bra_s . x . ket_s)
+(%o31)                                 0
+(%i32) expand(bra_s . x . x . ket_s)
+                                      2 h
+(%o32)                                ---
+                                      m w
+(%i33) delta_x:expand(bra_s . x . x . ket_s-(bra_s . x . ket_s)^2)
+                                      2 h
+(%o33)                                ---
+                                      m w
+(%i34) expand(bra_s . p . ket_s)
+(%o34)                            sqrt(h m w)
+(%i35) expand(bra_s . p . p . ket_s)
+(%o35)                              2 h m w
+(%i36) delta_p:expand(bra_s . p . p . ket_s-(bra_s . p . ket_s)^2)
+(%o36)                               h m w
+(%i37) "The product is strictly greater than that of Robertson-Heisemberg uncertainty limit."
+(%i38) delta_x*delta_p
+                                        2
+(%o38)                               2 h
+(%i39) "Problem 3. The matrix elements for x^^4."
+(%i40) "Since x is essentially L-R, we can compute the following:"
+(%i41) x4:expand(bra(i) . (L-R)^^4 . ket(j))
+(%o41) kron_delta(i, j + 4) sqrt(j + 1) sqrt(j + 2) sqrt(j + 3) sqrt(j + 4)
+ - 4 kron_delta(i, j + 2) j sqrt(j + 1) sqrt(j + 2)
+                                                                        2
+ - 6 kron_delta(i, j + 2) sqrt(j + 1) sqrt(j + 2) + 6 kron_delta(i, j) j
+                                       3/2
+ - 4 kron_delta(i, j - 2) sqrt(j - 1) j    + 6 kron_delta(i, j) j
+ + kron_delta(i, j - 4) sqrt(j - 3) sqrt(j - 2) sqrt(j - 1) sqrt(j)
+ + 2 kron_delta(i, j - 2) sqrt(j - 1) sqrt(j) + 3 kron_delta(i, j)
+(%i42) cs:factor(makelist(coeff(x4,kron_delta(i,j+t)),t,-4,4,2))
+(%o42) [sqrt(j - 3) sqrt(j - 2) sqrt(j - 1) sqrt(j), 
+                                         2
+- 2 sqrt(j - 1) sqrt(j) (2 j - 1), 3 (2 j  + 2 j + 1), 
+- 2 sqrt(j + 1) sqrt(j + 2) (2 j + 3), 
+sqrt(j + 1) sqrt(j + 2) sqrt(j + 3) sqrt(j + 4)]
+(%i43) cs[1]
+(%o43)            sqrt(j - 3) sqrt(j - 2) sqrt(j - 1) sqrt(j)
+(%i44) cs[2]
+(%o44)                 - 2 sqrt(j - 1) sqrt(j) (2 j - 1)
+(%i45) cs[3]
+                                    2
+(%o45)                        3 (2 j  + 2 j + 1)
+(%i46) cs[4]
+(%o46)               - 2 sqrt(j + 1) sqrt(j + 2) (2 j + 3)
+(%i47) cs[5]
+(%o47)          sqrt(j + 1) sqrt(j + 2) sqrt(j + 3) sqrt(j + 4)
+(%o47)           /home/rds/Documents/Maxima/QM/QM1_2018_6.mac

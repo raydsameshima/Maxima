@@ -4,30 +4,42 @@ QM1_2018_6.mac
 Ray D. Sameshima
 */
 load("SHO.mac");
-"Problem 1 a) x and p in energy eigen space."$ 
-declare([m,w,h],[scalar]);
-sol: solve([L=1/sqrt(2*m*w*h)*(p-%i*m*w*x), R=1/sqrt(2*m*w*h)*(p+%i*m*w*x)],[x,p]);
-x: rhs( sol[1][1] );
-p: rhs( sol[1][2] );
-mat_rep(x, 4);
-mat_rep(p, 4);
-mat_rep(L+R, 4);
-mat_rep(L-R, 4);
 
 /* Problem 1 */
+
+"Problem 1 a) x and p in energy eigen space."$ 
+declare([m,w,h],[scalar]);
+sol: factor(solve([L=1/sqrt(2*m*w*h)*(p-%i*m*w*x), R=1/sqrt(2*m*w*h)*(p+%i*m*w*x)],[x,p]));
+x: ev(x, sol);
+p: ev(p, sol);
+/*
+x: rhs( sol[1][1] );
+p: rhs( sol[1][2] );
+*/
+"For indices lovers:"$
+factor(expand( bra(i) . x . ket(j) ));
+factor(expand( bra(i) . p . ket(j) ));
+"For matrix form lovers:"$
+mat_rep(x, 4);
+mat_rep(p, 4);
+"They are essentiall R+L and R-L, so let us compute them:"$
+mat_rep(R+L, 4);
+mat_rep(R-L, 4);
 
 "Problem 1 b) Hamiltonian"$
 H: p^^2/(2*m) + m*w^2/2 * x^^2;
 mat_rep(H, 4);
+factor(expand( bra(i) . H . ket(j)));
 
 "CCR"$
 mat_rep(x.p - p.x, 4);
-
 expand( bra(i) . (x.p - p.x). ket(j));
 
 /* Problem 2 */
+"Problem 2 a) To see the possible outcome:"$
+expand( bra(i) . H . (ket(1) + ket(2)));
 
-"Problem 2 a) Define a state:"$
+"Define a state:"$
 /* Consider a superposition of states: */
 bra_s: sqrt(1/2)*(bra(1) + bra(2));
 ket_s: sqrt(1/2)*(ket(1) + ket(2));
