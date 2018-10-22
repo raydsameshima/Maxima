@@ -70,4 +70,3 @@ tellsimp((N^^k) . ket(n), (N^^(k-1)) . (N . ket(n)));
 /* Maxima's labeling starts from zero. */
 mat_rep(lo, size) := 
   radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo. ket(j-1))), size, size));
-
