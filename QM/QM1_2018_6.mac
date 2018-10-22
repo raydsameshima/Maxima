@@ -14,12 +14,18 @@ mat_rep(p, 4);
 mat_rep(L+R, 4);
 mat_rep(L-R, 4);
 
+/* Problem 1 */
+
 "Problem 1 b) Hamiltonian"$
 H: p^^2/(2*m) + m*w^2/2 * x^^2;
 mat_rep(H, 4);
 
 "CCR"$
 mat_rep(x.p - p.x, 4);
+
+expand( bra(i) . (x.p - p.x). ket(j));
+
+/* Problem 2 */
 
 "Problem 2 a) Define a state:"$
 /* Consider a superposition of states: */
@@ -42,6 +48,8 @@ delta_p: expand( bra_s . p. p . ket_s - (bra_s . p . ket_s)^2);
 
 "The product is strictly greater than that of Robertson-Heisemberg uncertainty limit."$
 delta_x * delta_p;
+
+/* Problem 3 */
 
 "Problem 3. The matrix elements for x^^4."$
 "Since x is essentially L-R, we can compute the following:"$
