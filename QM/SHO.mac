@@ -7,6 +7,19 @@ see
 
 */
 kill(all);
+print("
+SHO.mac
+
+This .mac file can provide the i-th state
+  bra(i)
+  ket(i),
+L,R of ladder operator, and the matrix representation of operators.
+  mat_rep(linear_op, size_of_matrix)
+ 
+Use i and j for indices, e.g.,
+  bra(i) . ket(j);
+
+")$
 
 /* Dirac bra and ket */
 
@@ -62,11 +75,11 @@ tellsimp(((L . R)^^k) . ket(n), ((L . R)^^(k-1)) . (L . R.ket(n)));
 tellsimp(R . L, L . R - 1);
 
 /* The number operator is defined, with recursive simplification */
-tellsimp(N . ket(n), expand(R . L . ket(n)));
+tellsimp(N . ket(n),      expand(R . L . ket(n)));
 tellsimp((N^^k) . ket(n), (N^^(k-1)) . (N . ket(n)));
 
 /* Matrix representations */
 
 /* Maxima's labeling starts from zero. */
 mat_rep(lo, size) := 
-  radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo. ket(j-1))), size, size));
+  radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo . ket(j-1))), size, size));
