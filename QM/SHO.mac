@@ -9,15 +9,16 @@ see
 kill(all);
 print("
 SHO.mac
-
+ 
 This .mac file can provide the i-th state
   bra(i)
   ket(i),
-L,R of ladder operator, and the matrix representation of operators.
-  mat_rep(linear_op, size_of_matrix)
- 
+L,R of ladder operator, and the matrix representation of operators:
+  mat_rep(linear_op, size_of_matrix);
+  
 Use i and j for indices, e.g.,
-  bra(i) . ket(j);
+  bra(i) . linear_op . ket(j);
+to see the indexed expression of a linear_op.
 
 ")$
 
@@ -80,6 +81,6 @@ tellsimp((N^^k) . ket(n), (N^^(k-1)) . (N . ket(n)));
 
 /* Matrix representations */
 
-/* Maxima's labeling starts from zero. */
+/* Maxima's labeling starts from one, but the labeling for SHO starts from zero. */
 mat_rep(lo, size) := 
   radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo . ket(j-1))), size, size));
