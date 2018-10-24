@@ -10,6 +10,7 @@ least_square_fit.mac
 A list of functions:
   best_fit(list_of_xys)
   plot_data_and_fit(xys)
+  merge_xs_and_ys(xs,ys)
  
 ");
 
@@ -47,4 +48,10 @@ plot_data_and_fit(xys) := block(
       ,[gnuplot_preamble,"set key bottom;"]
     )
   )
+);
+
+merge_xs_and_ys(xs,ys) := block(
+  [l],
+  l: min(length(xs), length(ys)),
+  makelist([xs[i],ys[i]], i,1,l)
 );
