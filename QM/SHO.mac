@@ -48,9 +48,9 @@ declare(
 /* To simplify scalar-multiplication as we expect. */
 dotscrules: true;
 
-/* Define bra and ket abstractly; they are orthonormal. 
+/* Define bra and ket abstractly; they are orthonormal.
    If both m and n are integer (as we've stated above), then we replace 
-   bra(m) . ket(n) by Kronecker's delta. */
+   bra(m) . ket(n) by Kronecker's delta, of ther inner product. */
 tellsimp( bra(m) . ket(n), kron_delta(m,n));
 
 /* Ladder operators */
@@ -84,3 +84,6 @@ tellsimp((N^^k) . ket(n), (N^^(k-1)) . (N . ket(n)));
 /* Maxima's labeling starts from one, but the labeling for SHO starts from zero. */
 mat_rep(lo, size) := 
   radcan(genmatrix(lambda([i,j], expand(bra(i-1). lo . ket(j-1))), size, size));
+
+/* Outer product, the associativity. */
+tellsimp( bra(i) . (ket(m) . bra(n)), (bra(i) . ket(m)) . bra(n));
