@@ -6,7 +6,7 @@ see
   https://raoul.koalatux.ch/sites/ladderoperator/data/laddersimp.pdf
 
 */
-kill(all);
+kill(i,j,m,n,k,bra,ket,L,R,N,mat_rep);
 print("
 SHO.mac
  
