@@ -4,23 +4,9 @@ Ray D. Sameshima
 
 see
   https://raoul.koalatux.ch/sites/ladderoperator/data/laddersimp.pdf
-
 */
-kill(i,j,m,n,k,bra,ket,L,R,N,mat_rep);
-print("
-SHO.mac
- 
-This .mac file can provide the i-th state
-  bra(i)
-  ket(i),
-L,R of ladder operator, and the matrix representation of operators:
-  mat_rep(linear_op, size_of_matrix);
-  
-Use i and j for indices, e.g.,
-  bra(i) . linear_op . ket(j);
-to see the indexed expression of a linear_op.
 
-")$
+kill(i,j,m,n,k,bra,ket,L,R,N,mat_rep);
 
 /* Dirac bra and ket */
 
@@ -30,7 +16,7 @@ declare(
   [integer, scalar]
 );
 
-/* If, for example, i is "tested", i returns featurep(i,integer),
+/* If, for example, i is "tested" (via tellsimp), it returns featurep(i,integer),
    and this must be true since we've declare so above. 
    Then this i is assigned in an equation.
    Note that, since they are symbols, we can not use integerp. */
@@ -51,7 +37,7 @@ dotscrules: true;
 /* Define bra and ket abstractly; they are orthonormal.
    If both m and n are integer (as we've stated above), then we replace 
    bra(m) . ket(n) by Kronecker's delta, of ther inner product. */
-tellsimp( bra(m) . ket(n), kron_delta(m,n));
+tellsimp( bra(m) . ket(n), kron_delta(m,n) );
 
 /* Ladder operators */
 
@@ -87,3 +73,18 @@ mat_rep(lo, size) :=
 
 /* Outer product, the associativity. */
 tellsimp( bra(i) . (ket(m) . bra(n)), (bra(i) . ket(m)) . bra(n));
+
+/* After loading this script, the following message will arise: */
+print("
+SHO.mac
+ 
+This .mac file can provide the i-th state
+  bra(i)
+  ket(i),
+L,R of ladder operator, and the matrix representation of operators:
+  mat_rep(linear_op, size_of_matrix);
+  
+Use i and j for indices, e.g.,
+  bra(i) . linear_op . ket(j);
+to see the indexed expression of a linear_op.
+")$
