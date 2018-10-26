@@ -4,15 +4,10 @@ Ray D. Sameshima
 */
 
 load("lsquares");
-print("
-least_square_fit.mac
- 
-A list of functions:
-  best_fit(list_of_xys)
-  plot_data_and_fit(xys)
-  merge_xs_and_ys(xs,ys)
- 
-");
+
+/* */
+data_plot(xys) := 
+  plot2d([discrete, xys], [style, [points, 2,1,1]]);
 
 /* Returns the best fit for the list of [[x1,y1],[x2,y2] ..] */
 best_fit(xys) := block(
@@ -55,3 +50,15 @@ merge_xs_and_ys(xs,ys) := block(
   l: min(length(xs), length(ys)),
   makelist([xs[i],ys[i]], i,1,l)
 );
+
+/**/
+print("
+least_square_fit.mac
+ 
+A list of functions:
+  data_plot(list_of_xys) 
+  best_fit(xys)
+  plot_data_and_fit(xys)
+ 
+  merge_xs_and_ys(xs,ys)
+");
