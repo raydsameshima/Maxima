@@ -1,0 +1,45 @@
+/*
+QM homework 8
+Ray D. Sameshima
+*/
+kill(all);
+
+" Problem 2: "$ 
+assume(N > 0, a > 0)$
+rho(x) := N^2 /(x^2 + a^2);
+sol: solve( 1 = integrate(rho(x),x,-inf,inf), N);
+is(rhs(sol[2]) > 0);
+define(rho(x), at(rho(x), sol[2]));
+define(phi(x), at( N/sqrt(x^2+a^2), sol[2]));
+define(phid(x), conjugate( phi(x) ));
+average_x : integrate(phid(x)*x*phi(x),x,-inf, inf);
+average_k : integrate(phid(x)* diff(phi(x),x,1),x,-inf, inf);
+
+" Problem 3 "$
+kill(N,a, phi)$
+assume(N > 0, a > 0)$
+phi(x) := N * exp(-a*x^2/2);
+sol: solve( 1 = integrate(conjugate(phi(x)) * phi(x),x,-inf,inf), N);
+is(rhs(sol[2]) > 0);
+define(phi(x), at(phi(x), sol[2]));
+square_x: integrate( conjugate(phi(x)) * x^2 * phi(x),x,-inf,inf);
+/* Expectation values for p .. p^4: */
+assume(h>0)$
+ps: makelist
+      ( integrate( conjugate(phi(x)) * (%i*h)^j * diff( phi(x), x, j),x,-inf,inf)
+      , j , 1 , 4 );
+xs: makelist
+      ( integrate( conjugate(phi(x)) * x^j * phi(x),x,-inf,inf)
+      , j , 1 , 4 );
+
+assume(j>0)$
+declare(j, integer)$
+integrate( conjugate(phi(x)) * x^(2*j+1) * phi(x),x,-inf,inf);
+
+average_x: integrate( conjugate(phi(x)) * x * phi(x),x,-inf,inf);
+delta_x: square_x - (average_x)^2;
+delta_p: ps[2] - (ps[1])^2;
+
+assume(m>0)$
+E: ps[2]/(2*m);
+delta_E: ps[4]/(4*m^2) - E^2;
