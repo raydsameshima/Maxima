@@ -4,16 +4,34 @@ Ray D. Sameshima
 */
 kill(all);
 
-" Problem 2: "$ 
+"Problem 2:"$ 
 assume(N > 0, a > 0)$
 rho(x) := N^2 /(x^2 + a^2);
 sol: solve( 1 = integrate(rho(x),x,-inf,inf), N);
 is(rhs(sol[2]) > 0);
 define(rho(x), at(rho(x), sol[2]));
-define(phi(x), at( N/sqrt(x^2+a^2), sol[2]));
+declare(d, real);
+depends(d,x);
+
+"In general, there is a phase freedom:"$
+define(phi(x), at( N/sqrt(x^2+a^2), sol[2]) * exp(%i*d) );
 define(phid(x), conjugate( phi(x) ));
 average_x : integrate(phid(x)*x*phi(x),x,-inf, inf);
+"The phase is a function of x"$
+dphi: radcan(expand(diff(phi(x),x,1)));
+average_k : integrate(phid(x)* dphi,x,-inf,inf); /* diff(phi(x),x,1),x,-inf, inf); */
+
+"Consider a limit case; constant phase."$
+declare(d, constant);
 average_k : integrate(phid(x)* diff(phi(x),x,1),x,-inf, inf);
+
+"Another case; a linear phase, which has a shifted momentum:"$
+assume(d>0);
+define(phi(x), ev( at( N/sqrt(x^2+a^2), sol[2]) * exp(%i*d), d:d*x));
+phi(x);
+dphi: conjugate(phi(x));
+kernel: dphi * (-%i)*diff(phi(x),x,1);
+integrate(kernel,x,minf,inf);
 
 " Problem 3 "$
 kill(N,a, phi)$
@@ -39,7 +57,9 @@ integrate( conjugate(phi(x)) * x^(2*j+1) * phi(x),x,-inf,inf);
 average_x: integrate( conjugate(phi(x)) * x * phi(x),x,-inf,inf);
 delta_x: square_x - (average_x)^2;
 delta_p: ps[2] - (ps[1])^2;
+delta_x * delta_p;
 
 assume(m>0)$
 E: ps[2]/(2*m);
-delta_E: ps[4]/(4*m^2) - E^2;
+EE: ps[4]/(4*m^2); 
+delta_E: EE - E^2;
