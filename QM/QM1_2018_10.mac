@@ -1,0 +1,50 @@
+/*
+QM1_2018_10.mac
+2018 QM 1. Homework 10
+Ray D. Sameshima
+*/
+kill(all);
+load("SHO.mac");
+
+/* Problem 2 */
+
+"Problem 1 a) x and p in energy eigen space."$ 
+declare([m,w,h],[scalar, real]);
+sol: factor(solve([L=1/sqrt(2*m*w*h)*(p-%i*m*w*x), R=1/sqrt(2*m*w*h)*(p+%i*m*w*x)],[x,p]));
+x: ev(x, sol);
+p: ev(p, sol);
+"So x and p are essentially (R-L) and (R+L) "$
+
+/* Define a state */
+declare(N, [scalar, real]);
+s: N*(3*ket(0) + sqrt(3)*ket(1) + 2*ket(3));
+sd: conjugate(s);
+sol: solve( sd. s = 1, N);
+s: at(s, sol[2]);
+sd: at(sd, sol[2]);
+
+"To see the non-zero elements of x, and x^^2: "$
+factor( expand( bra(i) . x . ket(j)));
+factor( expand( bra(i) . x^^2 . ket(j)));
+
+mat_rep(x,4);
+mat_rep(x^^2,4);
+
+bra(i) . (R-L) . ket(j), expand;
+bra(i) . (R-L)^^2 . ket(j), expand;
+
+mat_rep((R-L), 4);
+mat_rep((R-L)^^2, 4);
+
+/* Time evolution */
+declare(U, nonscalar);
+declare([t], [scalar, real]);
+
+tellsimp( U(t) . ket(i), exp(-%i*t*w*h*(i+1/2)) * ket(i));
+tellsimp( bra(i) . U(t), exp( %i*t*w*h*(i+1/2)) * bra(i));
+
+s(t) := expand(U(t) . s);
+exp_x: conjugate(s(t)) . x . s(t);
+expand(demoivre(expand(exp_x)));
+
+
