@@ -3,6 +3,7 @@ QM1_2018_6.mac
 2018 QM 1. Homework 6
 Ray D. Sameshima
 */
+kill(all);
 load("SHO.mac");
 
 /* Problem 1 */
