@@ -1,0 +1,14 @@
+/*
+kronecker_product
+
+https://books.google.com/books?id=LBw8DQAAQBAJ&lpg=PA283&ots=z2kE3YX8rX&dq=kronecker_product%20maxima%20example&hl=ja&pg=PA284#v=onepage&q&f=true
+
+*/
+kill(all);
+A: matrix([a1,1],[0,a2]);
+B: matrix([1,b1],[b2,0]);
+KAB: kronecker_product(A,B);
+determinant(KAB);
+mat_trace(KAB);
+kronecker_product(A,B)-kronecker_product(B,A);
+
