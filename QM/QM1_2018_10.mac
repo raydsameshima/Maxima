@@ -41,7 +41,10 @@ declare(U, nonscalar);
 declare([t], [scalar, real]);
 
 tellsimp( U(t) . ket(i), exp(-%i*t*w*h*(i+1/2)) * ket(i));
-tellsimp( bra(i) . U(t), exp( %i*t*w*h*(i+1/2)) * bra(i));
+/* 
+tellsimp( bra(i) . U(t), exp( %i*t*w*h*(i+1/2)) * bra(i)); 
+*/
+tellsimp( bra(i) . U(t), conjugate( U(t) . ket(i)));
 
 s(t) := expand(U(t) . s);
 exp_x: conjugate(s(t)) . x . s(t);
@@ -53,8 +56,7 @@ declare([h,m,k,x,rho],[scalar, real]);
 declare([A,B,C,D],[scalar, complex]);
 phi[1](x) := A*exp(%i*k*x) + B*exp(-%i*k*x);
 phi[2](x) := C*exp(rho*x) + D*exp(-rho*x);
-sol: solve([phi[1](0) = phi[2](0), at(diff(phi[1](x),x,1),x=0) = at(diff(phi[2](x),x,1),x=0)]
-          ,[C,D]);
+
 current1: -%i*h/m * conjugate(phi[1](x)) * diff(phi[1](x),x,1);
 trigsimp( realpart (expand(demoivre(expand(current1)))));
 "So there is no interference, and they are essentially j_in - j_out"$
@@ -64,3 +66,9 @@ trigsimp( realpart (expand(demoivre(expand(current2)))));
 "Only interference terms"$
 
 
+/*
+sol: solve([phi[1](0) = phi[2](0), at(diff(phi[1](x),x,1),x=0) = at(diff(phi[2](x),x,1),x=0)]
+          ,[C,D]);
+define(phi[2](x), at(phi[2](x), sol[1]));
+trigsimp( realpart (expand(demoivre(expand( -%i*h/m * conjugate(phi[2](x)) * diff(phi[2](x),x))))));
+*/
