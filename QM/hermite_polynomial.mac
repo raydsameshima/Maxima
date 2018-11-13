@@ -1,0 +1,46 @@
+/*
+hermite_polynomial.mac
+Ray D. Sameshima
+*/
+
+kill(all);
+
+/* To achieve (x - d/dx)^n type operators, we introduce power of operator function: */
+op_pow(o, n, f) := 
+  if n <= 0 then f 
+            else op_pow(o, n - 1, o(f));
+
+h2(n,x) := 
+  expand(
+    exp(x^2/2) * op_pow(lambda([g],x*g-diff(g,x,1)),n,exp(-x^2/2))
+  );
+
+/* Maxima has hermite(n,x) as its build-in function. */
+makelist(h2(n,x),n,0,4);
+makelist(expand(hermite(n,x)),n,0,4);
+
+/* Consider a harmonic oscilator in QM. */
+assume(m>0, w>0, h>0);
+depends(f,q);
+
+/* Annihilator for vacuum in coordinate representation: */
+eqn: sqrt(m*w)*q*f + h/(sqrt(m*w)) * 'diff(f,q,1) = 0;
+
+/* Let us try to solve it with ode2: */
+sol: ode2(eqn, f,q);
+
+/* First, fix a solution setting an initial condition. */
+sol1: ic1(sol,q=0,f=c);
+define(f(q), rhs(sol1));
+
+/* Then solve it with normalization condition. */
+sol2: solve( 1 = integrate(abs(f(q))^2,q,-inf,inf), c);
+
+/* So far this f(q) is the lowest energy state: */
+define(f(q), at(f(q),(sol2[2])));
+
+/* The n-th state of oscillator is given in this form:*/
+s(n,q) :=
+  (m*w/(%pi*h))^(1/4) * 1/(sqrt(n! * 2^n)) * exp(-m*w*q^2/(2*h)) * hermite(n, sqrt(m*w/h)*q);
+
+plot2d (makelist (ev(s(n,x),m:w:h:1),n,0,6),[x,0,4]);
