@@ -1,20 +1,72 @@
 /*
 http://issc.uj.ac.za/downloads/problems/advancedP.pdf
 
+http://fe.math.kobe-u.ac.jp/MathLibre-doc/maxima-note.pdf
 */
-
+kill(all)$
 "Bernoulli Numbers"$
 B[n] := block(
-  [f,g],
-  f(x) := x/(exp(x) -1),
-  g[n](x) := taylor(f(x),x,0,n),
+  [x,f,g],
+  f: x/(exp(x) - 1),
+  g: taylor(f,x,0,n),
   return(
-    at( diff(g[n](x),x,n), x=0)
+    coeff(g,x,n)*factorial(n)
   )
 );
 
-/* Using the recurrence relation, see wikipedia for example. */
+/* Using the recurrence relation, see Wikipedia for example.
+   Caution: it is extremely slow. */
 B_[n] := -1/(n+1) * sum(binomial(n+1,k)*B[k],k,0,n-1);
 
 /* Maxima has a build-in bern(n). */
+showtime:true;
+makelist([bern(i), B[i]], i, 1, 10);
+B[144];
+/*
+B_[144];
+*/
+bern(144);
+
+showtime:false;
+
+/* Euler summation formula */
+euler_sum(f,n) := block(
+  [integral, ends, s],
+  integral: integrate(f(j),j,1,n),
+  ends: (f(n) + f(1))/2,
+  s: sum( bern(2*k)/(factorial(2*k)) 
+          * ( at( diff(f(x),x,2*k-1), x=n) - at( diff(f(x),x,2*k-1), x=1))
+        , k, 1, n),
+  return(
+    integral + ends + s
+  )
+);
+
+"Using this home-made euler_sum, we evaluate "$
+print("nusum(j^2,j,1,n) = ", nusum(j^2,j,1,n))$
+euler_sum( lambda([j],j^2), 14);
+sum(j^2,j,1,14);
+
+"Differential equation; consider the EoM for falling object under air friction."$
+kill(x);
+/* depends(x,t); */
+assume(m>0, r>0, h>0);
+atvalue(x(t), t=0, h);
+atvalue(diff(x(t),t,1), t=0, 0);
+sol: desolve( m*diff(x(t),t,2) = m*g - r*diff(x(t),t,1), x(t));
+define(x(t), rhs(sol));
+v(t) := diff(x(t),t,1);
+xvs(r) := ev([x(t),v(t)], h:1, m:1, g:9.81);
+xvs0: ev(limit([x(t),v(t)],r,0), h:m:1, g:9.81);
+"Let us plot r=0(limit), 0.1, 1, 10, and 100."$
+plot2d( append(xvs0, xvs(0.1), xvs(1), xvs(10), xvs(100)), [t,0,0.2]);
+
+/* An oscillator with small friction. */
+kill(x);
+assume(r^2 < 4*k*m);
+atvalue(x(t), t=0, A);
+atvalue(diff(x(t),t,1), t=0, 0);
+sol: ratsimp( desolve(m*diff(x(t),t,2) =-k*x(t) - r*diff(x(t),t,1),x(t)));
+define(x(t), rhs(sol));
+plot2d(ev(x(t),A:m:k:1, r:0.1),[t,0,100]);
 
