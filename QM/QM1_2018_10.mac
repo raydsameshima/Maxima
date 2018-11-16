@@ -16,6 +16,8 @@ sol: solve( sd. s = 1, N);
 s: at(s, sol[2]);
 sd: at(sd, sol[2]);
 expand(sd . s);
+[expand(bra(0) . s)^2, expand(bra(1) . s)^2, expand(bra(3) . s)^2];
+sum(%[i],i,1,length(%));
 
 "d) x and p in energy eigen space."$ 
 declare([m,w,h],[scalar, real]);
@@ -27,6 +29,7 @@ p: ev(p, sol);
 "To see the non-zero elements of x, and x^^2: "$
 factor( expand( bra(i) . x . ket(j)));
 factor( expand( bra(i) . x^^2 . ket(j)));
+
 "The matrix representations are"$
 mat_rep(x,4);
 mat_rep(x^^2,4);
@@ -39,20 +42,28 @@ bra(i) . (R-L)^^2 . ket(j), expand;
 mat_rep((R-L), 4);
 mat_rep((R-L)^^2, 4);
 
+"e) <x>_s and <x^2>_s in t=0:"$
+x;
+x^^2;
+expand(sd . x . s);
+expand(sd . expand(x^^2 . s));
+
 "Let us consider time evolution. "$
 declare(U, nonscalar);
 declare([t], [scalar, real]);
 
-tellsimp( U(t) . ket(i), exp(-%i*t*w*h*(i+1/2)) * ket(i));
+tellsimp( U(t) . ket(i), exp(-%i*t*w*(i+1/2)) * ket(i));
 tellsimp( bra(i) . U(t), conjugate( U(t) . ket(i)));
 
-"The state in t and the expectation value for x are"$
+"f) The state in t and the expectation value for x are"$
 s(t) := expand(U(t) . s);
 exp_x: conjugate(s(t)) . x . s(t);
 expand(demoivre(expand(exp_x)));
 
+expand(demoivre(expand( conjugate(s(t)) . expand(x^^2 . s(t)))));
+
 "Question 2, solutions of wave equation."$ 
-kill(all);
+kill(h,m,k,x,rho);
 declare([h,m,k,x,rho],[scalar, real]);
 declare([A,B,C,D],[scalar, complex]);
 phi[1](x) := A*exp(%i*k*x) + B*exp(-%i*k*x);
