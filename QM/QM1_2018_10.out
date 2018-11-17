@@ -1,0 +1,243 @@
+Maxima 5.41.0 http://maxima.sourceforge.net
+using Lisp SBCL 1.4.7
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("QM1_2018_10.mac")
+
+read and interpret file: /home/rds/Documents/Maxima/QM/QM1_2018_10.mac
+(%i2) kill(all)
+(%i1) load("SHO.mac")
+SHO.mac
+ 
+This .mac file can provide the i-th state
+  bra(i)
+  ket(i),
+L,R of ladder operator, and the matrix representation of operators:
+  mat_rep(linear_op, size_of_matrix);
+  
+Use i and j for indices, e.g.,
+  bra(i) . linear_op . ket(j);
+to see the indexed expression of a linear_op.
+ 
+(%i2) "Question 1 c) Define a state "
+(%i3) declare(N,[scalar,real])
+(%o3)                                done
+(%i4) s:N*(3*ket(0)+sqrt(3)*ket(1)+2*ket(3))
+(%o4)              (2 ket(3) + sqrt(3) ket(1) + 3 ket(0)) N
+(%i5) sd:conjugate(s)
+(%o5)              (2 bra(3) + sqrt(3) bra(1) + 3 bra(0)) N
+(%i6) "The normalization condition should be:"
+(%i7) sol:solve(sd . s = 1,N)
+                                      1      1
+(%o7)                          [N = - -, N = -]
+                                      4      4
+(%i8) "Therefore, we have"
+(%i9) s:at(s,sol[2])
+                     2 ket(3) + sqrt(3) ket(1) + 3 ket(0)
+(%o9)                ------------------------------------
+                                      4
+(%i10) sd:at(sd,sol[2])
+                     2 bra(3) + sqrt(3) bra(1) + 3 bra(0)
+(%o10)               ------------------------------------
+                                      4
+(%i11) expand(sd . s)
+(%o11)                                 1
+(%i12) [expand(bra(0) . s)^2,expand(bra(1) . s)^2,expand(bra(3) . s)^2]
+                                   9   3   1
+(%o12)                            [--, --, -]
+                                   16  16  4
+(%i13) sum(%[i],i,1,length(%))
+(%o13)                                 1
+(%i14) "d) x and p in energy eigen space."
+(%i15) declare([m,w,h],[scalar,real])
+(%o15)                               done
+(%i16) sol:factor(solve([L = (1/sqrt(2*m*w*h))*(p-%i*m*w*x),
+                         R = (1/sqrt(2*m*w*h))*(p+%i*m*w*x)],[x,p]))
+                   %i sqrt(h m w) (R - L)      sqrt(h m w) (R + L)
+(%o16)     [[x = - ----------------------, p = -------------------]]
+                        sqrt(2) m w                  sqrt(2)
+(%i17) x:ev(x,sol)
+                             %i sqrt(h m w) (R - L)
+(%o17)                     - ----------------------
+                                  sqrt(2) m w
+(%i18) p:ev(p,sol)
+                              sqrt(h m w) (R + L)
+(%o18)                        -------------------
+                                    sqrt(2)
+(%i19) "So x and p are essentially (R-L) and (R+L) "
+(%i20) "To see the non-zero elements of x, and x^^2: "
+(%i21) factor(expand(bra(i) . x . ket(j)))
+(%o21) - (%i (kron_delta(i, j + 1) sqrt(j + 1) - kron_delta(i, j - 1) sqrt(j))
+                                                     sqrt(h m w))/(sqrt(2) m w)
+(%i22) factor(expand(bra(i) . x^^2 . ket(j)))
+(%o22) - (h (kron_delta(i, j + 2) sqrt(j + 1) sqrt(j + 2)
+ - 2 kron_delta(i, j) j + kron_delta(i, j - 2) sqrt(j - 1) sqrt(j)
+ - kron_delta(i, j)))/(2 m w)
+(%i23) "The matrix representations are"
+(%i24) mat_rep(x,4)
+                [             0             ]
+                [                           ]
+                [         %i sqrt(h)        ]
+                [ - ----------------------- ]
+(%o24)  Col 1 = [   sqrt(2) sqrt(m) sqrt(w) ]
+                [                           ]
+                [             0             ]
+                [                           ]
+                [             0             ]
+         [       %i sqrt(h)        ]         [             0             ]
+         [ ----------------------- ]         [                           ]
+         [ sqrt(2) sqrt(m) sqrt(w) ]         [        %i sqrt(h)         ]
+         [                         ]         [      ---------------      ]
+         [            0            ]         [      sqrt(m) sqrt(w)      ]
+ Col 2 = [                         ] Col 3 = [                           ]
+         [        %i sqrt(h)       ]         [             0             ]
+         [    - ---------------    ]         [                           ]
+         [      sqrt(m) sqrt(w)    ]         [     sqrt(3) %i sqrt(h)    ]
+         [                         ]         [ - ----------------------- ]
+         [            0            ]         [   sqrt(2) sqrt(m) sqrt(w) ]
+         [            0            ]
+         [                         ]
+         [            0            ]
+         [                         ]
+ Col 4 = [   sqrt(3) %i sqrt(h)    ]
+         [ ----------------------- ]
+         [ sqrt(2) sqrt(m) sqrt(w) ]
+         [                         ]
+         [            0            ]
+(%i25) mat_rep(x^^2,4)
+        [       h                              h                     ]
+        [     -----            0        - -----------        0       ]
+        [     2 m w                       sqrt(2) m w                ]
+        [                                                            ]
+        [                     3 h                         sqrt(3) h  ]
+        [       0            -----            0        - ----------- ]
+        [                    2 m w                       sqrt(2) m w ]
+(%o25)  [                                                            ]
+        [        h                           5 h                     ]
+        [ - -----------        0            -----            0       ]
+        [   sqrt(2) m w                     2 m w                    ]
+        [                                                            ]
+        [                   sqrt(3) h                       7 h      ]
+        [       0        - -----------        0            -----     ]
+        [                  sqrt(2) m w                     2 m w     ]
+(%i26) "Using indices"
+(%i27) ev(bra(i) . (R-L) . ket(j),expand)
+(%o27)  kron_delta(i, j + 1) sqrt(j + 1) - kron_delta(i, j - 1) sqrt(j)
+(%i28) ev(bra(i) . (R-L)^^2 . ket(j),expand)
+(%o28) kron_delta(i, j + 2) sqrt(j + 1) sqrt(j + 2) - 2 kron_delta(i, j) j
+                  + kron_delta(i, j - 2) sqrt(j - 1) sqrt(j) - kron_delta(i, j)
+(%i29) "Since x is essentially R-L,"
+(%i30) mat_rep(R-L,4)
+                     [ 0    - 1        0          0     ]
+                     [                                  ]
+                     [ 1     0     - sqrt(2)      0     ]
+(%o30)               [                                  ]
+                     [ 0  sqrt(2)      0      - sqrt(3) ]
+                     [                                  ]
+                     [ 0     0      sqrt(3)       0     ]
+(%i31) mat_rep((R-L)^^2,4)
+            [   - 1           0         sqrt(2)         0        ]
+            [                                                    ]
+            [    0           - 3           0     sqrt(2) sqrt(3) ]
+(%o31)      [                                                    ]
+            [ sqrt(2)         0           - 5           0        ]
+            [                                                    ]
+            [    0     sqrt(2) sqrt(3)     0           - 7       ]
+(%i32) "e) <x>_s and <x^2>_s in t=0:"
+(%i33) x
+                             %i sqrt(h m w) (R - L)
+(%o33)                     - ----------------------
+                                  sqrt(2) m w
+(%i34) x^^2
+                                           <2>
+                                  h (R - L)
+(%o34)                          - ------------
+                                     2 m w
+(%i35) expand(sd . x . s)
+(%o35)                                 0
+(%i36) expand(sd . expand(x^^2 . s))
+                                23 h      3 h
+(%o36)                         ------ - --------
+                               16 m w    5/2
+                                        2    m w
+(%i37) "Let us consider time evolution. "
+(%i38) declare(U,nonscalar)
+(%o38)                               done
+(%i39) declare([t],[scalar,real])
+(%o39)                               done
+(%i40) tellsimp(U(t) . ket(i),exp((-%i)*t*w*(i+1/2))*ket(i))
+(%o40) [.rule11, .rule10, .rule9, .rule8, .rule7, .rule6, .rule5, .rule4, 
+                                               .rule3, .rule2, .rule1, simpnct]
+(%i41) tellsimp(bra(i) . U(t),conjugate(U(t) . ket(i)))
+(%o41) [.rule12, .rule11, .rule10, .rule9, .rule8, .rule7, .rule6, .rule5, 
+                                       .rule4, .rule3, .rule2, .rule1, simpnct]
+(%i42) "f) The state in t and the expectation value for x are"
+(%i43) s(t):=expand(U(t) . s)
+(%o43)                     s(t) := expand(U(t) . s)
+(%i44) exp_x:conjugate(s(t)) . x . s(t)
+                                    7 %i t w                    3 %i t w
+                                    --------                    --------
+                                       2                           2
+                           bra(3) %e           sqrt(3) bra(1) %e
+(%o44) - (%i sqrt(h m w) ((----------------- + -------------------------
+                                   2                       4
+              %i t w                            %i t w
+              ------                          - ------
+                2                                 2
+   3 bra(0) %e                     3 ket(0) %e
+ + -----------------) . (R - L) . (-------------------
+           4                                4
+                      3 %i t w              7 %i t w
+                    - --------            - --------
+                         2                     2
+   sqrt(3) ket(1) %e             ket(3) %e
+ + --------------------------- + -------------------)))/(sqrt(2) m w)
+                4                         2
+(%i45) expand(demoivre(expand(exp_x)))
+                            3/2
+                           3    sqrt(h m w) sin(t w)
+(%o45)                     -------------------------
+                                    7/2
+                                   2    m w
+(%i46) expand(demoivre(expand(conjugate(s(t)) . expand(x^^2 . s(t)))))
+                             23 h    3 h cos(2 t w)
+(%o46)                      ------ - --------------
+                            16 m w       5/2
+                                        2    m w
+(%i47) "Question 2, solutions of wave equation."
+(%i48) kill(h,m,k,x,rho)
+(%o48)                               done
+(%i49) declare([h,m,k,x,rho],[scalar,real])
+(%o49)                               done
+(%i50) declare([A,B,C,D],[scalar,complex])
+(%o50)                               done
+(%i51) phi[1](x):=A*exp(%i*k*x)+B*exp((-%i)*k*x)
+(%o51)           phi (x) := A exp(%i k x) + B exp((- %i) k x)
+                    1
+(%i52) phi[2](x):=C*exp(rho*x)+D*exp((-rho)*x)
+(%o52)            phi (x) := C exp(rho x) + D exp((- rho) x)
+                     2
+(%i53) current1:(((-%i)*h)/m)*conjugate(phi[1](x))*diff(phi[1](x),x,1)
+                               %i k x                  - %i k x
+(%o53) - (%i h (conjugate(B) %e       + conjugate(A) %e        )
+                                                 %i k x            - %i k x
+                                       (%i A k %e       - %i B k %e        ))/m
+(%i54) trigsimp(realpart(expand(demoivre(expand(current1)))))
+                  2              2              2              2
+         (realpart (B) + imagpart (B) - realpart (A) - imagpart (A)) h k
+(%o54) - ---------------------------------------------------------------
+                                        m
+(%i55) "So there is no interference, and they are essentially j_in - j_out"
+(%i56) current2:(((-%i)*h)/m)*conjugate(phi[2](x))*diff(phi[2](x),x,1)
+                               rho x                  - rho x
+(%o56) - (%i h (conjugate(C) %e      + conjugate(D) %e       )
+                                                    rho x           - rho x
+                                           (C rho %e      - D rho %e       ))/m
+(%i57) radcan(realpart(expand(current2)))
+         (2 imagpart(C) realpart(D) - 2 realpart(C) imagpart(D)) h rho
+(%o57)   -------------------------------------------------------------
+                                       m
+(%i58) "Only interference terms"
+(%o59)           /home/rds/Documents/Maxima/QM/QM1_2018_10.mac

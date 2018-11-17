@@ -57,10 +57,10 @@ tellsimp( bra(i) . U(t), conjugate( U(t) . ket(i)));
 
 "f) The state in t and the expectation value for x are"$
 s(t) := expand(U(t) . s);
-exp_x: conjugate(s(t)) . x . s(t);
-expand(demoivre(expand(exp_x)));
+exp_x: expand(demoivre(expand(conjugate(s(t)) . x . s(t))));
 
-expand(demoivre(expand( conjugate(s(t)) . expand(x^^2 . s(t)))));
+exp_x2: expand(demoivre(expand( conjugate(s(t)) . expand(x^^2 . s(t)))));
+trigsimp(exp_x2 - exp_x^2);
 
 "Question 2, solutions of wave equation."$ 
 kill(h,m,k,x,rho);
@@ -74,8 +74,9 @@ trigsimp( realpart (expand(demoivre(expand(current1)))));
 "So there is no interference, and they are essentially j_in - j_out"$
 
 current2: -%i*h/m * conjugate(phi[2](x)) * diff(phi[2](x),x,1);
-radcan(realpart(expand(current2)));
-"Only interference terms"$
+c2: radcan(realpart(expand(current2)));
+"Only interference terms, and this combination is essentially "$
+imagpart(conjugate(D)*C);
 
 /*
 sol: solve([phi[1](0) = phi[2](0), at(diff(phi[1](x),x,1),x=0) = at(diff(phi[2](x),x,1),x=0)]
