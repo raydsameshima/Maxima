@@ -4,6 +4,8 @@ http://maxima.sourceforge.net/docs/tutorial/en/gaertner-tutorial-revision/Conten
 
 ## Useful links
 https://themaximalist.org/
+https://wxmaximafor.files.wordpress.com/2015/06/wxmaxima_for_calculus_i_cq.pdf
+https://wxmaximafor.files.wordpress.com/2015/06/wxmaxima_for_calculus_ii_cq.pdf
 
 ## few tips
 ### batch mode
