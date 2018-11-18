@@ -84,3 +84,30 @@ sol: solve([phi[1](0) = phi[2](0), at(diff(phi[1](x),x,1),x=0) = at(diff(phi[2](
 define(phi[2](x), at(phi[2](x), sol[1]));
 trigsimp( realpart (expand(demoivre(expand( -%i*h/m * conjugate(phi[2](x)) * diff(phi[2](x),x))))));
 */
+
+"Question 3"$
+"a) and b) Dirac-delta potential well."$
+assume(h>0,m>0, E<0, k>0, a>0);
+"Let me define a wave function, where k:sqrt(2*m*(-E)/h^2)"$
+phi[1](x) := A*exp( k*x); /* 0<x */
+phi[2](x) := A*exp(-k*x); /* 0<x */
+"Let me set an integrated Schroedinger eq, with Dirac delta part on the right:"$
+s_eq: at( diff(phi[2](x),x,1) - diff(phi[1](x),x,1), x=0) = 2*m/h^2 * (-a) * phi[1](0);
+k_sol:solve(s_eq, k);
+solve( ev(k_sol, k: sqrt(2*m*(-E)/h^2)), E);
+
+"
+  For the existance condition of bound states, we have
+    x*(coth(x)+1) (for odd function), 
+    x*(tanh(x)+1) (for even function),
+  are equal to some constant (2*m*alpha*a/h^2) as the form.
+"$
+plot2d(
+  [x*(coth(x)+1), x*(tanh(x)+1)],
+  [x,0,2],
+  [y,0,4],
+  [style,[lines,1]
+        ,[lines,10]], 
+  [gnuplot_preamble, "set key bottom right"]
+);
+"From this graph, to have a bound state in odd wave function, the constant > 1 is needed."$
