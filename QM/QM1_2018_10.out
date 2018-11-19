@@ -176,36 +176,23 @@ to see the indexed expression of a linear_op.
 (%i42) "f) The state in t and the expectation value for x are"
 (%i43) s(t):=expand(U(t) . s)
 (%o43)                     s(t) := expand(U(t) . s)
-(%i44) exp_x:conjugate(s(t)) . x . s(t)
-                                    7 %i t w                    3 %i t w
-                                    --------                    --------
-                                       2                           2
-                           bra(3) %e           sqrt(3) bra(1) %e
-(%o44) - (%i sqrt(h m w) ((----------------- + -------------------------
-                                   2                       4
-              %i t w                            %i t w
-              ------                          - ------
-                2                                 2
-   3 bra(0) %e                     3 ket(0) %e
- + -----------------) . (R - L) . (-------------------
-           4                                4
-                      3 %i t w              7 %i t w
-                    - --------            - --------
-                         2                     2
-   sqrt(3) ket(1) %e             ket(3) %e
- + --------------------------- + -------------------)))/(sqrt(2) m w)
-                4                         2
-(%i45) expand(demoivre(expand(exp_x)))
+(%i44) exp_x:expand(demoivre(expand(conjugate(s(t)) . x . s(t))))
                             3/2
                            3    sqrt(h m w) sin(t w)
-(%o45)                     -------------------------
+(%o44)                     -------------------------
                                     7/2
                                    2    m w
-(%i46) expand(demoivre(expand(conjugate(s(t)) . expand(x^^2 . s(t)))))
+(%i45) exp_x2:expand(demoivre(expand(conjugate(s(t)) . expand(x^^2 . s(t)))))
                              23 h    3 h cos(2 t w)
-(%o46)                      ------ - --------------
+(%o45)                      ------ - --------------
                             16 m w       5/2
                                         2    m w
+(%i46) trigsimp(exp_x2-exp_x^2)
+                                                2            7/2
+              96 h cos(2 t w) + 27 sqrt(2) h sin (t w) - 23 2    h
+(%o46)      - ----------------------------------------------------
+                                    15/2
+                                   2     m w
 (%i47) "Question 2, solutions of wave equation."
 (%i48) kill(h,m,k,x,rho)
 (%o48)                               done
@@ -235,9 +222,124 @@ to see the indexed expression of a linear_op.
 (%o56) - (%i h (conjugate(C) %e      + conjugate(D) %e       )
                                                     rho x           - rho x
                                            (C rho %e      - D rho %e       ))/m
-(%i57) radcan(realpart(expand(current2)))
+(%i57) c2:radcan(realpart(expand(current2)))
          (2 imagpart(C) realpart(D) - 2 realpart(C) imagpart(D)) h rho
 (%o57)   -------------------------------------------------------------
                                        m
-(%i58) "Only interference terms"
-(%o59)           /home/rds/Documents/Maxima/QM/QM1_2018_10.mac
+(%i58) "Only interference terms, and this combination is essentially "
+(%i59) imagpart(conjugate(D)*C)
+(%o59)         imagpart(C) realpart(D) - realpart(C) imagpart(D)
+(%i60) "Question 3 a) and b) Dirac-delta potential well."
+(%i61) assume(h > 0,m > 0,E < 0,k > 0,a > 0)
+(%o61)                [h > 0, m > 0, E < 0, k > 0, a > 0]
+(%i62) "Let me define a wave function, where k:sqrt(2*m*(-E)/h^2)"
+(%i63) phi[1](x):=A*exp(k*x)
+(%o63)                       phi (x) := A exp(k x)
+                                1
+(%i64) phi[2](x):=A*exp((-k)*x)
+(%o64)                     phi (x) := A exp((- k) x)
+                              2
+(%i65) "Let me set an integrated Schroedinger eq, with Dirac delta part on the right:"
+(%i66) s_eq:at(diff(phi[2](x),x,1)-diff(phi[1](x),x,1),x = 0)
+             = ((2*m)/h^2)*(-a)*phi[1](0)
+                                          2 A m a
+(%o66)                        - 2 A k = - -------
+                                             2
+                                            h
+(%i67) k_sol:solve(s_eq,k)
+                                        m a
+(%o67)                             [k = ---]
+                                         2
+                                        h
+(%i68) solve(ev(k_sol,k:sqrt((2*m*(-E))/h^2)),E)
+                                           2
+                                        m a
+(%o68)                           [E = - ----]
+                                           2
+                                        2 h
+(%i69) "Let me consider symmetric solution for 0<=x: "
+(%i70) psi[1](x):=A*(exp(k*x)+exp((-k)*x))
+define: warning: redefining built-in subscripted function psi
+(%o70)              psi (x) := A (exp(k x) + exp((- k) x))
+                       1
+(%i71) psi[2](x):=B*A*exp((-k)*x)
+(%o71)                    psi (x) := B A exp((- k) x)
+                             2
+(%i72) c_eq:psi[1](a) = psi[2](a)
+                            k a     - k a          - k a
+(%o72)                 A (%e    + %e     ) = A B %e
+(%i73) define(psi[2](x),at(psi[2](x),solve(c_eq,B)))
+                                     - k x    2 k a
+(%o73)                psi (x) := A %e      (%e      + 1)
+                         2
+(%i74) q_eq:((-h^2)/(2*m))*at(diff(psi[2](x)-psi[1](x),x,1),x = a)
+             = (-(-alpha))*psi[1](a)
+          2           - k a    2 k a                k a       - k a
+         h  ((- A k %e      (%e      + 1)) - A (k %e    - k %e     ))
+(%o74) - ------------------------------------------------------------ = 
+                                     2 m
+                                                           k a     - k a
+                                                      A (%e    + %e     ) alpha
+(%i75) sol:solve(q_eq,k)
+                         - 2 k a      2 k a
+                       %e        (m %e      alpha + m alpha)
+(%o75)            [k = -------------------------------------]
+                                         2
+                                        h
+(%i76) answer1:2*a*factor(expand(sol/(exp((-2)*k*a)+1)))
+                                  2 k a
+                          2 k a %e        2 m a alpha
+(%o76)                   [------------- = -----------]
+                             2 k a             2
+                           %e      + 1        h
+(%i77) "So we have x*exp(x)/(exp(x)+1) as a function which characterizes the existance of bound state."
+(%i78) "Next, the odd solution:"
+(%i79) psi[3](x):=C*(exp(k*x)-exp((-k)*x))
+(%o79)              psi (x) := C (exp(k x) - exp((- k) x))
+                       3
+(%i80) psi[4](x):=D*C*exp((-k)*x)
+(%o80)                    psi (x) := D C exp((- k) x)
+                             4
+(%i81) c_eq2:psi[3](a) = psi[4](a)
+                            k a     - k a          - k a
+(%o81)                 C (%e    - %e     ) = C D %e
+(%i82) define(psi[4](x),at(psi[4](x),solve(c_eq2,D)))
+                                     - k x    2 k a
+(%o82)                psi (x) := C %e      (%e      - 1)
+                         4
+(%i83) q_eq2:((-h^2)/(2*m))*at(diff(psi[4](x)-psi[3](x),x,1),x = a)
+              = (-(-alpha))*psi[3](a)
+          2           - k a    2 k a                k a       - k a
+         h  ((- C k %e      (%e      - 1)) - C (k %e    + k %e     ))
+(%o83) - ------------------------------------------------------------ = 
+                                     2 m
+                                                           k a     - k a
+                                                      C (%e    - %e     ) alpha
+(%i84) sol2:solve(q_eq2,k)
+                         - 2 k a      2 k a
+                       %e        (m %e      alpha - m alpha)
+(%o84)            [k = -------------------------------------]
+                                         2
+                                        h
+(%i85) answer2:radcan((2*a*sol2)/(1-exp((-2)*k*a)))
+                                  2 k a
+                          2 k a %e        2 m a alpha
+(%o85)                   [------------- = -----------]
+                             2 k a             2
+                           %e      - 1        h
+(%i86) "So we have x*exp(x)/(exp(x)-1) as a function which characterizes the existance of bound state."
+(%i87) plot2d([(x*exp(x))/(exp(x)+1),(x*exp(x))/(exp(x)-1)],[x,0,5],[y,0,4],
+              [style,[lines,1],[lines,10]],
+              [gnuplot_preamble,"set key bottom right"])
+plot2d: some values were clipped.
+plot2d: expression evaluates to non-numeric value somewhere in plotting range.
+plot2d: some values were clipped.
+(%o87)         [/tmp/maxout5533.gnuplot_pipes, /tmp/maxplot.wxt]
+(%i88) "Therefore, if the right hand sides 2*m*alpha/h^2 of positive number is smaller than 1, 
+ then there is no odd baound state."
+(%i89) rhs(answer1[1])
+                                  2 m a alpha
+(%o89)                            -----------
+                                       2
+                                      h
+(%o89)           /home/rds/Documents/Maxima/QM/QM1_2018_10.mac

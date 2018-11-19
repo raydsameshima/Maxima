@@ -85,23 +85,21 @@ define(phi[2](x), at(phi[2](x), sol[1]));
 trigsimp( realpart (expand(demoivre(expand( -%i*h/m * conjugate(phi[2](x)) * diff(phi[2](x),x))))));
 */
 
-"Question 3"$
-"a) and b) Dirac-delta potential well."$
+"Question 3 a) and b) Dirac-delta potential well."$
 assume(h>0,m>0, E<0, k>0, a>0);
 "Let me define a wave function, where k:sqrt(2*m*(-E)/h^2)"$
 phi[1](x) := A*exp( k*x); /* 0<x */
 phi[2](x) := A*exp(-k*x); /* 0<x */
+
 "Let me set an integrated Schroedinger eq, with Dirac delta part on the right:"$
 s_eq: at( diff(phi[2](x),x,1) - diff(phi[1](x),x,1), x=0) = 2*m/h^2 * (-a) * phi[1](0);
 k_sol:solve(s_eq, k);
 solve( ev(k_sol, k: sqrt(2*m*(-E)/h^2)), E);
-
-"
-  For the existance condition of bound states, we have
+/*
+" For the existance condition of bound states, we have
     x*(coth(x)+1) (for odd function), 
     x*(tanh(x)+1) (for even function),
-  are equal to some constant (2*m*alpha*a/h^2) as the form.
-"$
+  are equal to some constant (2*m*alpha*a/h^2) as the form."$
 plot2d(
   [x*(coth(x)+1), x*(tanh(x)+1)],
   [x,0,2],
@@ -111,3 +109,36 @@ plot2d(
   [gnuplot_preamble, "set key bottom right"]
 );
 "From this graph, to have a bound state in odd wave function, the constant > 1 is needed."$
+*/
+
+"Let me consider symmetric solution for 0<=x: "$
+psi[1](x) := A*(exp(k*x) + exp(-k*x));
+psi[2](x) := B*A*exp(-k*x);
+c_eq: psi[1](a) = psi[2](a);
+define(psi[2](x),at(psi[2](x), solve( c_eq, B)));
+q_eq: -h^2/(2*m) * at( diff(psi[2](x) - psi[1](x),x,1), x=a) = -(-alpha)*psi[1](a);
+sol: solve(q_eq, k);
+answer1: 2*a*factor(expand(sol / (exp(-2*k*a)+1)));
+"So we have x*exp(x)/(exp(x)+1) as a function which characterizes the existance of bound state."$
+
+"Next, the odd solution:"$
+psi[3](x) := C*(exp(k*x) - exp(-k*x));
+psi[4](x) := D*C*exp(-k*x);
+c_eq2: psi[3](a) = psi[4](a);
+define(psi[4](x),at(psi[4](x), solve( c_eq2, D)));
+q_eq2: -h^2/(2*m) * at( diff(psi[4](x) - psi[3](x),x,1), x=a) = -(-alpha)*psi[3](a);
+sol2: solve(q_eq2, k);
+answer2: radcan( 2*a*sol2/(1-exp(-2*k*a)));
+"So we have x*exp(x)/(exp(x)-1) as a function which characterizes the existance of bound state."$
+
+plot2d(
+  [x*exp(x)/(exp(x)+1),x*exp(x)/(exp(x)-1)],
+  [x,0,5],
+  [y,0,4],
+  [style,[lines,1]
+        ,[lines,10]], 
+  [gnuplot_preamble, "set key bottom right"]
+);
+"Therefore, if the right hand sides 2*m*alpha/h^2 of positive number is smaller than 1, 
+ then there is no odd baound state."$
+rhs(answer1[1]);
