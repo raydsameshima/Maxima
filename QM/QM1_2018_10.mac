@@ -94,23 +94,10 @@ phi[2](x) := A*exp(-k*x); /* 0<x */
 "Let me set an integrated Schroedinger eq, with Dirac delta part on the right:"$
 s_eq: at( diff(phi[2](x),x,1) - diff(phi[1](x),x,1), x=0) = 2*m/h^2 * (-a) * phi[1](0);
 k_sol:solve(s_eq, k);
+"Substituting the definition of k, we can solve this equation for E to get the bound state energy:"$
 solve( ev(k_sol, k: sqrt(2*m*(-E)/h^2)), E);
-/*
-" For the existance condition of bound states, we have
-    x*(coth(x)+1) (for odd function), 
-    x*(tanh(x)+1) (for even function),
-  are equal to some constant (2*m*alpha*a/h^2) as the form."$
-plot2d(
-  [x*(coth(x)+1), x*(tanh(x)+1)],
-  [x,0,2],
-  [y,0,4],
-  [style,[lines,1]
-        ,[lines,10]], 
-  [gnuplot_preamble, "set key bottom right"]
-);
-"From this graph, to have a bound state in odd wave function, the constant > 1 is needed."$
-*/
 
+"c), d), e) and f)."$
 "Let me consider symmetric solution for 0<=x: "$
 psi[1](x) := A*(exp(k*x) + exp(-k*x));
 psi[2](x) := B*A*exp(-k*x);

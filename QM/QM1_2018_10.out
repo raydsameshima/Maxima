@@ -251,95 +251,97 @@ to see the indexed expression of a linear_op.
 (%o67)                             [k = ---]
                                          2
                                         h
-(%i68) solve(ev(k_sol,k:sqrt((2*m*(-E))/h^2)),E)
+(%i68) "Substituting the definition of k, we can solve this equation for E to get the bound state energy:"
+(%i69) solve(ev(k_sol,k:sqrt((2*m*(-E))/h^2)),E)
                                            2
                                         m a
-(%o68)                           [E = - ----]
+(%o69)                           [E = - ----]
                                            2
                                         2 h
-(%i69) "Let me consider symmetric solution for 0<=x: "
-(%i70) psi[1](x):=A*(exp(k*x)+exp((-k)*x))
+(%i70) "c), d), e) and f)."
+(%i71) "Let me consider symmetric solution for 0<=x: "
+(%i72) psi[1](x):=A*(exp(k*x)+exp((-k)*x))
 define: warning: redefining built-in subscripted function psi
-(%o70)              psi (x) := A (exp(k x) + exp((- k) x))
+(%o72)              psi (x) := A (exp(k x) + exp((- k) x))
                        1
-(%i71) psi[2](x):=B*A*exp((-k)*x)
-(%o71)                    psi (x) := B A exp((- k) x)
+(%i73) psi[2](x):=B*A*exp((-k)*x)
+(%o73)                    psi (x) := B A exp((- k) x)
                              2
-(%i72) c_eq:psi[1](a) = psi[2](a)
+(%i74) c_eq:psi[1](a) = psi[2](a)
                             k a     - k a          - k a
-(%o72)                 A (%e    + %e     ) = A B %e
-(%i73) define(psi[2](x),at(psi[2](x),solve(c_eq,B)))
+(%o74)                 A (%e    + %e     ) = A B %e
+(%i75) define(psi[2](x),at(psi[2](x),solve(c_eq,B)))
                                      - k x    2 k a
-(%o73)                psi (x) := A %e      (%e      + 1)
+(%o75)                psi (x) := A %e      (%e      + 1)
                          2
-(%i74) q_eq:((-h^2)/(2*m))*at(diff(psi[2](x)-psi[1](x),x,1),x = a)
+(%i76) q_eq:((-h^2)/(2*m))*at(diff(psi[2](x)-psi[1](x),x,1),x = a)
              = (-(-alpha))*psi[1](a)
           2           - k a    2 k a                k a       - k a
          h  ((- A k %e      (%e      + 1)) - A (k %e    - k %e     ))
-(%o74) - ------------------------------------------------------------ = 
+(%o76) - ------------------------------------------------------------ = 
                                      2 m
                                                            k a     - k a
                                                       A (%e    + %e     ) alpha
-(%i75) sol:solve(q_eq,k)
+(%i77) sol:solve(q_eq,k)
                          - 2 k a      2 k a
                        %e        (m %e      alpha + m alpha)
-(%o75)            [k = -------------------------------------]
+(%o77)            [k = -------------------------------------]
                                          2
                                         h
-(%i76) answer1:2*a*factor(expand(sol/(exp((-2)*k*a)+1)))
+(%i78) answer1:2*a*factor(expand(sol/(exp((-2)*k*a)+1)))
                                   2 k a
                           2 k a %e        2 m a alpha
-(%o76)                   [------------- = -----------]
+(%o78)                   [------------- = -----------]
                              2 k a             2
                            %e      + 1        h
-(%i77) "So we have x*exp(x)/(exp(x)+1) as a function which characterizes the existance of bound state."
-(%i78) "Next, the odd solution:"
-(%i79) psi[3](x):=C*(exp(k*x)-exp((-k)*x))
-(%o79)              psi (x) := C (exp(k x) - exp((- k) x))
+(%i79) "So we have x*exp(x)/(exp(x)+1) as a function which characterizes the existance of bound state."
+(%i80) "Next, the odd solution:"
+(%i81) psi[3](x):=C*(exp(k*x)-exp((-k)*x))
+(%o81)              psi (x) := C (exp(k x) - exp((- k) x))
                        3
-(%i80) psi[4](x):=D*C*exp((-k)*x)
-(%o80)                    psi (x) := D C exp((- k) x)
+(%i82) psi[4](x):=D*C*exp((-k)*x)
+(%o82)                    psi (x) := D C exp((- k) x)
                              4
-(%i81) c_eq2:psi[3](a) = psi[4](a)
+(%i83) c_eq2:psi[3](a) = psi[4](a)
                             k a     - k a          - k a
-(%o81)                 C (%e    - %e     ) = C D %e
-(%i82) define(psi[4](x),at(psi[4](x),solve(c_eq2,D)))
+(%o83)                 C (%e    - %e     ) = C D %e
+(%i84) define(psi[4](x),at(psi[4](x),solve(c_eq2,D)))
                                      - k x    2 k a
-(%o82)                psi (x) := C %e      (%e      - 1)
+(%o84)                psi (x) := C %e      (%e      - 1)
                          4
-(%i83) q_eq2:((-h^2)/(2*m))*at(diff(psi[4](x)-psi[3](x),x,1),x = a)
+(%i85) q_eq2:((-h^2)/(2*m))*at(diff(psi[4](x)-psi[3](x),x,1),x = a)
               = (-(-alpha))*psi[3](a)
           2           - k a    2 k a                k a       - k a
          h  ((- C k %e      (%e      - 1)) - C (k %e    + k %e     ))
-(%o83) - ------------------------------------------------------------ = 
+(%o85) - ------------------------------------------------------------ = 
                                      2 m
                                                            k a     - k a
                                                       C (%e    - %e     ) alpha
-(%i84) sol2:solve(q_eq2,k)
+(%i86) sol2:solve(q_eq2,k)
                          - 2 k a      2 k a
                        %e        (m %e      alpha - m alpha)
-(%o84)            [k = -------------------------------------]
+(%o86)            [k = -------------------------------------]
                                          2
                                         h
-(%i85) answer2:radcan((2*a*sol2)/(1-exp((-2)*k*a)))
+(%i87) answer2:radcan((2*a*sol2)/(1-exp((-2)*k*a)))
                                   2 k a
                           2 k a %e        2 m a alpha
-(%o85)                   [------------- = -----------]
+(%o87)                   [------------- = -----------]
                              2 k a             2
                            %e      - 1        h
-(%i86) "So we have x*exp(x)/(exp(x)-1) as a function which characterizes the existance of bound state."
-(%i87) plot2d([(x*exp(x))/(exp(x)+1),(x*exp(x))/(exp(x)-1)],[x,0,5],[y,0,4],
+(%i88) "So we have x*exp(x)/(exp(x)-1) as a function which characterizes the existance of bound state."
+(%i89) plot2d([(x*exp(x))/(exp(x)+1),(x*exp(x))/(exp(x)-1)],[x,0,5],[y,0,4],
               [style,[lines,1],[lines,10]],
               [gnuplot_preamble,"set key bottom right"])
 plot2d: some values were clipped.
 plot2d: expression evaluates to non-numeric value somewhere in plotting range.
 plot2d: some values were clipped.
-(%o87)         [/tmp/maxout5533.gnuplot_pipes, /tmp/maxplot.wxt]
-(%i88) "Therefore, if the right hand sides 2*m*alpha/h^2 of positive number is smaller than 1, 
+(%o89)         [/tmp/maxout7839.gnuplot_pipes, /tmp/maxplot.wxt]
+(%i90) "Therefore, if the right hand sides 2*m*alpha/h^2 of positive number is smaller than 1, 
  then there is no odd baound state."
-(%i89) rhs(answer1[1])
+(%i91) rhs(answer1[1])
                                   2 m a alpha
-(%o89)                            -----------
+(%o91)                            -----------
                                        2
                                       h
-(%o89)           /home/rds/Documents/Maxima/QM/QM1_2018_10.mac
+(%o91)           /home/rds/Documents/Maxima/QM/QM1_2018_10.mac
