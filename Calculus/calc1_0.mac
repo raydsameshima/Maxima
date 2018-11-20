@@ -1,0 +1,51 @@
+/*
+https://wxmaximafor.files.wordpress.com/2015/06/wxmaxima_for_calculus_i_cq.pdf
+
+*/
+"2d plot"$
+f(x):= x^2;
+/*
+see also the source:
+  http://maxima.sourceforge.net/docs/manual/maxima_12.html#Function:plot2d
+*/
+
+/* discrete points */
+plot2d(
+  [discrete,[[-3,3],[1,4],[2,2]]],
+  [style, points],
+  [label,["[-3,3]",-3,3.5],["[1,4]",1,4.5],["a point",2,2.5]],
+  [x,-5,5],
+  [y,-5,5],
+  [title, "a plot"]
+);
+
+/*
+find_root
+*/
+"find_root can find a root in a range. "$
+find_root(sin(x),2,4);
+
+L1: 2*x-3*y=5;
+L2: 3*x+y=2;
+pt: linsolve([L1,L2],[x,y]);
+plot2d(
+  [[discrete, [ map(rhs,pt) ]] ],
+  [style, points],
+  [point_type, asterisk],
+  [x,-2,2],
+  [y,-2,2]
+);
+plot2d(
+  [rhs(solve(L1,y)[1]), rhs(solve(L2,y)[1]) ],
+  [x,-2,2],
+  [y,-2,2]
+);
+plot2d(
+  [ [discrete, [map(rhs, pt)]], (2*x-5)/3, 2-3*x], 
+  [x,-2,2],
+  [y,-2,2],
+  [style,[points,10,2], [lines,3,3], [lines,3,1]],
+  [point_type, asterisk]
+);
+
+
