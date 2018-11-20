@@ -6,7 +6,16 @@ Ray D. Sameshima
 kill(all)$
 load("SHO.mac")$
 
-"Question 1 c) Define a state "$
+"Question 1 a)"$
+declare([m,w,h],[scalar]);
+sol: factor(solve([L=1/sqrt(2*m*w*h)*(p-%i*m*w*x), R=1/sqrt(2*m*w*h)*(p+%i*m*w*x)],[x,p]));
+x: ev(x, sol);
+p: ev(p, sol);
+"Since we've imposed a \"canonical order\" for L and R for ket's, L.R will appear."$ 
+expand( p^^2/(2*m) + m*w^2*x^^2/2 );
+factor(expand( % . ket(i) ));
+
+"c) Define a state "$
 declare(N, [scalar, real]);
 s: N*(3*ket(0) + sqrt(3)*ket(1) + 2*ket(3));
 sd: conjugate(s);
@@ -20,10 +29,12 @@ expand(sd . s);
 sum(%[i],i,1,length(%));
 
 "d) x and p in energy eigen space."$ 
+/*
 declare([m,w,h],[scalar, real]);
 sol: factor(solve([L=1/sqrt(2*m*w*h)*(p-%i*m*w*x), R=1/sqrt(2*m*w*h)*(p+%i*m*w*x)],[x,p]));
 x: ev(x, sol);
 p: ev(p, sol);
+*/
 "So x and p are essentially (R-L) and (R+L) "$
 
 "To see the non-zero elements of x, and x^^2: "$
