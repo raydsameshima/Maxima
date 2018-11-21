@@ -27,21 +27,28 @@ find_root(sin(x),2,4);
 
 L1: 2*x-3*y=5;
 L2: 3*x+y=2;
-pt: linsolve([L1,L2],[x,y]);
+sol: linsolve([L1,L2],[x,y]);
+pt: map(rhs, sol);
+l1:rhs(solve(L1,y)[1]);
+l2:rhs(solve(L2,y)[1]);
+
+/* A plot of the solution point. */
 plot2d(
-  [[discrete, [ map(rhs,pt) ]] ],
+  [[discrete, [ pt ]] ],
   [style, points],
   [point_type, asterisk],
   [x,-2,2],
   [y,-2,2]
 );
+
+/**/
 plot2d(
-  [rhs(solve(L1,y)[1]), rhs(solve(L2,y)[1]) ],
+  [l1,l2],
   [x,-2,2],
   [y,-2,2]
 );
 plot2d(
-  [ [discrete, [map(rhs, pt)]], (2*x-5)/3, 2-3*x], 
+  [ [discrete, [pt]], (2*x-5)/3, 2-3*x], 
   [x,-2,2],
   [y,-2,2],
   [style,[points,10,2], [lines,3,3], [lines,3,1]],
