@@ -1,0 +1,7 @@
+/**/
+
+"3.3"$
+diff(f*g);
+factor( diff(f/g) );
+declare([a,b],[constant]);
+diff(a*f + b*g);
