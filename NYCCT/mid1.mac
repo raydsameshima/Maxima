@@ -1,0 +1,34 @@
+kill(all);
+"1 (from Ex.17.4 Vector addition of forces)"$
+r: bfloat(sqrt( 0.30^2 + 0.30^2 ));
+f: bfloat(ev(k*q^2/r^2, k: 8.99E9, q:3E-6));
+fx: bfloat(f*cos(45/180*%pi));
+2*fx;
+
+"2 (from Ex.18.2 Parallel plates and conservation of energy)"$
+solve(m/2*v^2 = e*Vba,[v]), m:9.11E-31, e:1.60E-19, Vba:12.0;
+bfloat(%[2]);
+
+a: e*E/m, e:1.60E-19, E:1.2E3,m:9.11E-31;
+sqrt(2*a*x),x:1.0E-2;
+bfloat(%);
+
+"3 (from Ex.19.11 Recharging a battery)"$
+kill(r);
+j1: 1+3=I; 
+l1: -4*1 + 9 - r*I=0; 
+l2: -4*1-E+3*1=0; 
+l3: -3*1+E+9-r*I;
+rE: at(linsolve([l1,l2],[r,E]),linsolve(j1,[I]));
+
+at(l3, linsolve(j1,[I]));
+at(%, rE);
+
+P: 9*4-3*1;
+4*1^2 + 1*3^2 + (5/4)*4^2;
+
+"4 (From problem 16)"$
+R: 1/7.69;
+solve(R=rho*L/A,[rho]);
+rho: ev(rhs(%[1]), L:10, A:1.32E-6);
+100* (rho-rst)/rst, rst:1.68E-8;
