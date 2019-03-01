@@ -1,0 +1,84 @@
+Maxima 5.41.0 http://maxima.sourceforge.net
+using Lisp SBCL 1.4.7
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("mid1.mac")
+
+read and interpret file: /home/rds/Documents/Maxima/NYCCT/mid1.mac
+(%i2) kill(all)
+(%o0)                                done
+(%i1) "1 (from Ex.17.4 Vector addition of forces)"
+(%i2) "The distance between (0.3, 0.3) and the origin is"
+(%i3) r:bfloat(sqrt(0.3^2+0.3^2))
+(%o3)                        4.242640687119285b-1
+(%i4) "The Coulomb force between +q at (0.3, 0.3) and -q3 at (0,0) is"
+(%i5) f:bfloat(ev((k*q*q3)/r^2,k:8.99e+9,q:3.0e-6,q3:4.0e-6))
+(%o5)                        5.993333333333333b-1
+(%i6) fx:bfloat(f*cos((45/180)*%pi))
+(%o6)                        4.237926641911375b-1
+(%i7) 2*fx
+(%o7)                        8.475853283822749b-1
+(%i8) "2 (from Ex.18.2 Parallel plates and conservation of energy)"
+(%i9) ev(solve((m/2)*v^2 = e*Vba,[v]),m:9.11e-31,e:1.6e-19,Vba:12.0)
+
+rat: replaced -1.92e-18 by -1/520833333333333376 = -1.92e-18
+
+rat: replaced 4.555e-31 by 1/2195389681668495977098728439808 = 4.555e-31
+             1048576 sqrt(15599181904722286)
+(%o9) [v = - -------------------------------, 
+                 sqrt(4069010416666667)
+                                               1048576 sqrt(15599181904722286)
+                                           v = -------------------------------]
+                                                   sqrt(4069010416666667)
+(%i10) bfloat(%[2])
+(%o10)                      v = 2.053082606424669b6
+(%i11) ev(a:(e*E)/m,e:1.6e-19,E:1200.0,m:9.11e-31)
+(%o11)                       2.107574094401756e+14
+(%i12) ev(sqrt(2*a*x),x:0.01)
+(%o12)                         2053082.606424669
+(%i13) bfloat(%)
+(%o13)                        2.053082606424669b6
+(%i14) "3 (from Ex.19.11 Recharging a battery)"
+(%i15) kill(r)
+(%o15)                               done
+(%i16) j1:1+3 = I
+(%o16)                               4 = I
+(%i17) l1:(-4)*1+9+(-r)*I = 0
+(%o17)                            5 - I r = 0
+(%i18) l2:(-4)*1-E+3*1 = 0
+(%o18)                           (- E) - 1 = 0
+(%i19) l3:(-3)*1+E+9+(-r)*I
+(%o19)                          (- I r) + E + 6
+(%i20) rE:at(linsolve([l1,l2],[r,E]),linsolve(j1,[I]))
+                                    5
+(%o20)                         [r = -, E = - 1]
+                                    4
+(%i21) at(l3,linsolve(j1,[I]))
+(%o21)                          (- 4 r) + E + 6
+(%i22) at(%,rE)
+(%o22)                                 0
+(%i23) "The power in and out, and its check."
+(%i24) P:9*4-3*1
+(%o24)                                33
+(%i25) 4*1^2+1*3^2+(5/4)*4^2
+(%o25)                                33
+(%i26) "4 (From problem 16)"
+(%i27) R:1/7.69
+(%o27)                         0.130039011703511
+(%i28) solve(R = (rho*L)/A,[rho])
+
+rat: replaced 0.130039011703511 by 100/769 = 0.1300390117035111
+                                        100 A
+(%o28)                           [rho = -----]
+                                        769 L
+(%i29) rho:ev(rhs(%[1]),L:10,A:1.32e-6)
+(%o29)                       1.716514954486346e-8
+(%i30) "percentage error will be"
+(%i31) ev((100*(rho-rst))/rst,rst:1.68e-8)
+(%o31)                         2.173509195615837
+(%i32) "percentage difference will be"
+(%i33) ev(((rho-rst)/((rho+rst)/2))*100,rst:1.68e-8)
+(%o33)                         2.15014242396399
+(%o33)             /home/rds/Documents/Maxima/NYCCT/mid1.mac

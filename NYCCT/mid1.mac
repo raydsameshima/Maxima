@@ -1,7 +1,9 @@
 kill(all);
 "1 (from Ex.17.4 Vector addition of forces)"$
+"The distance between (0.3, 0.3) and the origin is"$
 r: bfloat(sqrt( 0.30^2 + 0.30^2 ));
-f: bfloat(ev(k*q^2/r^2, k: 8.99E9, q:3E-6));
+"The Coulomb force between +q at (0.3, 0.3) and -q3 at (0,0) is"$
+f: bfloat(ev(k*q*q3/r^2, k: 8.99E9, q:3E-6, q3:4E-6));
 fx: bfloat(f*cos(45/180*%pi));
 2*fx;
 
@@ -19,11 +21,14 @@ j1: 1+3=I;
 l1: -4*1 + 9 - r*I=0; 
 l2: -4*1-E+3*1=0; 
 l3: -3*1+E+9-r*I;
-rE: at(linsolve([l1,l2],[r,E]),linsolve(j1,[I]));
+rE: at(linsolve([l1,l2],[r,E])
+      ,linsolve(j1,[I])
+      );
 
 at(l3, linsolve(j1,[I]));
 at(%, rE);
 
+"The power in and out, and its check."$
 P: 9*4-3*1;
 4*1^2 + 1*3^2 + (5/4)*4^2;
 
@@ -31,4 +36,7 @@ P: 9*4-3*1;
 R: 1/7.69;
 solve(R=rho*L/A,[rho]);
 rho: ev(rhs(%[1]), L:10, A:1.32E-6);
+"percentage error will be"$
 100* (rho-rst)/rst, rst:1.68E-8;
+"percentage difference will be"$
+(rho-rst)/( (rho+rst)/2)*100, rst:1.68E-8;
