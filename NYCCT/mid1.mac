@@ -4,8 +4,9 @@ kill(all);
 r: bfloat(sqrt( 0.30^2 + 0.30^2 ));
 "The Coulomb force between +q at (0.3, 0.3) and -q3 at (0,0) is"$
 f: bfloat(ev(k*q*q3/r^2, k: 8.99E9, q:3E-6, q3:4E-6));
-fx: bfloat(f*cos(45/180*%pi));
-2*fx;
+fy: bfloat(f*cos(45/180*%pi));
+"The net force on q3 has only y-component, and"$
+2*fy;
 
 "2 (from Ex.18.2 Parallel plates and conservation of energy)"$
 solve(m/2*v^2 = e*Vba,[v]), m:9.11E-31, e:1.60E-19, Vba:12.0;

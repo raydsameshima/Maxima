@@ -1,0 +1,58 @@
+/* 
+PPR.mac
+Positive coefficients polynomial reconstruction
+
+As Federico suggested me that if we have a polynomial of positive coefficients, then
+we can determine its coefficients by sampling only two points, 
+  f(1) and f(f(1))
+
+See also 
+  https://en.wikipedia.org/wiki/Horner%27s_method
+
+*/
+
+kill(all);
+display("
+PPR.mac is loaded.
+This .mac file can provide
+
+  ppr2poly(fx,x) 
+
+for a positive polynomial fx in x.
+
+As helper functions, this also provide
+  ppr2cs(fx,x)
+  ppr2poly_(fx,x) 
+ 
+")$
+
+f(x) := 2*x^3 + x^2 + 5*x + 7;
+
+/* ppr2cs returns a finite coefficient list for a positive polynomial. */
+ppr2cs(fx,x) := block(
+  [f1, ff1, cs:[], q, r],
+  f1: subst([x=1], fx),
+  ff1: subst([x=f1], fx),
+
+  q: ff1,
+  while q#0 do
+    ( [q,r]: divide(q,f1),
+      cs: cons(r,cs)
+    ),
+    
+  return( cs )
+);
+
+/* ppr2poly_ returns a positive polynomial in Horner's form. */
+ppr2poly_(fx,x) := block(
+  [g:0, cs:[]],
+  cs: ppr2cs(fx,x),
+  
+  for c in cs do
+    ( g: c+x*g ),
+
+  return( g )
+);
+
+ppr2poly(fx,x) := expand( ppr2poly_(fx,x) );
+ 
