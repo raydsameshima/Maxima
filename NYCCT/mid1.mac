@@ -1,3 +1,5 @@
+/* mid1.mac */
+
 kill(all);
 "1 (from Ex.17.4 Vector addition of forces)"$
 "The distance between (0.3, 0.3) and the origin is"$

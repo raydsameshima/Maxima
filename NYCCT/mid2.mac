@@ -1,0 +1,86 @@
+/* mid2.mac */
+
+kill(all);
+
+"1 (from Ex.19.11 Recharging a battery)"$
+"1 (a)"$
+j1: 1+3=I;
+
+"1 (b)"$
+l1: -4*1 + 9 - r*I=0$
+l2: -4*1-E+3*1=0$
+l3: -3*1+E+9-r*I$
+
+rE: at(linsolve([l1,l2],[r,E])
+      ,linsolve(j1,[I])
+      );
+
+"1 (c)"$
+at(l3, linsolve(j1,[I]));
+at(%, rE);
+
+"1 (d), (e) and (f)"$
+"The power in and out, and its check."$
+P: 9*4-3*1;
+4*1^2 + 1*3^2 + (5/4)*4^2;
+
+"2 (from Ex.20.2 Electron motion in a mircowave oven)"$
+"2 (b)"$
+eom: e*v*B = m*v^2/r;
+
+"2 (c)"$
+req: solve(eom, r);
+ev( rhs(req[1]), m:9.11E-31, v:1E7, e:1.60E-19, B:0.1 );
+
+"2 (d)"$
+kill(v)$
+veq: solve(eom, v);
+v: ev( rhs(veq[1]), B:0.1, e:1.60E-19, r:0.1, m:9.11E-31 );
+
+"2 (e)"$
+solve(v*T = 2*%pi*r, T)$
+Teq: solve(v*T = 2*%pi*r, T)$
+ev( rhs(Teq[1]), r:0.1, numer );
+
+"2 (f)"$
+omega: 2*%pi*f$
+ev( omega, f:2.45E9, numer );
+
+"2 (g)"$
+kill(B);
+Beq: solve(eom, B);
+B: ev(rhs(Beq[1]), v:r*omega);
+ev( B, f:2.45E9, m:9.11E-31, e:1.60E-19, bfloat);
+
+"2 (h)"$
+ev( B, f:2.5E9, m:9.11E-31, e:1.60E-19, bfloat);
+
+/* Problem 3 */
+"3 (a)"$
+E: 0.012*0.020;
+
+"3 (b)"$
+I: E/R$ 
+ev( I, R:5.0 );
+
+"3 (c)"$
+E: 0.010 * 0.25$
+I: E/R$ 
+ev( I, R:2.5, bfloat );
+
+"3 (d)"$
+E: ev(B*L*v*dt/dt,B: 0.60, L:0.1, v:2.5 ); 
+
+"3 (e)"$
+ev( I:E/R, R:0.030);
+
+"3 (f)"$
+kill(q,v,B,I)$
+F: q*v*B$
+F: ev(F, q: I*dt, v:l/dt);
+
+"3 (h), (i), (j)"$
+ev(F*v, B:0.60, I:5.0, l:0.1, v:2.5);
+ev(E*I, I:5.0);
+ev(R*I^2, R:0.030, I:5.0);
+
