@@ -1,0 +1,40 @@
+/* fe.mac */
+
+kill(all);
+
+"1 (from Ex.18.2 Parallel plates and conservation of energy)"$
+solve(m/2*v^2 = e*Vba,[v]), m:9.11E-31, e:1.60E-19, Vba:12.0;
+bfloat(%[2]);
+
+a: e*E/m, e:1.60E-19, E:1.2E3,m:9.11E-31;
+sqrt(2*a*x),x:1.0E-2;
+bfloat(%);
+
+/**/
+
+"2 (a)"$
+j1: 1+4=I;
+
+"2 (b)"$
+/* outer edges */
+l1: -5*1 + 12 - r*I = 0$
+/* left half */
+l2: -5*1 - E + 4*(7/10) = 0$
+/* right half */
+l3: -4*(7/10) + E + 12 - r*I = 0$
+
+rE: at(linsolve([l1,l2],[r,E])
+               ,linsolve(j1,[I])
+               );
+r:rhs(rE[1]);
+E:rhs(rE[2]);
+"2 (c)"$
+at(l3, linsolve(j1,[I]));
+at(%, rE);
+
+"2 (d), (e) and (f)"$
+"The power in and out, and its check."$
+P: at( 12*I - 4*(7/10), I:linsolve(j1,[I]));
+at( 5*1^2 + (7/10)*4^2 + r*I^2, linsolve(j1,[I]));
+
+
