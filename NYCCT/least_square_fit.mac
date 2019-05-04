@@ -39,7 +39,7 @@ plot_data_and_fit(xys) := block(
       ,[x, xi,xf]
       ,[y, yi,yf]
       ,[style,[points,2,1,1],[lines,1]]
-      ,[legend,"data","lsqare estimates"] 
+      ,[legend,"data","lsqare estimation"] 
       ,[gnuplot_preamble,"set key bottom;"]
     )
   )
