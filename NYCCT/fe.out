@@ -1,0 +1,142 @@
+Maxima 5.41.0 http://maxima.sourceforge.net
+using Lisp SBCL 1.4.7
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("fe.mac")
+
+read and interpret file: /home/rds/Documents/Maxima/NYCCT/fe.mac
+(%i2) kill(all)
+(%o0)                                done
+(%i1) "1 (from Ex.18.2 Parallel plates and conservation of energy)"
+(%i2) E:12.0/0.01
+(%o2)                               1200.0
+(%i3) sol:ev(solve((m/2)*v^2 = e*Vba,[v]),m:9.11e-31,e:1.6e-19,Vba:12.0)
+
+rat: replaced -1.92e-18 by -1/520833333333333376 = -1.92e-18
+
+rat: replaced 4.555e-31 by 1/2195389681668495977098728439808 = 4.555e-31
+(%i4) bfloat(sol[2])
+(%o4)                       v = 2.053082606424669b6
+(%i5) ev(a:(e*E)/m,e:1.6e-19,E:1200.0,m:9.11e-31)
+(%o5)                        2.107574094401756e+14
+(%i6) ev(sqrt(2*a*x),x:0.01)
+(%o6)                          2053082.606424669
+(%i7) bfloat(%)
+(%o7)                         2.053082606424669b6
+(%i8) kill(E)
+(%i9) "2 (a)"
+(%i10) j1:I = 1+4
+(%o10)                               I = 5
+(%i11) "2 (b)"
+(%i12) l1:(-5)*1+12+(-r)*I = 0
+(%i13) l2:(-5)*1-E+4*(7/10) = 0
+(%i14) l3:(-4)*(7/10)+E+12+(-r)*I = 0
+(%i15) rE:at(linsolve([l1,l2],[r,E]),j1)
+                                    7        11
+(%o15)                         [r = -, E = - --]
+                                    5        5
+(%i16) [r,E]:map(rhs,rE)
+                                    7    11
+(%o16)                             [-, - --]
+                                    5    5
+(%i17) "2 (c)"
+(%i18) at(l3,j1)
+                                           46
+(%o18)                       (- 5 r) + E + -- = 0
+                                           5
+(%i19) at(%,rE)
+(%o19)                               0 = 0
+(%i20) "2 (d), (e) and (f)"
+(%i21) "The power in and out, and its check."
+(%i22) P:at(12*I-4*(7/10),j1)
+                                      286
+(%o22)                                ---
+                                       5
+(%i23) at(5*1^2+(7/10)*4^2+r*I^2,j1)
+                                      256
+(%o23)                                ---
+                                       5
+(%i24) "3 Joule heating"
+(%i25) W:q*V
+(%o25)                                V q
+(%i26) ev(W,q:I*t)
+(%o26)                               I V t
+(%i27) W:ev(%,V:R*I)
+                                     2
+(%o27)                              I  R t
+(%i28) W:ev(W,I:2,R:3,t:660)
+(%o28)                               7920
+(%i29) Q:(mw*cw+mc*cc+mh*ch)*dT
+(%o29)                    dT (cw mw + ch mh + cc mc)
+(%i30) Q:ev(Q,cw:4186,cc:ch:910,mw:0.07,mc:0.05,mh:0.015,dT:45.2-24.4)
+(%o30)                         7325.136000000002
+(%i31) "Percent difference is"
+(%i32) ((W-Q)/W)*100
+(%o32)                         7.510909090909062
+(%i33) R_eff:ev(((mw*cw+mc*cc+mh*ch)/I^2)*0.0321,I:2,cw:4186,cc:ch:910,
+                mw:0.07,mc:0.05,mh:0.015)
+(%o33)                            2.82616425
+(%i34) "4 Ladder of resistors"
+(%i35) kill(R)
+(%o35)                               done
+(%i36) R0:R
+(%o36)                                 R
+(%i37) solve(1/R1 = 1/R0+1/(3*R),R1)
+                                        3 R
+(%o37)                            [R1 = ---]
+                                         4
+(%i38) R1:rhs(%[1])
+                                      3 R
+(%o38)                                ---
+                                       4
+(%i39) solve(1/R2 = 1/R1+1/(3*R),R2)
+                                        3 R
+(%o39)                            [R2 = ---]
+                                         5
+(%i40) R2:rhs(%[1])
+                                      3 R
+(%o40)                                ---
+                                       5
+(%i41) solve(1/R3 = 1/R2+1/(3*R),R3)
+                                         R
+(%o41)                             [R3 = -]
+                                         2
+(%i42) R3:rhs(%[1])
+                                       R
+(%o42)                                 -
+                                       2
+(%i43) 1/R1-1/R0
+                                       1
+(%o43)                                ---
+                                      3 R
+(%i44) 1/R2-1/R1
+                                       1
+(%o44)                                ---
+                                      3 R
+(%i45) 1/R3-1/R2
+                                       1
+(%o45)                                ---
+                                      3 R
+(%i46) define(RR(n),rhs(solve(1/Rn = 1/R+n/(3*R),Rn)[1]))
+                                          3 R
+(%o46)                          RR(n) := -----
+                                         n + 3
+(%i47) makelist(RR(n),n,0,4)
+                                 3 R  3 R  R  3 R
+(%o47)                       [R, ---, ---, -, ---]
+                                  4    5   2   7
+(%i48) expand(1/RR(n+1)-1/RR(n))
+                                       1
+(%o48)                                ---
+                                      3 R
+(%i49) limit(RR(n),n,inf)
+(%o49)                                 0
+(%i50) "5"
+(%i51) solve([1/f1+1/f2+1/f3 = 1/9+1/7,1/f1+1/f2 = 1/7+1/5,
+              1/f2+1/f3 = 1/9+1/11],[f1,f2,f3])
+                  77       55         45
+(%o51)     [[f1 = --, f2 = --, f3 = - --], [f1 = 0, f2 = 0, f3 = 0]]
+                  4        16         4
+(%o51)              /home/rds/Documents/Maxima/NYCCT/fe.mac

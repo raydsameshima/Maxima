@@ -17,6 +17,7 @@ bfloat(%);
 kill(E)$
 "2 (a)"$
 j1: I=1+4;
+I: rhs( solve(j1,I)[1] );
 
 "2 (b)"$
 /* outer edges */
@@ -30,6 +31,7 @@ rE: at(linsolve([l1,l2],[r,E])
                , j1
                );
 [r,E]: map(rhs, rE);
+%, numer;
 
 "2 (c)"$
 at(l3, j1);
@@ -37,7 +39,10 @@ at(%, rE);
 
 "2 (d), (e) and (f)"$
 "The power in and out, and its check."$
-P: at( 12*I - 4*(7/10), j1);
+12*I, numer;
+4*abs(E), numer;
+P: at( 12*I - 4*abs(E), j1);
+%, numer;
 at( 5*1^2 + (7/10)*4^2 + r*I^2, j1);
 /* at( 5*1^2 + (7/10)*4^2 + r*I^2, cons(j1,rE)); */
 
@@ -45,6 +50,7 @@ at( 5*1^2 + (7/10)*4^2 + r*I^2, j1);
 /**/
 
 "3 Joule heating"$
+kill(I);
 W: q*V;
 ev(W, q: I*t);
 W: ev(%, V: R*I);
@@ -55,7 +61,9 @@ Q: (mw*cw + mc*cc + mh*ch)*dT;
 Q: ev( Q, cw:4186, cc:ch:910, mw:70E-3, mc:50E-3, mh:15E-3, dT:(45.2-24.4) );
 
 "Percent difference is"$
+W-Q, numer;
 (W-Q)/W * 100;
+
 
 R_eff: ev( (mw*cw + mc*cc + mh*ch)/I^2 * 0.0321
          , I:2, cw:4186, cc:ch:910, mw:70E-3, mc:50E-3, mh:15E-3);
@@ -78,7 +86,10 @@ R3: rhs(%[1]);
 1/R2 - 1/R1;
 1/R3 - 1/R2;
 
+R100: 1/(1/R+ sum(1/(3*R),i,0,99));
+
 define(RR(n), rhs(solve( 1/Rn = 1/R + n/(3*R) , Rn)[1]));
+RR(100);
 makelist(RR(n),n,0,4);
 expand(1/RR(n+1) - 1/RR(n));
 
@@ -87,7 +98,13 @@ limit(RR(n),n,inf);
 
 /**/
 "5"$
+solve(1/f = 1/9+1/7,f);
+%, numer;
+
+solve(1/f = 1/7+1/5,f);
+%, numer;
 solve( [ 1/f1 + 1/f2 + 1/f3 = 1/9+1/7
        , 1/f1+1/f2 = 1/7 + 1/5
        , 1/f2 + 1/f3= 1/9 + 1/11]
      , [f1,f2,f3]);
+%[1], numer;
