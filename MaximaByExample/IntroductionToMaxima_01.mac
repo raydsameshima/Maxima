@@ -66,6 +66,17 @@ map('f, [x,y,z]);
 apply("+",%);
 print("***   We can create a list of equations from two lists   ***")$
 map("=", [x,y,z], [A,B,C]);
+
+
+kill(all);
+print("***   1.8.12, example 1 ***");
+eqn: x^6-1=0;
+solns: solve(eqn, x);
+/**/
+for i in solns do
+  disp ( ev( eqn, i, ratsimp ));
+
+
 /*
 The function 
   zeroequiv( expr, var)
