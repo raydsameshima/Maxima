@@ -1,0 +1,59 @@
+/*
+A note on ThermoDynamics
+
+http://www.phys.u-ryukyu.ac.jp/~maeno/td2019/td20190407.pdf
+*/
+
+/*
+1.1
+adiabatic process v.s. isothermal process
+internal energy U v.s. Helmholtz free energy F
+
+1.2.1
+heat   = flow (not stock)
+energy = stock
+
+1.2.2
+work = (initial energy) - (final energy)
+why? -> conservation law
+        principle of works
+
+1.3
+
+1.4
+no micro, yes macro
+We import the concepts energy and variation principle from mechanics.
+
+energy = stock
+work = (initial energy) - (final energy)
+
+We first define internal energy U.
+In an adiabatic process (no-heat exchange), we let an object work W.
+We define the internal energy difference Uf-Ui by this work,
+  Uf-Ui = W 
+
+Similarly, we define Helmholz free energy F.
+In an isothermal process from Fi to Ff, we let an object work W.
+  Ff-Fi = W
+*/
+
+/*
+2.1
+Energy is a stock, i.e., energy depends only on both final 
+and initial state.
+
+Let us review the mechanical energy.
+Consider a point mass under an infinitesimal displacement.
+If the point mass gives force F on anther object, and moves dx,
+then the mechanical work is defined by
+  F . dx.
+Under this setting, if we can define
+  dU := -F.dx
+then such U is called the mechanical energy of this point mass.
+
+2.1.2
+Uniform gravity
+ Fz = -m*g
+ F . dx = -m*g*dz = d(-m*g*z)
+
+*/

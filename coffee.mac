@@ -1,0 +1,13 @@
+kill(all);
+/* display2d:false; */
+atvalue(T(t),t = 0,90);
+ds:desolve(diff(T(t),t,1) = a*(T(t)-10),T(t));
+define(T(t),rhs(ds));
+sol:solve(T(3) = 70,a);
+a:rhs(sol[3]);
+solve(T(t) = 55,t);
+radcan(ev(rhs(%[1]),logexpand:super));
+plot2d(
+   [T(t),[parametric,x,55,[x,0,10]]]
+ , [t,0,10]
+ , [gnuplot_term, dumb]);
