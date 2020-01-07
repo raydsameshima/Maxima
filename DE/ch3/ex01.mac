@@ -1,0 +1,36 @@
+/* ch.3 ordinary differential equations */
+
+"Let us consider initial value problems of DE:"$
+
+kill(y,x)$
+"Consider the following DE:"$
+eqn: 'diff(y,x) = 2*x*y;
+sol: ode2(eqn, y, x);
+"If we assign the following initial condition, we then obtain a solution:"$
+sol: ic1(sol, x=0, y=1);
+
+"To check its validity, take:"$
+define(y(x), rhs(sol));
+y(0);
+diff(y(x),x)-2*x*y(x);
+
+kill(y,x)$
+
+depends(y,x);
+eqn:diff(y,x) = tan(y);
+ode2(eqn,y,x);
+solve(%,y);
+sol: ic1(%[1],x = 0,y = %pi/2);
+
+define(y(x), rhs(sol));
+y(0);
+diff(y(x),x) - tan(y(x));
+
+kill(y,x)$
+
+depends(y,x);
+eqn: diff(y,x) = tan(y);
+sol: ode2(eqn,y,x);
+
+sol: ic1(sol, x = 0, y = %pi/2);
+solve(sol, y);
