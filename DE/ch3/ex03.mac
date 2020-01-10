@@ -1,4 +1,7 @@
 /* ex03.mac */
+
+"1st order linear DE"$
+
 "Consider the following DE:"$
 eqn: 'diff(y,x,1)-y = x;
 sol: ode2(eqn,y,x), expand;
@@ -16,3 +19,24 @@ sol: ev(ode2(eqn,y,x), expand);
 sol: ic1(sol, x=1, y=0);
 define(y(x), rhs(sol));
 plot2d(y(x),[x,-1,1],[y,-10,10]);
+
+kill(y,x);
+
+"Bernoulli's equation"$
+eqn: 'diff(y,x,1)-y = x*y^n;
+sol: ode2( ev(eqn, n:1) ,y,x), expand;
+define(y(x),rhs(%));
+diff(y(x),x)-y(x)-x*y(x), expand;
+
+sol: ode2( ev(eqn, n:2) ,y,x), expand;
+define(y(x),rhs(%));
+diff(y(x),x)-y(x)-x*y(x)^2, expand;
+
+sol: ode2( ev(eqn, n:3) ,y,x), expand;
+define(y(x),rhs(%));
+diff(y(x),x)-y(x)-x*y(x)^3, expand;
+
+kill(y,x)$
+
+"Riccati's equation"$
+ode2( 'diff(y,x,1)+y^2+y-x=0, y, x);
