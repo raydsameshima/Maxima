@@ -1,0 +1,30 @@
+/* ex01.mac */
+
+"Laplace transform"$
+
+"Let us consider an initial value problem of a DE:"$
+
+"using desolve with atvalue:"$
+atvalue(y(t), t=0, 2);
+desolve( diff(y(t),t)+2*y(t)=exp(-t), y(t));
+
+kill(x,y)$
+
+"using ode2 with ic1:"$
+eqn:'diff(y,t,1)+2*y = %e^-t;
+sol: ode2(eqn,y,t), expand;
+asol: ic1(sol,t = 0,y = 2)$
+asol, expand;
+
+kill(eqn,x,y)$
+
+"using Laplace transform:"$
+eqn2: diff(y(t),t)+2*y(t) = exp(-t);
+lap: laplace(eqn2,t,s);
+lap: ev(lap,y(0):2);
+sol: solve(lap,'laplace(y(t),t,s));
+
+ilt(rhs(sol[1]),s,t);
+
+partfrac(rhs(sol[1]),s);
+ilt(%, s, t);

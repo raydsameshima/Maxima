@@ -1,0 +1,24 @@
+/* ex01.mac */
+
+load(functs); /* for wronskian */
+
+eqn:'diff(y,x,2)-3*'diff(y,x,1)+2*y = 0;
+ode2(eqn,y,x);
+wronskian([exp(2*x),exp(x)],x);
+ev(determinant(%),expand);
+
+kill(y,x);
+
+eqn:'diff(y,x,2)-2*'diff(y,x,1)+5*y = 0;
+ode2(eqn,y,x);
+ev(%,expand);
+ev(determinant(wronskian([exp(x)*sin(2*x),exp(x)*cos(2*x)],x)),expand);
+trigsimp(%);
+
+kill(y,x);
+
+eqn:'diff(y,x,2)-2*'diff(y,x,1)+y = 0;
+ode2(eqn,y,x), expand;
+
+diff(f(x), x, 2)-2*diff(f(x),x,1)+f(x), f(x):   exp(x), expand;
+diff(f(x), x, 2)-2*diff(f(x),x,1)+f(x), f(x): x*exp(x), expand;

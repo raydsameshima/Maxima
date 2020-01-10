@@ -1,0 +1,8 @@
+/* ex02.mac */
+
+"method of undetermined coefficients"$
+
+eqn:'diff(y,x,2)-3*'diff(y,x,1)+2*y = exp(3*x);
+ode2(eqn,y,x);
+
+ode2('diff(y,x,2)+4*y = cos(x),y,x);
