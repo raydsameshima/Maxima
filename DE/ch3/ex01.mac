@@ -1,5 +1,7 @@
 /* ch.3 ordinary differential equations */
 
+"separation of variables form"$
+
 "Let us consider initial value problems of DE:"$
 
 kill(y,x)$

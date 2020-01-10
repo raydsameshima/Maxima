@@ -1,19 +1,25 @@
 /* ex02.mac */
 
+"homogeneous form"$
+
 kill(y,x)$
 depends(y,x);
 eqn: 9*y*diff(y,x)+4*x = 0;
-sol: ode2(eqn,y,x);
-sol: ic1(sol, x = 0,y = 1);
-sol: radcan(expand(sol));
+gsol: ode2(eqn,y,x);
+asol: ic1(gsol, x = 0,y = 1);
+asol: radcan(expand(asol));
 
 
 load(draw);
-draw2d(implicit(sol,x,-2,2,y,-2,2));
+draw2d(implicit(asol,x,-2,2,y,-2,2));
 
 kill(y,x)$
 eqn: x*'diff(y,x)=2*x-y;
-sol: ode2(eqn,y,x);
-solve(%,y);
+/* sol: ode2(eqn,y,x); */
+solve(sol,y);
 define(y(x), rhs(%[1]));
 x*diff(y(x),x)-(2*x-y(x)), expand;
+
+asol: ic1(sol, x=1, y=2);
+define(y(x), rhs(asol))$
+plot2d([t, y(t)], [t,1/10, 10], [x,0,2]);
