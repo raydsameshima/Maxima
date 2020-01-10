@@ -3,15 +3,21 @@
 "Let us consider initial value problems of DE:"$
 
 kill(y,x)$
+
 "Consider the following DE:"$
 eqn: 'diff(y,x) = 2*x*y;
+
+"Maxima can obtain the following general solution:"$
 sol: ode2(eqn, y, x);
+
 "If we assign the following initial condition, we then obtain a solution:"$
 sol: ic1(sol, x=0, y=1);
 
 "To check its validity, take:"$
 define(y(x), rhs(sol));
+"The initial condition:"$
 y(0);
+"The DE:"$
 diff(y(x),x)-2*x*y(x);
 
 kill(y,x)$
@@ -28,8 +34,7 @@ diff(y(x),x) - tan(y(x));
 
 kill(y,x)$
 
-depends(y,x);
-eqn: diff(y,x) = tan(y);
+eqn: 'diff(y,x) = tan(y);
 sol: ode2(eqn,y,x);
 
 sol: ic1(sol, x = 0, y = %pi/2);
