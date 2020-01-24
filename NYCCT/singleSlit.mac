@@ -1,0 +1,4 @@
+/* 14 week Lab 24 Diffraction of Light from a Single Slit and on a Wire */
+
+ev( (2*m*l*L)/d, m:2,l:6.5e-7,L:1.5,d:0.1);
+ev( (2*m*l*L)/d, l:6.33e-7,L:1,m:1,d:0.08);
