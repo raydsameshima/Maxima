@@ -1,0 +1,45 @@
+Maxima 5.43.0 http://maxima.sourceforge.net
+using Lisp SBCL 2.0.0
+Distributed under the GNU Public License. See the file COPYING.
+Dedicated to the memory of William Schelter.
+The function bug_report() provides bug reporting information.
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("ex18.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex18.mac
+(%i2) "ex. 18.1 (section 18.3):"
+(%i3) k:8.99e+9
+(%o3)                               8.99e+9
+(%i4) "eq.(18.5) - eq.(18.7) "
+(%i5) ev(Fc:(k*q1*q2)/r^2,q1:q2:1.6e-19,r:5.3e-11)
+(%o5)                        8.193093627625488e-8
+(%i6) "eq.(18.8) - eq.(18.9) "
+(%i7) ev(Fg:(G*m*M)/r^2,G:6.669999999999999e-11,m:9.11e-31,M:1.67e-27,r
+                                                                       :5.3e-11)
+(%o7)                        3.612509042363831e-47
+(%i8) "eq.(18.10):"
+(%i9) Fc/Fg
+(%o9)                        2.26797871826623e+39
+(%i10) "ex. 18.2 (section 18.4)"
+(%i11) "eq.(18.14):"
+(%i12) E:ev((k*Q)/r^2,Q:2.0e-9,r:0.005)
+(%i13) ev(E,bfloat)
+(%o13)                              7.192b5
+(%i14) "ex. 18.3 (section 18.4)"
+(%i15) "eq.(18.15):"
+(%i16) ev(E*q,q:2.5e-7)
+(%o16)                              0.1798
+(%i17) "ex. 18.4 (section 18.4)"
+(%i18) "The x and y components, eq.(18.17) and eq.(18.16):"
+(%i19) Ex:ev(((-k)*q2)/r2^2,q2:1.0e-8,r2:0.04)
+(%o19)                             - 56187.5
+(%i20) Ey:ev((k*q1)/r1^2,q1:5.0e-9,r1:0.02)
+(%o20)                             112375.0
+(%i21) "eq.(18.18):"
+(%i22) E:ev(sqrt(Ex^2+Ey^2),bfloat)
+(%o22)                        1.256390694857694b5
+(%i23) "eq.(18.19):"
+(%i24) theta:atan(Ey/Ex)
+(%i25) ev(abs((theta*180)/%pi),numer)
+(%o25)                         63.43494882292201
+(%o26)           /home/rds/Documents/Maxima/NYCCT/Lec/ex18.mac
