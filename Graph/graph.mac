@@ -1,0 +1,41 @@
+/* https://sysplay.in/blog/mathematics/2014/12/visualizing-graph-theory/ */
+/* https://sysplay.in/blog/mathematics/2015/01/playing-with-graphs/ */
+
+load(graphs);
+
+/* a graph "g" is now a global variable */
+incidence_map[i,j] := block(
+  [es, l, vs, xs],
+  es: edges(g), 
+  l: length(es),
+  vs: vertices(g), 
+
+  [a,b]: es[i],
+
+  if (j=a) then return(1) elseif (j=b) then return(-1) else return(0)
+
+);
+
+/* g :: graph */
+incidence_matrix(g) := block(
+  [incidence_map],
+
+    es: reverse(edges(g)), 
+    l: length(es),
+    vs: vertices(g), 
+    /* xs: makelist( concat(x,i), i, 1, l), */
+
+  incidence_map[i,j] := block(
+    [a,b],
+  
+    [a,b]: es[j],
+  
+        if (i=a) then return(1) 
+    elseif (i=b) then return(-1) 
+                 else return(0)
+  
+  ), 
+
+  return( genmatrix(incidence_map, length(vs), length(es)))
+
+);
