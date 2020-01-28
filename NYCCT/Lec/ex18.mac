@@ -3,6 +3,7 @@
 "ex. 18.1 (section 18.3):"$
 
 k:8.99e+9;
+
 "eq.(18.5) - eq.(18.7) "$
 ev( Fc:k*q1*q2/r^2, q1:q2:1.6e-19, r:5.3e-11);
 "eq.(18.8) - eq.(18.9) "$
@@ -31,3 +32,52 @@ E: ev( sqrt(Ex^2 + Ey^2), bfloat);
 theta: atan(Ey/Ex)$
 abs(theta * 180/%pi), numer;
 
+/* HW */
+e: 1.60E-19; 
+
+"1: "$
+2.00E-9/e;
+0.500E-6/e;
+
+"4: "$
+40.0/e, bfloat;
+
+"5: "$
+solve(-5.00-9 = (n - 1.0000E12)*(-e), n), bfloat;
+
+"7: "$
+avogadro_const : 6.02214076E23;
+mol: 50/63.5;
+num_of_e: q/e; /*The number of electron which is removed from atom.*/
+total_num_of_e: 29*mol*avogadro_const;
+"The fraction of electrons that has been removed:"$
+num_of_e / total_num_of_e, bfloat;
+
+"21: "$
+Fc: ev( k*q1*q2/r^2, q1:q2:1.6e-19);
+Fg: ev( G*m*M/r^2, G:6.67e-11,m:M:9.11e-31);
+Fc/Fg; /* 4.157546058731729e+42 <- 2.26797871826623e+39 (p-e of a hydrogen) */
+
+"28: "$
+"Since the charge > 0, the direction still is east."$
+3.50E-6 * 250; /* 8.750000000000001e-4 */
+
+"32: "$
+"An electron is negatively charged, the direction of e-field is eastward."$
+4.80E-17 / e; /* 300.0 */
+
+/*
+"44: "$
+kill(q,x);
+Q: 2.00E-9;
+e1(x) := k*(-2*q)/(x-1 )^2;
+e2(x) := k*q     /(x-5 )^2;
+e3(x) := k*3*q   /(x-8 )^2;
+e4(x) := k*(-q)  /(x-14)^2;
+
+e(x) := e1(x) + e2(x) + e3(x) + e4(x);
+ev( Q*e(4), q: 4.00E-2 );
+
+solve(e(x)=0, x); 
+map('e, [-1,0,2,3,4,6,7,9,10,11,12,13]);
+*/

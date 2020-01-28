@@ -42,4 +42,56 @@ read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex18.mac
 (%i24) theta:atan(Ey/Ex)
 (%i25) ev(abs((theta*180)/%pi),numer)
 (%o25)                         63.43494882292201
-(%o26)           /home/rds/Documents/Maxima/NYCCT/Lec/ex18.mac
+(%i26) e:1.6e-19
+(%o26)                              1.6e-19
+(%i27) "1: "
+(%i28) 2.0e-9/e
+(%o28)                             1.25e+10
+(%i29) 4.999999999999999e-7/e
+(%o29)                             3.125e+12
+(%i30) "4: "
+(%i31) ev(40.0/e,bfloat)
+(%o31)                              2.5b20
+(%i32) "5: "
+(%i33) ev(solve((-5.0)-9 = (n-1.0e+12)*(-e),n),bfloat)
+
+rat: replaced -14.0 by -14/1 = -14.0
+
+rat: replaced 1.6e-19 by 1/6250000000000000000 = 1.6e-19
+
+rat: replaced -1.0e+12 by -1000000000000/1 = -1.0e+12
+(%o33)                        [n = 8.7500001b19]
+(%i34) "7: "
+(%i35) avogadro_const:6.02214076e+23
+(%o35)                          6.02214076e+23
+(%i36) mol:50/63.5
+(%o36)                        0.7874015748031497
+(%i37) num_of_e:q/e
+(%o37)                            6.25e+18 q
+(%i38) total_num_of_e:29*mol*avogadro_const
+(%o38)                       1.375134504251969e+25
+(%i39) "The fraction of electrons that has been removed:"
+(%i40) ev(num_of_e/total_num_of_e,bfloat)
+(%o40)                      4.545009946790485b-7 q
+(%i41) "21: "
+(%i42) Fc:ev((k*q1*q2)/r^2,q1:q2:1.6e-19)
+                                  2.30144e-28
+(%o42)                            -----------
+                                       2
+                                      r
+(%i43) Fg:ev((G*m*M)/r^2,G:6.669999999999999e-11,m:M:9.11e-31)
+                                5.53557307e-71
+(%o43)                          --------------
+                                       2
+                                      r
+(%i44) Fc/Fg
+(%o44)                       4.157546058731729e+42
+(%i45) "28: "
+(%i46) "Since the charge > 0, the direction still is east."
+(%i47) 3.5e-6*250
+(%o47)                       8.750000000000001e-4
+(%i48) "32: "
+(%i49) "An electron is negatively charged, the direction of e-field is eastward."
+(%i50) 4.8e-17/e
+(%o50)                               300.0
+(%o52)           /home/rds/Documents/Maxima/NYCCT/Lec/ex18.mac
