@@ -1,8 +1,3 @@
-Maxima 5.43.0 http://maxima.sourceforge.net
-using Lisp SBCL 2.0.0
-Distributed under the GNU Public License. See the file COPYING.
-Dedicated to the memory of William Schelter.
-The function bug_report() provides bug reporting information.
 maxima_userdir is  /home/rds/.maxima 
 (%i1) batch("ex18.mac")
 

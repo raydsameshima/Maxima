@@ -4,7 +4,7 @@
 load(graphs);
 
 /* a graph "g" is now a global variable */
-incidence_map[i,j] := block(
+/* incidence_map[i,j] := block(
   [es, l, vs, xs],
   es: edges(g), 
   l: length(es),
@@ -15,13 +15,14 @@ incidence_map[i,j] := block(
   if (j=a) then return(1) elseif (j=b) then return(-1) else return(0)
 
 );
+*/
 
 /* g :: graph */
 incidence_matrix(g) := block(
   [incidence_map],
 
-    es: reverse(edges(g)), 
-    l: length(es),
+    es: edges(g), 
+    l:  length(es),
     vs: vertices(g), 
     /* xs: makelist( concat(x,i), i, 1, l), */
 
@@ -38,4 +39,38 @@ incidence_matrix(g) := block(
 
   return( genmatrix(incidence_map, length(vs), length(es)))
 
+);
+
+w_matrix_(g, i) := block(
+  [l, im, a, diag_ys],
+ 
+  l: graph_size(g),
+  im : submatrix (i, incidence_matrix (g)),
+  a[i,j] := if (i=j) then concat(y,i) else 0,
+  diag_ys: genmatrix(a,l,l),
+ 
+  return(
+    im . diag_ys . transpose(im)
+  )
+);
+
+w_matrix(g) := w_matrix_(g, 1);
+
+chord_set_prod_sum(g) := expand(determinant(w_matrix(g)));
+
+tree_prod_sum(g) := block(
+  [l, b, diag_xs, im, w_matrix_x, det ],
+  
+  l: graph_size(g),
+  b[i,j] := if (i=j) then 1/concat(x,i) else 0,
+  diag_xs: genmatrix(b,l,l),
+
+  im : submatrix (1, incidence_matrix (g)),
+  w_matrix_x: im . diag_xs . transpose(im),
+
+  det: determinant(w_matrix_x) * prod( concat(x,i), i, 1, l),
+
+  return(
+    expand(det)
+  )
 );
