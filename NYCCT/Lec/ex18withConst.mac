@@ -1,40 +1,64 @@
 /* ex18.mac*/
 
-load(ezunits)$
-load(physical_constants)$
+load(physical_constants)$ 
 
 "ex. 18.1 (section 18.3):"$
 
-k:8.99e+9;
+/* We could also use declare_constant(k, ... ) to let this k a given number in the text. */
+k: 1/(4*%pi*%e_0)$ 
+
+ev( constvalue(k), numer);
 
 "eq.(18.5) - eq.(18.7) "$
-ev( Fc:k*q1*q2/r^2, q1:q2:1.6e-19, r:5.3e-11);
+Fc: k*q1*q2/r^2, q1:q2: %%e , r:5.3e-11 ` m$
+
+ev( constvalue(Fc), numer);
+dimensions(Fc);
+
 "eq.(18.8) - eq.(18.9) "$
-ev(Fg:(G*m*M)/r^2,G:6.67e-11,m:9.11e-31,M:1.67e-27,r:5.3e-11);
+Fg: (%G*m*M)/r^2,m:9.11e-31 ` kg, M:1.67e-27 ` kg, r:5.3e-11 ` m$
+
+ev( constvalue(Fg), numer);
+
 "eq.(18.10):"$
-Fc/Fg; /* 2.26797871826623e+39 */
+r: Fc/Fg$ 
+
+ev( constvalue(r), numer );
+dimensions(r);
 
 
 "ex. 18.2 (section 18.4)"$
 "eq.(18.14):"$
-E: ev( k*Q/r^2, Q: 2.00E-9, r:5.00E-3 )$
-E, bfloat; /* 7.192b5 */
+E: k*Q/r^2, Q: 2.00E-9 ` C, r:5.00E-3 ` m$
+
+constvalue(E), bfloat; 
+dimensions(E);
 
 "ex. 18.3 (section 18.4)"$
 "eq.(18.15):"$
-ev( E*q, q:0.250E-6); /* 0.1798 */
+E*q, q:0.250E-6 ` C$ 
+
+constvalue(%), numer;
+dimensions(E);
 
 "ex. 18.4 (section 18.4)"$
 "The x and y components, eq.(18.17) and eq.(18.16):"$
-Ex: ev(-k*q2/r2^2, q2:10E-9, r2:4E-2);
-Ey: ev( k*q1/r1^2, q1:5E-9,  r1:2E-2);
+Ex: -k*q2/r2^2, q2:10E-9 ` C, r2:4E-2 ` m$
+constvalue(Ex), numer;
+
+Ey:  k*q1/r1^2, q1:5E-9 ` C,  r1:2E-2 ` m$
+constvalue(Ey), numer;
 
 "eq.(18.18):"$
-E: ev( sqrt(Ex^2 + Ey^2), bfloat);
+E: sqrt(Ex^2 + Ey^2);
+constvalue(E), bfloat;
+
 "eq.(18.19):"$
+/* dimensions(Ey/Ex); */
 theta: atan(Ey/Ex)$
 abs(theta * 180/%pi), numer;
 
+/*
 /* HW */
 e: 1.60E-19; 
 
@@ -83,4 +107,6 @@ ev( Q*e(4), q: 4.00E-2 );
 
 solve(e(x)=0, x); 
 map('e, [-1,0,2,3,4,6,7,9,10,11,12,13]);
+*/
+
 */
