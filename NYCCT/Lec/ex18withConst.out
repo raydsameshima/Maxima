@@ -1,0 +1,104 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("ex18withConst.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex18withConst.mac
+(%i2) load(physical_constants)
+(%i3) "ex. 18.1 (section 18.3):"
+(%i4) k:1/(4*%pi*%e_0)
+(%i5) ev(constvalue(k),numer)
+                                                   2
+                                                N m
+(%o5)                    8.987551787368178e+9 ` -----
+                                                 2  2
+                                                A  s
+(%i6) "eq.(18.5) - eq.(18.7) "
+(%i7) ev(Fc:(k*q1*q2)/r^2,q1:q2:%%e,r:5.3e-11 ` m)
+(%i8) ev(constvalue(Fc),numer)
+                                                 2
+                                                C  N
+(%o8)                    8.213161722093849e-8 ` -----
+                                                 2  2
+                                                A  s
+(%i9) dimensions(Fc)
+                                  length mass
+(%o9)                             -----------
+                                         2
+                                     time
+(%i10) "eq.(18.8) - eq.(18.9) "
+(%i11) ev(Fg:(%G*m*M)/r^2,m:9.11e-31 ` kg,M:1.67e-27 ` kg,r:5.3e-11 ` m)
+(%i12) ev(constvalue(Fg),numer)
+                                                 kg m
+(%o12)                   3.614827114133143e-47 ` ----
+                                                   2
+                                                  s
+(%i13) "eq.(18.10):"
+(%i14) r:Fc/Fg
+(%i15) ev(constvalue(r),numer)
+                                                 2
+                                                C  N
+(%o15)                  2.27207594243782e+39 ` -------
+                                                2
+                                               A  kg m
+(%i16) dimensions(r)
+(%o16)                                 1
+(%i17) "ex. 18.2 (section 18.4)"
+(%i18) "eq.(18.14):"
+(%i19) ev(E:(k*Q)/r^2,Q:2.0e-9 ` C,r:0.005 ` m)
+(%i20) ev(constvalue(E),bfloat)
+                                              1.0b0 C N
+(%o20)                  7.190041429894542b5 ` ---------
+                                                 2  2
+                                                A  s
+(%i21) dimensions(E)
+                                  length mass
+(%o21)                           -------------
+                                             3
+                                 current time
+(%i22) "ex. 18.3 (section 18.4)"
+(%i23) "eq.(18.15):"
+(%i24) ev(E*q,q:2.5e-7 ` C)
+(%i25) ev(constvalue(%),numer)
+                                                2
+                                               C  N
+(%o25)                    0.1797510357473636 ` -----
+                                                2  2
+                                               A  s
+(%i26) dimensions(E)
+                                  length mass
+(%o26)                           -------------
+                                             3
+                                 current time
+(%i27) "ex. 18.4 (section 18.4)"
+(%i28) "The x and y components, eq.(18.17) and eq.(18.16):"
+(%i29) ev(Ex:((-k)*q2)/r2^2,q2:1.0e-8 ` C,r2:0.04 ` m)
+(%i30) ev(constvalue(Ex),numer)
+                                                  C N
+(%o30)                   (- 56172.19867105111) ` -----
+                                                  2  2
+                                                 A  s
+(%i31) ev(Ey:(k*q1)/r1^2,q1:5.0e-9 ` C,r1:0.02 ` m)
+(%i32) ev(constvalue(Ey),numer)
+                                                C N
+(%o32)                     112344.3973421022 ` -----
+                                                2  2
+                                               A  s
+(%i33) "eq.(18.18):"
+(%i34) E:sqrt(Ex^2+Ey^2)
+                                      2                     2
+                      9.765625e-12   C    2.44140625e-12   C
+                      ------------ ` --   -------------- ` --
+                             2        4           2         4
+                          %pi        m         %pi         m
+(%o34)           sqrt(----------------- + -------------------)
+                                2                    2
+                            %e_0                 %e_0
+(%i35) ev(constvalue(E),bfloat)
+                                              1.0b0 C N
+(%o35)                  1.256048546740936b5 ` ---------
+                                                 2  2
+                                                A  s
+(%i36) "eq.(18.19):"
+(%i37) theta:atan(Ey/Ex)
+(%i38) ev(abs((theta*180)/%pi),numer)
+(%o38)                         63.43494882292201
+(%o40)      /home/rds/Documents/Maxima/NYCCT/Lec/ex18withConst.mac
