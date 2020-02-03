@@ -1,5 +1,6 @@
 /* ex18.mac*/
 
+kill(all);
 load(physical_constants)$ 
 
 "ex. 18.1 (section 18.3):"$
@@ -58,40 +59,48 @@ constvalue(E), bfloat;
 theta: atan(Ey/Ex)$
 abs(theta * 180/%pi), numer;
 
-/*
 /* HW */
-e: 1.60E-19; 
+/* e: 1.60E-19;  */
 
 "1: "$
-ans: 2.00E-9/e;
-ans: 0.500E-6/e;
+ans: (2.00*10^(-9) ` C)/%%e $
+constvalue( ans ), numer;
+
+constvalue( (0.500*10^(-6) ` C)/%%e ), numer;
 
 "4: "$
-ans: ev(40.0/e, bfloat);
+constvalue( (40.0 ` C)/%%e) , bfloat;
 
 "5: "$
-solve(-5.00E-9 = (n - 1.0000E12)*(-e), n), bfloat;
+sol: solve( (-5.00*10^(-9) ` C)= (n - 1.0000*10^12)*(-%%e), n)$
+constvalue( sol[1] ), numer;
 
 "7: "$
-avogadro_const : 6.02214076E23;
-mol: 50/63.5;
-num_of_e: q/e; /*The number of electron which is removed from atom.*/
-total_num_of_e: 29*mol*avogadro_const;
+/* avogadro_const : 6.02214076E23; */
+mol_of_Cu: (50/63.5 ` mol);
+num_of_e: (2.0*10^(-6) ` C)/%%e; /*The number of electron which is removed from atom.*/
+total_num_of_e: 29 * mol_of_Cu * %N_A; 
 "The fraction of electrons that has been removed:"$
-num_of_e / total_num_of_e, bfloat;
+constvalue(num_of_e / total_num_of_e), numer;
 
 "21: "$
-Fc: ev( k*q1*q2/r^2, q1:q2:1.6e-19);
-Fg: ev( G*m*M/r^2, G:6.67e-11,m:M:9.11e-31);
-Fc/Fg; /* 4.157546058731729e+42 <- 2.26797871826623e+39 (p-e of a hydrogen) */
+kill(q1,q2,r);
+declare_units(r, m)$
+Fc: k*q1*q2/r^2, q1:q2:%%e$ 
+dimensions(Fc);
+
+Fg: %G*m*M/r^2, m:M: %m_e$
+dimensions(Fg);
+constvalue(Fc/Fg), numer; /* 4.157546058731729e+42 <- 2.26797871826623e+39 (p-e of a hydrogen) */
+dimensions(%);
 
 "28: "$
 "Since the charge > 0, the direction still is east."$
-3.50E-6 * 250; /* 8.750000000000001e-4 */
+constvalue( (3.50*10^(-6) ` C)* (250 ` N/C)), numer; /* 8.750000000000001e-4 */
 
 "32: "$
 "An electron is negatively charged, the direction of e-field is eastward."$
-4.80E-17 / e; /* 300.0 */
+constvalue( (4.80E-17 ` N) / %%e ), numer; /* 300.0 */
 
 /*
 "44: "$
@@ -107,6 +116,4 @@ ev( Q*e(4), q: 4.00E-2 );
 
 solve(e(x)=0, x); 
 map('e, [-1,0,2,3,4,6,7,9,10,11,12,13]);
-*/
-
 */
