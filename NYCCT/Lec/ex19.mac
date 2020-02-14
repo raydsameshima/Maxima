@@ -1,0 +1,15 @@
+/* ex19.mac */
+
+kill(all);
+load(physical_constants)$ 
+
+"Exercise 19.1"$
+"1"$
+
+voltage: 40 ` kV;
+energy_conservation: 1/2 * %m_e *v^2 = voltage * %%e;
+sol: solve(energy_conservation, v);
+dimensions(sol[2]);
+constvalue(rhs(sol[2])), bfloat;
+dimensions(%);
+
