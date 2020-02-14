@@ -94,6 +94,9 @@ dimensions(Fg);
 constvalue(Fc/Fg), numer; /* 4.157546058731729e+42 <- 2.26797871826623e+39 (p-e of a hydrogen) */
 dimensions(%);
 
+FgProton: %G * m*M/r^2, m:M: 1.67*10^(-27) ` kg;
+constvalue(Fc/FgProton), numer;
+
 "28: "$
 "Since the charge > 0, the direction still is east."$
 constvalue( (3.50*10^(-6) ` C)* (250 ` N/C)), numer; /* 8.750000000000001e-4 */
