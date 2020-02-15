@@ -4,12 +4,69 @@ kill(all);
 load(physical_constants)$ 
 
 "Exercise 19.1"$
-"1"$
+"2"$
 
-voltage: 40 ` kV;
-energy_conservation: 1/2 * %m_e *v^2 = voltage * %%e;
+voltage: 40 ` kV$
+declare_units(v, m/s);
+energy_conservation: 1/2 * %m_e *v^2 = voltage * %%e$
 sol: solve(energy_conservation, v);
-dimensions(sol[2]);
-constvalue(rhs(sol[2])), bfloat;
+/* dimensions(sol[2]); */
+ans: ev(constvalue(rhs(sol[2])), bfloat);
+ans `` m/s, bfloat;
+dimensions(ans);
+
+
+"14"$
+potential_diff: 1.50*10^4 ` V$
+separation: 1.00 ` cm$
+E: potential_diff / separation `` V/m$
+constvalue(E), bfloat;
+
+"23"$
+E: 2.0*10^6 ` V/m$
+d: 0.400 ` m$
+potential_diff: E*d;
+/* dimensions(%); */
+
+OneeV: ev( constvalue((1 ` V)*(%%e)) `` J, bfloat);
+
+energy: potential_diff *  %%e $
+constvalue(energy), bfloat;
+
+energy: ev( constvalue(energy) `` J, bfloat )$
+energy/OneeV;
 dimensions(%);
+
+d: (50.0 ` GV `` V)/(2.00 ` MV/m `` V/m)$
+constvalue(d), bfloat;
+
+"27"$
+kill(k, eq, r, sol)$
+k: 1/(4 * %pi * %e_0)$ 
+
+declare_units(r, m)$
+eq: (100 ` V) = k*(1.00*10^(-6) ` C)/r$
+/* dimensions(eq); */
+eq: ev( constvalue(eq), bfloat)$
+sol: linsolve(eq, r)$
+ev(ev(constvalue(rhs(sol[1])) `` m), bfloat);
+
+kill(eq)$
+eq: (200 ` V) = k*(1.00*10^(-6) ` C)/r$
+eq: ev( constvalue(eq), bfloat)$
+sol: linsolve(eq, r)$
+ev(ev(constvalue(rhs(sol[1])) `` m), bfloat);
+
+"49"$
+linsolve(q=c*v, v)$
+ev( rhs(%[1]), c: (2.00*10^(-6) ` F), q: (3.10*10^(-6) ` C), bfloat) `` V;
+
+"53"$
+2.1 * %e_0*(5.00 ` m^2)/(0.100 ` mm `` m)$
+ev(constvalue(%), bfloat) `` F;
+
+"57"$
+declare_units(cc, F)$
+sol:solve( 1/cc = 1/(10*10^(-6) ` F + 2.5*10^(-6) ` F) + 1/(0.30*10^(-6) ` F), cc )$
+rhs(sol[1]), bfloat;
 

@@ -1,0 +1,88 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("ex19.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex19.mac
+(%i2) kill(all)
+(%o0)                                done
+(%i1) load(physical_constants)
+(%i2) "Exercise 19.1"
+(%i3) "2"
+(%i4) voltage:40 ` kV
+(%i5) declare_units(v,m/s)
+                                       m
+(%o5)                                  -
+                                       s
+(%i6) energy_conservation:(1/2)*%m_e*v^2 = voltage*%%e
+(%i7) sol:solve(energy_conservation,v)
+                         %%e (80 ` kV)            %%e (80 ` kV)
+(%o7)        [v = - sqrt(-------------), v = sqrt(-------------)]
+                             %m_e                     %m_e
+(%i8) ans:ev(constvalue(rhs(sol[2])),bfloat)
+                                       1.0b0 sqrt(C) sqrt(kV)
+(%o8)            3.751074671568539b6 ` ----------------------
+                                              sqrt(kg)
+(%i9) ev(ans `` m/s,bfloat)
+                                               1.0b0 m
+(%o9)                    1.186193963552463b8 ` -------
+                                                  s
+(%i10) dimensions(ans)
+                                    length
+(%o10)                              ------
+                                     time
+(%i11) "14"
+(%i12) potential_diff:1.5*10^4 ` V
+(%i13) separation:1.0 ` cm
+(%i14) E:potential_diff/separation `` V/m
+(%i15) ev(constvalue(E),bfloat)
+                                        1.0b0 V
+(%o15)                          1.5b6 ` -------
+                                           m
+(%i16) "23"
+(%i17) E:2.0*10^6 ` V/m
+(%i18) d:0.4 ` m
+(%i19) potential_diff:E*d
+(%o19)                           800000.0 ` V
+(%i20) OneeV:ev(constvalue((1 ` V)*%%e) `` J,bfloat)
+(%o20)                        1.602176487b-19 ` J
+(%i21) energy:potential_diff*%%e
+(%i22) ev(constvalue(energy),bfloat)
+(%o22)                   1.2817411896b-13 ` 1.0b0 C V
+(%i23) energy:ev(constvalue(energy) `` J,bfloat)
+(%i24) energy/OneeV
+(%o24)                               8.0b5
+(%i25) dimensions(%)
+(%o25)                                 1
+(%i26) d:(50.0 ` GV `` V)/(2.0 ` MV/m `` V/m)
+(%i27) ev(constvalue(d),bfloat)
+(%o27)                             2.5b4 ` m
+(%i28) "27"
+(%i29) kill(k,eq,r,sol)
+(%i30) k:1/(4*%pi*%e_0)
+(%i31) declare_units(r,m)
+(%i32) eq:100 ` V = (k*(1.0*10^-6 ` C))/r
+(%i33) eq:ev(constvalue(eq),bfloat)
+(%i34) sol:linsolve(eq,r)
+(%i35) ev(ev(constvalue(rhs(sol[1])) `` m),bfloat)
+(%o35)                      8.987551787368176b1 ` m
+(%i36) kill(eq)
+(%i37) eq:200 ` V = (k*(1.0*10^-6 ` C))/r
+(%i38) eq:ev(constvalue(eq),bfloat)
+(%i39) sol:linsolve(eq,r)
+(%i40) ev(ev(constvalue(rhs(sol[1])) `` m),bfloat)
+(%o40)                      4.493775893684088b1 ` m
+(%i41) "49"
+(%i42) linsolve(q = c*v,v)
+(%i43) ev(rhs(%[1]),c:2.0*10^-6 ` F,q:3.1*10^-6 ` C,bfloat) `` V
+(%o43)                            1.55b0 ` V
+(%i44) "53"
+(%i45) (2.1*%e_0*(5.0 ` m^2))/(0.1 ` mm `` m)
+(%i46) ev(constvalue(%),bfloat) `` F
+(%o46)                     9.296897208501409b-7 ` F
+(%i47) "57"
+(%i48) declare_units(cc,F)
+(%i49) sol:solve(1/cc = 1/(10*10^-6 ` F+2.5*10^-6 ` F)+1/(0.3*10^-6 ` F),cc)
+
+rat: replaced -3413333.333333333 by -10240000/3 = -3413333.333333333
+(%i50) ev(rhs(sol[1]),bfloat)
+(%o50)                         2.9296875b-7 ` F
+(%o51)           /home/rds/Documents/Maxima/NYCCT/Lec/ex19.mac
