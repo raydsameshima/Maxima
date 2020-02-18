@@ -1,0 +1,89 @@
+/* ex20.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"Exercise 20.1 Current"$
+"2"$
+charge: 600 ` C$
+time: 0.5 ` hour$
+I : charge/time `` A;
+
+"5"$
+(30 ` C)/(20000 ` A) `` s, bfloat;
+
+"9"$
+kill(charge)$
+charge: (12.0 ` A)*(0.0100 ` s) `` C;
+constvalue( charge/%%e ), bfloat;
+dimensions(%);
+
+"Exercise 20.2 Ohm's Law: Resistance and Simple Circuits"$
+"18"$
+current: (3.00 ` V)/(3.60 ` Ohm) `` A;
+
+"21"$
+(140 ` Ohm)*(25.0 ` mA) `` V;
+
+"Exercise 20.3 Resistance and Resistivity"$
+"24"$
+L: 20.0 ` m$
+diameter: 2.052 ` mm$
+resistivity: 1.72e-8 ` Ohm*m$
+R: resistivity * L/(%pi*diameter^2 / 4)$
+ev(R, bfloat) `` Ohm;
+
+"26"$
+rho0: 5.6e-8 ` Ohm*m$ /* tungsten */
+declare_dimensions(t, K)$
+rho(t):= ev( rho0 *(1 + alpha*(t-(20 ` K))), alpha:(4.5e-3 ` 1/K) )$
+rho20: rho(20 ` K) `` Ohm;
+
+kill(L)$
+L: ev( (%pi*d^2/4)*(0.200 ` Ohm)/rho20, d:(0.100 ` mm), bfloat) `` m; 
+L `` cm;
+
+"28"$
+kill(d,l)$
+d: 2.54 ` inch$
+l: 20.0 ` cm$
+R: (2300 ` Ohm*m)* l/(%pi*d^2/4) `` Ohm$
+ev((1.00e3 ` V)/R, bfloat) `` A;
+
+"29"$
+1/(3.9e-3 ` 1/K) `` K;
+
+"33"$
+kill(R,rho,L,A)$
+sol:solve( R=rho*L/A, rho);
+ev( sol, L: (25.0 ` m), R:(77.7 ` Ohm), A: ev(%pi*d^2/4, d:(0.100 ` mm)), bfloat) `` Ohm*m;
+"Gold has (2.44e-8 ` Ohm*m), so it is made by gold."$
+ev( (77.7 ` Ohm)*(1 + alpha*((150-20) ` K)), alpha: (3.4e-3 ` 1/K), bfloat) `` Ohm;
+
+"Exercise 20.4 Electric Power and Energy"$
+"40"$
+(1.00e2 ` MV)*(2.00e4 ` A) `` W;
+
+"43"$
+kill(I)$
+I: (6.00e2 ` C)/(0.500 ` hour) `` A;
+I*(3.00 ` V) `` W;
+
+"44"$
+kill(R,I)$
+R: (0.0600 ` Ohm)$
+I: (5.00 ` A)$
+Voltage: R*I `` V;
+I*Voltage `` W;
+
+R: (0.300 ` Ohm)$
+I: (5.00 ` A)$
+Voltage: R*I `` V;
+I*Voltage `` W;
+
+"51"$
+(1200 ` W)*(1 ` minute) * (9.0 ` cents/(kW*hour)) `` cents;
+
+"54"$
+(1.00 ` A*hour)/( (1.00 ` W)/(1.58 ` V) ) `` hour;
+

@@ -1,0 +1,102 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("ex20.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex20.mac
+(%i2) kill(all)
+(%i1) load(physical_constants)
+(%i2) "Exercise 20.1 Current"
+(%i3) "2"
+(%i4) charge:600 ` C
+(%i5) time:0.5 ` hour
+(%i6) I:charge/time `` A
+(%o6)                       0.3333333333333333 ` A
+(%i7) "5"
+(%i8) ev((30 ` C)/(20000 ` A) `` s,bfloat)
+(%o8)                             1.5b-3 ` s
+(%i9) "9"
+(%i10) kill(charge)
+(%i11) charge:(12.0 ` A)*(0.01 ` s) `` C
+(%o11)                             0.12 ` C
+(%i12) ev(constvalue(charge/%%e),bfloat)
+(%o12)                        7.4898115765445b17
+(%i13) dimensions(%)
+(%o13)                                 1
+(%i14) "Exercise 20.2 Ohm's Law: Resistance and Simple Circuits"
+(%i15) "18"
+(%i16) current:(3.0 ` V)/(3.6 ` Ohm) `` A
+(%o16)                      0.8333333333333334 ` A
+(%i17) "21"
+(%i18) (140 ` Ohm)*(25.0 ` mA) `` V
+(%o18)                              3.5 ` V
+(%i19) "Exercise 20.3 Resistance and Resistivity"
+(%i20) "24"
+(%i21) L:20.0 ` m
+(%i22) diameter:2.052 ` mm
+(%i23) resistivity:1.72e-8 ` Ohm*m
+(%i24) R:(resistivity*L)/((%pi*diameter^2)/4)
+(%i25) ev(R,bfloat) `` Ohm
+(%o25)                    1.040192811911965b-1 ` Ohm
+(%i26) "26"
+(%i27) rho0:5.599999999999999e-8 ` Ohm*m
+(%i28) declare_dimensions(t,K)
+(%i29) rho(t):=ev(rho0*(1+alpha*(t-20 ` K)),alpha:0.0045 ` 1/K)
+(%i30) rho20:rho(20 ` K) `` Ohm
+(%o30)                   5.599999999999999e-8 m ` Ohm
+(%i31) kill(L)
+(%i32) L:ev((((%pi*d^2)/4)*(0.2 ` Ohm))/rho20,d:0.1 ` mm,bfloat) `` m
+(%o32)                     2.804993440705173b-2 ` m
+(%i33) L `` cm
+(%o33)                     2.804993440705173b0 ` cm
+(%i34) "28"
+(%i35) kill(d,l)
+(%i36) d:2.54 ` inch
+(%i37) l:20.0 ` cm
+(%i38) R:((2300 ` Ohm*m)*l)/((%pi*d^2)/4) `` Ohm
+(%i39) ev((1000.0 ` V)/R,bfloat) `` A
+(%o39)                      7.10668254814221b-3 ` A
+(%i40) "29"
+(%i41) 1/(0.0039 ` 1/K) `` K
+(%o41)                       256.4102564102564 ` K
+(%i42) "33"
+(%i43) kill(R,rho,L,A)
+(%i44) sol:solve(R = (rho*L)/A,rho)
+                                         A R
+(%o44)                            [rho = ---]
+                                          L
+(%i45) ev(sol,L:25.0 ` m,R:77.7 ` Ohm,A:ev((%pi*d^2)/4,d:0.1 ` mm),bfloat) `` Ohm
+                                                                           *m
+(%o45)           [rho `` Ohm m = 2.44101749183927b-8 ` Ohm m]
+(%i46) "Gold has (2.44e-8 ` Ohm*m), so it is made by gold."
+(%i47) ev((77.7 ` Ohm)*(1+alpha*((150-20) ` K)),alpha:0.0034 ` 1/K,bfloat) `` Ohm
+(%o47)                         1.120434b2 ` Ohm
+(%i48) "Exercise 20.4 Electric Power and Energy"
+(%i49) "40"
+(%i50) (100.0 ` MV)*(20000.0 ` A) `` W
+(%o50)                            2.0e+12 ` W
+(%i51) "43"
+(%i52) kill(I)
+(%i53) I:(600.0 ` C)/(0.5 ` hour) `` A
+(%o53)                      0.3333333333333333 ` A
+(%i54) I*(3.0 ` V) `` W
+(%o54)                              1.0 ` W
+(%i55) "44"
+(%i56) kill(R,I)
+(%i57) R:0.06 ` Ohm
+(%i58) I:5.0 ` A
+(%i59) Voltage:R*I `` V
+(%o59)                              0.3 ` V
+(%i60) I*Voltage `` W
+(%o60)                              1.5 ` W
+(%i61) R:0.3 ` Ohm
+(%i62) I:5.0 ` A
+(%i63) Voltage:R*I `` V
+(%o63)                              1.5 ` V
+(%i64) I*Voltage `` W
+(%o64)                              7.5 ` W
+(%i65) "51"
+(%i66) (1200 ` W)*(1 ` minute)*(9.0 ` cents/(kW*hour)) `` cents
+(%o66)                           0.18 ` cents
+(%i67) "54"
+(%i68) (1.0 ` A*hour)/((1.0 ` W)/(1.58 ` V)) `` hour
+(%o68)                            1.58 ` hour
+(%o69)           /home/rds/Documents/Maxima/NYCCT/Lec/ex20.mac
