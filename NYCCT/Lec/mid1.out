@@ -1,0 +1,224 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("mid1.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/mid1.mac
+(%i2) kill(all)
+(%i1) load(physical_constants)
+(%i2) k:1/(4*%pi*%e_0)
+(%i3) ev(constvalue(k),bfloat)
+                                                      2
+                                             1.0b0 N m
+(%o3)                  8.987551787368176b9 ` ----------
+                                                2  2
+                                               A  s
+(%i4) q1:(-4.0e-6) ` C
+(%i5) q2:4.0e-6 ` C
+(%i6) q3:3.0e-6 ` C
+(%i7) "1 Coulomb's law: double point charges"
+(%i8) "(a)"
+(%i9) declare_units([r13,r23],m)
+(%i10) r13:r23:ev(sqrt(r^2+r^2),r:0.25 ` m)
+(%o10)                      0.3535533905932738 ` m
+(%i11) "(b)"
+(%i12) "North-East, i.e., %pi/4"
+(%o12)                      North-East, i.e., %pi/4
+(%i13) "(c)"
+(%i14) F1:(k*abs(q1*q3))/r13^2
+(%i15) ev(constvalue(F1) `` N,bfloat)
+(%o15)                     8.628049715873448b-1 ` N
+(%i16) "(d)"
+(%i17) F1x:cos(%pi/4)*F1
+(%i18) F1y:sin(%pi/4)*F1
+(%i19) F1Components:ev(constvalue([F1x,F1y]),bfloat)
+                                      2                                  2
+                               1.0b0 C  N                         1.0b0 C  N
+(%o19) [6.100952462508779b-1 ` ----------, 6.100952462508779b-1 ` ----------]
+                                  2  2                               2  2
+                                 A  s                               A  s
+(%i20) "(e)"
+(%i21) F2:(k*abs(q2*q3))/r23^2
+(%i22) ev(constvalue(F2) `` N,bfloat)
+(%o22)                     8.628049715873448b-1 ` N
+(%i23) F2x:cos((3*%pi)/4)*F2
+(%i24) F2y:sin((3*%pi)/4)*F2
+(%i25) F2Components:ev(constvalue([F2x,F2y]),bfloat)
+                                          2
+                                   1.0b0 C  N
+(%o25) [(- 6.100952462508779b-1) ` ----------, 
+                                      2  2
+                                     A  s
+                                                                           2
+                                                                    1.0b0 C  N
+                                             6.100952462508779b-1 ` ----------]
+                                                                       2  2
+                                                                      A  s
+(%i26) "(f)"
+(%i27) F1Components+F2Components
+                            2                                 2
+                     1.0b0 C  N                        1.0b0 C  N
+(%o27)      [0.0b0 ` ----------, 1.220190492501756b0 ` ----------]
+                        2  2                              2  2
+                       A  s                              A  s
+(%i28) % `` N
+(%o28)               [0.0b0 ` N, 1.220190492501756b0 ` N]
+(%i29) "2 Parallel plates, electric gun"
+(%i30) "(a)"
+(%i31) "sketch"
+(%i32) "(b)"
+(%i33) kill(E)
+(%i34) Voltage:24 ` V
+(%i35) distance:2.54 ` cm
+(%i36) E:Voltage/distance
+(%i37) ev(E,bfloat) `` V/m
+                                                  V
+(%o37)                      9.448818897637794b2 ` -
+                                                  m
+(%i38) "(c) and (d)"
+(%i39) ev(%m_e,constvalue)
+(%o39)                    9.109382149999999e-31 ` kg
+(%i40) eqn:(%m_e/2)*v^2 = %%e*Voltage
+                                  2
+                            %m_e v
+(%o40)                      ------- = %%e (24 ` V)
+                               2
+(%i41) sol:ev(constvalue(solve(eqn,v)),bfloat) `` m/s
+(%i42) vf1:rhs(sol[2])
+                                                  m
+(%o42)                      2.905569946673081b6 ` -
+                                                  s
+(%i43) "(e)"
+(%i44) constvalue((%%e*E)/%m_e) `` m/s^2
+                                                  m
+(%o44)                    1.661877306104293e+14 ` --
+                                                   2
+                                                  s
+(%i45) kill(eqn,vf)
+(%i46) declare_units(acc,m/s^2)
+(%i47) eqn:ev(%%e*E = %m_e*acc)
+(%i48) declare_units(vf,m/s)
+(%i49) sol:solve(subst([acc = vf^2/(2*distance)],eqn),vf)
+
+rat: replaced 9.448818897637794 by 1200/127 = 9.448818897637794
+
+rat: replaced -0.1968503937007874 by -25/127 = -0.1968503937007874
+(%i50) vf2:ev(constvalue(rhs(sol[2])),bfloat) `` m/s
+                                                  m
+(%o50)                      2.905569946673081b6 ` -
+                                                  s
+(%i51) vf1-vf2
+                                           m
+(%o51)                             0.0b0 ` -
+                                           s
+(%i52) "3 from a Lab: Ohms' law"
+(%i53) "(a)"
+(%i54) "Yes, it does."
+(%i55) "(b)"
+(%i56) R:6.41 ` V/A `` Ohm
+(%o56)                            6.41 ` Ohm
+(%i57) "(c)"
+(%i58) L:1 ` m
+(%i59) A:(5.0e-5 ` m)^2
+(%i60) rho:(R*A)/L `` Ohm*m
+(%o60)                         1.6025e-8 ` Ohm m
+(%i61) "(d)"
+(%i62) "silver"
+(%i63) (abs(1.59-1.6025)/1.59)*100
+(%o63)                        0.7861635220125759
+(%i64) "Take Home Exam 1 Coulomb's law: double point charges"
+(%i65) kill(q1,q2,q3)
+(%i66) q1:2.0e-6 ` C
+(%i67) q2:7.999999999999999e-6 ` C
+(%i68) q3:(-5.0e-6) ` C
+(%i69) kill(r13,r23)
+(%o69)                               done
+(%i70) declare_units([r13,r23],m)
+(%i71) r13:sqrt((0.15 ` m)^2+(0.2 ` m)^2)
+(%o71)                             0.25 ` m
+(%i72) r23:sqrt((0.4 ` m)^2+(0.3 ` m)^2)
+(%o72)                              0.5 ` m
+(%i73) theta13:atan(0.2/0.15)
+(%o73)                        0.9272952180016123
+(%i74) ev((%/%pi)*180,numer)
+(%o74)                         53.13010235415599
+(%i75) theta23:atan(0.3/0.4)
+(%o75)                        0.6435011087932844
+(%i76) ev((%/%pi)*180,numer)
+(%o76)                         36.86989764584402
+(%i77) F1:(k*abs(q1*q3))/r13^2
+(%i78) ev(constvalue(F1) `` N,bfloat)
+(%o78)                      1.438008285978909b0 ` N
+(%i79) F1x:cos(theta13)*F1
+(%i80) F1y:sin(theta13)*F1
+(%i81) F1Components:ev(constvalue([F1x,F1y]),bfloat)
+                                     2                                 2
+                              1.0b0 C  N                        1.0b0 C  N
+(%o81) [8.62804971587345b-1 ` ----------, 1.150406628783127b0 ` ----------]
+                                 2  2                              2  2
+                                A  s                              A  s
+(%i82) F2:(k*abs(q2*q3))/r23^2
+(%i83) ev(constvalue(F2) `` N,bfloat)
+(%o83)                      1.438008285978909b0 ` N
+(%i84) F2x:cos(theta23)*F2
+(%i85) F2y:sin(theta23)*F2
+(%i86) F2Components:ev(constvalue([F2x,F2y]),bfloat)
+                                     2                                 2
+                              1.0b0 C  N                        1.0b0 C  N
+(%o86) [1.150406628783127b0 ` ----------, 8.62804971587345b-1 ` ----------]
+                                 2  2                              2  2
+                                A  s                              A  s
+(%i87) FComponents:F1Components+F2Components
+                                     2                                 2
+                              1.0b0 C  N                        1.0b0 C  N
+(%o87) [2.013211600370472b0 ` ----------, 2.013211600370472b0 ` ----------]
+                                 2  2                              2  2
+                                A  s                              A  s
+(%i88) FComponents `` N
+(%o88)        [2.013211600370472b0 ` N, 2.013211600370472b0 ` N]
+(%i89) apply(lambda([a,b],sqrt(a^2+b^2)),FComponents) `` N
+(%o89)                      2.847111149170765b0 ` N
+(%i90) ev((apply(lambda([a,b],atan(b/a)),FComponents)*180)/%pi,numer)
+(%o90)                               45.0
+(%i91) "Take Home Exam 2 Parallel plates, electric gun"
+(%i92) E:5000 ` V/m
+(%i93) distance:1.27 ` cm
+(%i94) Voltage:E*distance `` V
+(%o94)                             63.5 ` V
+(%i95) eqn:(%m_e/2)*v^2 = %%e*Voltage
+(%i96) sol:ev(constvalue(solve(eqn,v)),bfloat) `` m/s
+
+rat: replaced -63.5 by -127/2 = -63.5
+(%i97) vf1:rhs(sol[2])
+                                                  m
+(%o97)                      4.726205231662797b6 ` -
+                                                  s
+(%i98) constvalue((%%e*E)/%m_e) `` m/s^2
+                                                  m
+(%o98)                    8.794100744801886e+14 ` --
+                                                   2
+                                                  s
+(%i99) declare_units(acc,m/s^2)
+(%i100) eqn:ev(%%e*E = %m_e*acc)
+(%i101) declare_units(vf,m/s)
+(%i102) sol:solve(subst([acc = vf^2/(2*distance)],eqn),vf)
+
+rat: replaced -0.3937007874015748 by -50/127 = -0.3937007874015748
+(%i103) vf2:ev(constvalue(rhs(sol[2])),bfloat) `` m/s
+                                                  m
+(%o103)                     4.726205231662796b6 ` -
+                                                  s
+(%i104) vf1-vf2
+                                                   m
+(%o104)                    3.492459654808044b-10 ` -
+                                                   s
+(%i105) "Take Home Exam 3 from a Lab: Ohms' law"
+(%i106) R:ev(1/(480 ` A/V),bfloat) `` Ohm
+(%o106)                   2.083333333333333b-3 ` Ohm
+(%i107) L:0.25 ` m
+(%i108) A:%pi*(1 ` mm)^2
+(%i109) rho:(R*A)/L `` Ohm*m
+(%i110) ev(rho,bfloat) `` Ohm*m
+(%o110)                  2.617993877991494b-8 ` Ohm m
+(%i111) "gold"
+(%i112) (abs(2.44-2.62)/2.44)*100
+(%o112)                        7.377049180327876
+(%o113)          /home/rds/Documents/Maxima/NYCCT/Lec/mid1.mac
