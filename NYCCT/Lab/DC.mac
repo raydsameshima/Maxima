@@ -1,0 +1,24 @@
+kill(Q,E,C,R,t);
+
+"Charging phase:"$
+deq: 'diff(Q(t),t,1)=(E-Q(t)/C)/R$
+atvalue (Q(t),t=0, 0)$
+sol:desolve (deq, Q(t));
+
+define(Q(t), rhs(sol))$
+
+ev(1-exp(-1), numer);
+
+define(I(t), diff(Q(t), t, 1));
+
+define(VC(t),ev(Q(t)/C, expand));
+define(VR(t),R*I(t));
+
+plot2d( ev([VC(t), VR(t), VC(t) + VR(t)], E:4, R: 1000, C:1e-3), 
+        [t, 0, 10], 
+        [x,-1/2, 10], [y,-1/2, 9/2],
+        [style, [lines, 2], [lines, 4], [lines, 8]],
+        [label, ["VC(t)=E*(1-exp(-t/(C*R)))", 2,3], ["VR(t)=E*exp(-t/(C*R))", 2,1]],
+        [title, "voltage across the capacitor"]
+        /* [gnuplot_term, dumb] */
+)$

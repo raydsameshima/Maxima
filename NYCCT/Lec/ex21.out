@@ -1,0 +1,196 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("ex21.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex21.mac
+(%i2) kill(all)
+(%i1) load(physical_constants)
+(%i2) "1"
+(%i3) R:275 ` Ohm
+(%o3)                              275 ` Ohm
+(%i4) R_p:1/(1/R+1/R)
+                                   275
+(%o4)                              --- ` Ohm
+                                    2
+(%i5) ev(R_p,numer)
+(%o5)                             137.5 ` Ohm
+(%i6) R_s:R+R
+(%o6)                              550 ` Ohm
+(%i7) "2"
+(%i8) kill(R_s,R_p)
+(%i9) R1:100.0 ` Ohm
+(%i10) R2:2500.0 ` Ohm
+(%i11) R3:4000.0 ` Ohm
+(%i12) R_s:R1+R2+R3
+(%o12)                           6600.0 ` Ohm
+(%i13) R_p:1/(1/R1+1/R2+1/R3)
+(%o13)                      93.89671361502347 ` Ohm
+(%i14) "6"
+(%i15) kill(R1,R2)
+(%o15)                               done
+(%i16) R1:24.0 ` Ohm
+(%i17) R2:96.0 ` Ohm
+(%i18) "series:"
+(%i19) Rs:R1+R2
+(%o19)                            120.0 ` Ohm
+(%i20) I:(48.0 ` V)/Rs `` A
+(%o20)                              0.4 ` A
+(%i21) P:I^2*Rs `` W
+(%o21)                             19.2 ` W
+(%i22) "parallel"
+(%i23) Rp:1/(1/R1+1/R2)
+(%o23)                            19.2 ` Ohm
+(%i24) I:(48.0 ` V)/Rp `` A
+(%o24)                              2.5 ` A
+(%i25) P:I^2*Rp `` W
+(%o25)                             120.0 ` W
+(%i26) "11"
+(%i27) kill(R1,R2)
+(%i28) R:expand(1/(1/R1+1/R2))
+                                       1
+(%o28)                              -------
+                                    1    1
+                                    -- + --
+                                    R2   R1
+(%i29) ev(subst([R2 = r*R1],R)/R1,factor)
+                                       r
+(%o29)                               -----
+                                     r + 1
+(%i30) limit(%,r,inf)
+(%o30)                                 1
+(%i31) "14"
+(%i32) (12.0 ` V)/6
+(%o32)                              2.0 ` V
+(%i33) "16"
+(%i34) kill(E,I,r,V)
+(%i35) E:3.0 ` V
+(%i36) I:0.3 ` mA
+(%i37) r:2.0 ` Ohm
+(%i38) TV:(E-r*I) `` V
+(%o38)                            2.9994 ` V
+(%i39) "18"
+(%i40) kill(TV,E,r,I)
+(%i41) sol:solve(TV = E-r*I,r)
+                                       TV - E
+(%o41)                          [r = - ------]
+                                         I
+(%i42) TV:12.0 ` V
+(%i43) E:15.0 ` V
+(%i44) I:8.0 ` A
+(%i45) ev(rhs(sol[1])) `` Ohm
+(%o45)                            0.375 ` Ohm
+(%i46) "31"
+(%i47) kill(I1,I2,I3,E1,E2,r1,r2,R1,R2,R3)
+(%i48) eqn:[I1 = I2+I3,E1-r1*I2+(-R1)*I1+(-R2)*I2 = 0,
+            E1-r1*I2+R3*I3+r2*I3-E2+(-R2)*I2 = 0,
+            E2-r2*I3+(-R3)*I3+(-R1)*I1 = 0]
+(%o48) [I1 = I3 + I2, (- I2 r1) - I2 R2 - I1 R1 + E1 = 0, 
+I3 r2 - I2 r1 + I3 R3 - I2 R2 - E2 + E1 = 0, 
+(- I3 r2) - I3 R3 - I1 R1 + E2 = 0]
+(%i49) three_eq:makelist(eqn[i],i,[1,2,3])
+(%o49) [I1 = I3 + I2, (- I2 r1) - I2 R2 - I1 R1 + E1 = 0, 
+                                   I3 r2 - I2 r1 + I3 R3 - I2 R2 - E2 + E1 = 0]
+(%i50) sol:linsolve(three_eq,[I1,I2,I3])
+                         E1 (r2 + R3) + E2 r1 + E2 R2
+(%o50) [I1 = ----------------------------------------------------, 
+             r1 (r2 + R3 + R1) + R2 (r2 + R3 + R1) + R1 (r2 + R3)
+                 E1 (r2 + R3) + (E1 - E2) R1
+I2 = ----------------------------------------------------, 
+     r1 (r2 + R3 + R1) + R2 (r2 + R3 + R1) + R1 (r2 + R3)
+                 E2 r1 + E2 R2 + (E2 - E1) R1
+I3 = ----------------------------------------------------]
+     r1 (r2 + R3 + R1) + R2 (r2 + R3 + R1) + R1 (r2 + R3)
+(%i51) R1:6 ` Ohm
+(%i52) R2:2.5 ` Ohm
+(%i53) R3:1.5 ` Ohm
+(%i54) r1:r2:0.5 ` Ohm
+(%i55) E1:18 ` V
+(%i56) E2:45 ` V
+(%i57) currents:ev(sol)
+(%i58) map(lambda([u],lhs(u) = rhs(u) `` A),%)
+(%o58)         [I1 = 4.75 ` A, I2 = (- 3.5) ` A, I3 = 8.25 ` A]
+(%i59) ev(eqn[4],currents)
+(%o59)                            0.0 ` V = 0
+(%i60) "36, 37, 38"
+(%i61) kill(I1,I2,I3,E1,E2,E3,E4,r1,r2,r3,R1,R2,R3,r4,R5)
+(%i62) eqn:[I3 = I2+I1,0 = (-R1)*I1+E1+(-r1)*I1+(-R5)*I1+R2*I2+r2*I2-E2,
+            0 = (-R1)*I1+E1+(-r1)*I1+(-R5)*I1+(-r4)*I3-E4+(-r3)*I3+E3
+                        +(-R3)*I3,
+            0 = (-R3)*I3+E2+(-r2)*I2+(-R2)*I2+(-r4)*I3-E4+(-r3)*I3+E3]
+(%o62) [I3 = I2 + I1, 0 = I2 r2 - I1 r1 - I1 R5 + I2 R2 - I1 R1 - E2 + E1, 
+0 = (- I3 r4) - I3 r3 - I1 r1 - I1 R5 - I3 R3 - I1 R1 - E4 + E3 + E1, 
+0 = (- I3 r4) - I3 r3 - I2 r2 - I3 R3 - I2 R2 - E4 + E3 + E2]
+(%i63) three_eq:makelist(eqn[i],i,[1,2,3])
+(%o63) [I3 = I2 + I1, 0 = I2 r2 - I1 r1 - I1 R5 + I2 R2 - I1 R1 - E2 + E1, 
+          0 = (- I3 r4) - I3 r3 - I1 r1 - I1 R5 - I3 R3 - I1 R1 - E4 + E3 + E1]
+(%i64) sol:linsolve(three_eq,[I1,I2,I3])
+(%o64) [I1 = (E1 (r4 + r3 + R3) + E2 ((- r4) - r3 - R3) + ((- E4) + E3 + E1) r2
+ + ((- E4) + E3 + E1) R2)/(r2 (r4 + r3 + r1 + R5 + R3 + R1)
+ + r1 (r4 + r3 + R3 + R2) + R5 (r4 + r3 + R3 + R2) + R2 (r4 + r3 + R3 + R1)
+ + R1 (r4 + r3 + R3)), I2 = (E2 (r4 + r3 + R3) + E1 ((- r4) - r3 - R3)
+ + ((- E4) + E3 + E2) r1 + ((- E4) + E3 + E2) R5 + ((- E4) + E3 + E2) R1)
+/(r2 (r4 + r3 + r1 + R5 + R3 + R1) + r1 (r4 + r3 + R3 + R2)
+ + R5 (r4 + r3 + R3 + R2) + R2 (r4 + r3 + R3 + R1) + R1 (r4 + r3 + R3)), 
+I3 = (((- E4) + E3 + E1) r2 + ((- E4) + E3 + E2) r1 + ((- E4) + E3 + E2) R5
+ + ((- E4) + E3 + E1) R2 + ((- E4) + E3 + E2) R1)
+/(r2 (r4 + r3 + r1 + R5 + R3 + R1) + r1 (r4 + r3 + R3 + R2)
+ + R5 (r4 + r3 + R3 + R2) + R2 (r4 + r3 + R3 + R1) + R1 (r4 + r3 + R3))]
+(%i65) E1:24.0 ` V
+(%i66) E2:48.0 ` V
+(%i67) E3:6.0 ` V
+(%i68) E4:36.0 ` V
+(%i69) r1:0.1 ` Ohm
+(%i70) r2:0.5 ` Ohm
+(%i71) r3:0.05 ` Ohm
+(%i72) R1:5.0 ` Ohm
+(%i73) R2:40 ` Ohm
+(%i74) R3:78 ` Ohm
+(%i75) r4:0.2 ` Ohm
+(%i76) R5:20 ` Ohm
+(%i77) currents:ev(sol)
+(%i78) map(lambda([u],lhs(u) = rhs(u) `` A),%)
+(%o78) [I1 = (- 0.3448920687832839) ` A, I2 = 0.3788446684824586 ` A, 
+                                                  I3 = 0.03395259969917477 ` A]
+(%i79) ev(eqn[4],currents)
+(%o79)                            0 = 0.0 ` V
+(%i80) "40"
+(%i81) kill(I1,I2,I3,E1,E2,E3,E4,r1,r2,r3,r4,R1,R2,R3)
+(%i82) eqn:[I1 = I2+I3,0 = E1-r1*I1+(-R1)*I1+(-R2)*I3+E2+(-r2)*I3+(-R4)*I1,
+            0 = E1-r1*I1+(-R1)*I1+(-R3)*I2+E3+(-r3)*I2+(-r4)*I2-E4+(-R4)*I1,
+            0 = (-R3)*I2+E3+(-r3)*I2+(-r4)*I2-E4+r2*I3-E2+R2*I3]
+(%o82) [I1 = I3 + I2, 0 = (- I3 r2) - I1 r1 - I1 R4 - I3 R2 - I1 R1 + E2 + E1, 
+0 = (- I2 r4) - I2 r3 - I1 r1 - I1 R4 - I2 R3 - I1 R1 - E4 + E3 + E1, 
+0 = (- I2 r4) - I2 r3 + I3 r2 - I2 R3 + I3 R2 - E4 + E3 - E2]
+(%i83) three_eq:makelist(eqn[i],i,[1,2,3])
+(%o83) [I1 = I3 + I2, 0 = (- I3 r2) - I1 r1 - I1 R4 - I3 R2 - I1 R1 + E2 + E1, 
+          0 = (- I2 r4) - I2 r3 - I1 r1 - I1 R4 - I2 R3 - I1 R1 - E4 + E3 + E1]
+(%i84) sol:linsolve(three_eq,[I1,I2,I3])
+(%o84) [I1 = (E2 (r4 + r3 + R3) + E1 (r4 + r3 + R3) + ((- E4) + E3 + E1) r2
+ + ((- E4) + E3 + E1) R2)/(r2 (r4 + r3 + r1 + R4 + R3 + R1)
+ + r1 (r4 + r3 + R3 + R2) + R4 (r4 + r3 + R3 + R2) + R2 (r4 + r3 + R3 + R1)
+ + R1 (r4 + r3 + R3)), I2 = (((- E4) + E3 + E1) r2 + ((- E4) + E3 - E2) r1
+ + ((- E4) + E3 - E2) R4 + ((- E4) + E3 + E1) R2 + ((- E4) + E3 - E2) R1)
+/(r2 (r4 + r3 + r1 + R4 + R3 + R1) + r1 (r4 + r3 + R3 + R2)
+ + R4 (r4 + r3 + R3 + R2) + R2 (r4 + r3 + R3 + R1) + R1 (r4 + r3 + R3)), 
+I3 = (E2 (r4 + r3 + R3) + E1 (r4 + r3 + R3) + (E4 - E3 + E2) r1
+ + (E4 - E3 + E2) R4 + (E4 - E3 + E2) R1)
+/(r2 (r4 + r3 + r1 + R4 + R3 + R1) + r1 (r4 + r3 + R3 + R2)
+ + R4 (r4 + r3 + R3 + R2) + R2 (r4 + r3 + R3 + R1) + R1 (r4 + r3 + R3))]
+(%i85) E1:18 ` V
+(%i86) E2:3.0 ` V
+(%i87) E3:12 ` V
+(%i88) E4:24 ` V
+(%i89) r1:0.5 ` Ohm
+(%i90) r2:0.25 ` Ohm
+(%i91) r3:0.5 ` Ohm
+(%i92) r4:0.75 ` Ohm
+(%i93) R1:20 ` Ohm
+(%i94) R2:6 ` Ohm
+(%i95) R3:8 ` Ohm
+(%i96) R4:15 ` Ohm
+(%i97) currents:ev(sol)
+(%i98) map(lambda([u],lhs(u) = rhs(u) `` A),%)
+(%o98) [I1 = 0.3811285846438483 ` A, I2 = (- 0.8140610545790935) ` A, 
+                                                    I3 = 1.195189639222942 ` A]
+(%i99) ev(eqn[4],currents)
+(%o99)                            0 = 0.0 ` V
+(%o100)          /home/rds/Documents/Maxima/NYCCT/Lec/ex21.mac

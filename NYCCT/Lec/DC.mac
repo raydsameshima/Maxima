@@ -1,0 +1,11 @@
+kill(Q,E,C,R,t);
+deq: 'diff(Q(t),t,1)=(E-Q(t)/C)/R;
+atvalue (Q(t),t=0, 0);
+sol:desolve (deq, Q(t));
+
+define(Q(t), rhs(sol));
+
+define(I(t), diff(Q(t), t, 1));
+
+define(V(t),Q(t)/C);
+plot2d( ev(V(t), E:R:C:1), [t, 0, 4]);

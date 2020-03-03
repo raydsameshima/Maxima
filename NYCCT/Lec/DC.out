@@ -1,0 +1,41 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("DC.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/DC.mac
+(%i2) kill(Q,E,C,R,t)
+(%o2)                                done
+(%i3) deq:'diff(Q(t),t,1) = (E-Q(t)/C)/R
+                                             Q(t)
+                                         E - ----
+                             d                C
+(%o3)                        -- (Q(t)) = --------
+                             dt             R
+(%i4) atvalue(Q(t),t = 0,0)
+(%o4)                                  0
+(%i5) sol:desolve(deq,Q(t))
+                                                 t
+                                              - ---
+                                                C R
+(%o5)                      Q(t) = C E - C E %e
+(%i6) define(Q(t),rhs(sol))
+                                                  t
+                                               - ---
+                                                 C R
+(%o6)                      Q(t) := C E - C E %e
+(%i7) define(I(t),diff(Q(t),t,1))
+                                              t
+                                           - ---
+                                             C R
+                                       E %e
+(%o7)                          I(t) := ---------
+                                           R
+(%i8) define(V(t),Q(t)/C)
+                                                  t
+                                               - ---
+                                                 C R
+                                   C E - C E %e
+(%o8)                      V(t) := -----------------
+                                           C
+(%i9) plot2d(ev(V(t),E:R:C:1),[t,0,4])
+(%o9)         [/tmp/maxout28245.gnuplot_pipes, /tmp/maxplot.wxt]
+(%o10)            /home/rds/Documents/Maxima/NYCCT/Lec/DC.mac

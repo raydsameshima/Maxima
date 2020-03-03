@@ -1,0 +1,5 @@
+eqn: [ I1=I2+I3, E1-r1*I2-R1*I1-R2*I2=0, E1-r1*I2+R3*I3+r2*I3-E2-R2*I2=0, E2-r2*I3-R3*I3 - R1*I1=0];
+three_eq: makelist (eqn[i], i, [1,2,3]);
+sol: linsolve( three_eq, [I1,I2,I3]);
+currents: ev(sol, R1:6, R2:2.5, R3:1.5, r1:r2:0.5, E1:18, E2:45);
+ev(eqn[4], R1:6, R2:2.5, R3:1.5, r1:r2:0.5, E1:18, E2:45, currents);

@@ -1,0 +1,120 @@
+/* ex21.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"1"$
+R: 275 ` Ohm;
+R_p: 1/(1/R + 1/R);
+ev(R_p, numer);
+R_s: R+R;
+
+"2"$
+kill(R_s, R_p)$
+R1: 1e+2 ` Ohm$
+R2: 2.5e3 ` Ohm$
+R3: 4e3 ` Ohm$
+R_s:R1+R2+R3;
+R_p: 1/(1/R1 + 1/R2 + 1/R3);
+
+"6"$
+kill(R1,R2);
+R1: 24.0 ` Ohm$
+R2: 96.0 ` Ohm$
+"series:"$
+Rs: R1+R2;
+I: ((48.0 ` V)/Rs) `` A;
+P: I^2*Rs `` W;
+
+"parallel"$
+Rp:1/(1/R1+1/R2);
+I: ((48.0 ` V)/Rp) `` A;
+P: I^2*Rp `` W;
+
+"11"$
+kill(R1,R2)$
+R: expand(1/(1/R1+1/R2));
+subst([R2=r*R1],R)/R1, factor;
+limit(%, r, inf);
+
+"14"$
+(12.0 ` V)/6;
+
+"16"$
+kill(E,I,r,V)$
+E:3.0000 ` V$
+I:0.300 ` mA$
+r:2.00 ` Ohm$
+TV: (E - r*I) `` V;
+
+"18"$
+kill(TV,E,r,I)$
+sol:solve(TV = E - r*I, r); 
+TV: 12.0 ` V$
+E: 15.0 ` V$
+I: 8.00 ` A$
+ev(rhs(sol[1])) `` Ohm;
+
+"31"$
+kill(I1,I2,I3, E1,E2, r1,r2,R1,R2,R3)$
+eqn: [ I1=I2+I3, E1-r1*I2-R1*I1-R2*I2=0, E1-r1*I2+R3*I3+r2*I3-E2-R2*I2=0, E2-r2*I3-R3*I3 - R1*I1=0];
+three_eq: makelist (eqn[i], i, [1,2,3]);
+sol: linsolve( three_eq, [I1,I2,I3]);
+R1:6 ` Ohm$ 
+R2:2.5 ` Ohm$ 
+R3:1.5 ` Ohm$ 
+r1:r2:0.5 ` Ohm$
+E1:18 ` V$ 
+E2:45 ` V$
+currents: ev(sol)$
+map(lambda([u], lhs(u)=(rhs(u) `` A)), %);
+ev(eqn[4],  currents);
+
+"36, 37, 38"$
+kill(I1,I2,I3, E1,E2,E3,E4, r1,r2,r3,R1,R2,R3,r4,R5)$
+eqn: [ I3=I2+I1, 
+       0 = -R1*I1 + E1 - r1*I1 - R5*I1 + R2*I2 + r2*I2 - E2,
+       0 = -R1*I1 + E1 - r1*I1 - R5*I1 - r4*I3 - E4 - r3*I3 + E3 - R3*I3 , 
+       0 = -R3*I3 + E2 - r2*I2 - R2*I2 - r4*I3 - E4 - r3*I3 + E3];
+three_eq: makelist (eqn[i], i, [1,2,3]);
+sol: linsolve( three_eq, [I1,I2,I3]);
+E1: 24.0 ` V$
+E2: 48.0 ` V$
+E3: 6.0 ` V$
+E4: 36.0 ` V$
+r1: 0.10 ` Ohm$
+r2: 0.50 ` Ohm$
+r3: 0.05 ` Ohm$
+R1: 5.0 ` Ohm$
+R2: 40 ` Ohm$
+R3: 78 ` Ohm$
+r4: 0.20 ` Ohm$
+R5: 20 ` Ohm$
+currents: ev(sol)$
+map(lambda([u], lhs(u)=(rhs(u) `` A)), %);
+ev(eqn[4],  currents);
+
+"40"$
+kill(I1,I2,I3, E1,E2,E3,E4, r1,r2,r3,r4, R1,R2,R3)$
+eqn: [ I1=I2+I3, 
+       0 = E1 - r1*I1 - R1*I1 - R2*I3 + E2 - r2*I3 - R4*I1,
+       0 = E1 - r1*I1 - R1*I1 - R3*I2 + E3 - r3*I2 - r4*I2 - E4 - R4*I1,
+       0 = -R3*I2 + E3 - r3*I2 - r4*I2 - E4 + r2*I3 - E2 + R2*I3
+];
+three_eq: makelist (eqn[i], i, [1,2,3]);
+sol: linsolve( three_eq, [I1,I2,I3]);
+E1: 18 ` V$
+E2: 3.0 ` V$
+E3: 12 ` V$
+E4: 24 ` V$
+r1: 0.5 ` Ohm$
+r2: 0.25 ` Ohm$
+r3: 0.5 ` Ohm$
+r4: 0.75 ` Ohm$
+R1: 20 ` Ohm$
+R2: 6 ` Ohm$
+R3: 8 ` Ohm$
+R4: 15 ` Ohm$
+currents: ev(sol)$
+map(lambda([u], lhs(u)=(rhs(u) `` A)), %);
+ev(eqn[4],  currents);

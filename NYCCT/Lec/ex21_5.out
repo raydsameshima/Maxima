@@ -1,0 +1,28 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("ex21_5.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/ex21_5.mac
+(%i2) eqn:[I1 = I2+I3,E1-r1*I2+(-R1)*I1+(-R2)*I2 = 0,
+           E1-r1*I2+R3*I3+r2*I3-E2+(-R2)*I2 = 0,
+           E2-r2*I3+(-R3)*I3+(-R1)*I1 = 0]
+(%o2) [I1 = I3 + I2, (- I2 r1) - I2 R2 - I1 R1 + E1 = 0, 
+I3 r2 - I2 r1 + I3 R3 - I2 R2 - E2 + E1 = 0, 
+(- I3 r2) - I3 R3 - I1 R1 + E2 = 0]
+(%i3) three_eq:makelist(eqn[i],i,[1,2,3])
+(%o3) [I1 = I3 + I2, (- I2 r1) - I2 R2 - I1 R1 + E1 = 0, 
+                                   I3 r2 - I2 r1 + I3 R3 - I2 R2 - E2 + E1 = 0]
+(%i4) sol:linsolve(three_eq,[I1,I2,I3])
+                        E1 (r2 + R3) + E2 r1 + E2 R2
+(%o4) [I1 = ----------------------------------------------------, 
+            r1 (r2 + R3 + R1) + R2 (r2 + R3 + R1) + R1 (r2 + R3)
+                 E1 (r2 + R3) + (E1 - E2) R1
+I2 = ----------------------------------------------------, 
+     r1 (r2 + R3 + R1) + R2 (r2 + R3 + R1) + R1 (r2 + R3)
+                 E2 r1 + E2 R2 + (E2 - E1) R1
+I3 = ----------------------------------------------------]
+     r1 (r2 + R3 + R1) + R2 (r2 + R3 + R1) + R1 (r2 + R3)
+(%i5) currents:ev(sol,R1:6,R2:2.5,R3:1.5,r1:r2:0.5,E1:18,E2:45)
+(%o5)                 [I1 = 4.75, I2 = - 3.5, I3 = 8.25]
+(%i6) ev(eqn[4],R1:6,R2:2.5,R3:1.5,r1:r2:0.5,E1:18,E2:45,currents)
+(%o6)                               0.0 = 0
+(%o7)           /home/rds/Documents/Maxima/NYCCT/Lec/ex21_5.mac
