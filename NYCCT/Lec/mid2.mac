@@ -1,0 +1,122 @@
+/* mid2.mac */
+
+kill(all);
+load(physical_constants)$ 
+
+/* take home exam */
+"1 (from Ex.19.11 Recharging a battery)"$
+"1 (a)"$
+I1: (1 ` A)$
+I2: (3 ` A)$
+R1: (4 ` Ohm)$
+R2: (1 ` Ohm)$
+declare_units(r, Ohm)$ 
+declare_units(E, V)$ 
+E2: (9 ` V)$
+
+j1: I = I1 + I2;
+
+I: ev(I, linsolve(j1, I));
+
+"1 (b)"$
+/* outer circuit */
+l1: 0 = -R1*I1 + E2 - r*I $
+
+/* left half */
+l2: 0 = -R1*I1 - E + R2*I2 $
+
+/* right half */
+l3: 0 = -R2*I2 + E + E2 - r*I $
+
+rE: at(linsolve([l1,l2],[r,E])
+      , linsolve(j1, I))$
+r: rhs(rE[1]) `` Ohm;
+E: rhs(rE[2]) `` V;
+
+"1 (c)"$
+ev(l3, expand);
+% `` V;
+
+"1 (d), (e) and (f)"$
+"The power in and out, and its check."$
+P: E*I2 + E2*I$
+P `` W;
+R1*I1^2 + R2*I2^2 + r*I^2$
+% `` W;
+
+"2 (from Ex.20.2 Electron motion in a mircowave oven)"$
+kill(e,v,B,m,v,r)$
+"2 (b)"$
+eom: e*v*B = m*v^2/r;
+
+"2 (c)"$
+req: solve(eom, r);
+ev( rhs(req[1]), m:(9.11E-31 ` kg), v:(1E7 ` m/s), e:(1.60E-19 ` C), B:(0.1 ` T) )$
+% `` m;
+
+"2 (d)"$
+kill(v)$
+veq: solve(eom, v);
+ev( rhs(veq[1]), B:(0.1 ` T), e:(1.60E-19 ` C), r:(0.1 ` m), m:(9.11E-31 ` kg) )$
+v: (% `` m/s);
+
+"2 (e)"$
+declare_units(T, s)$
+solve(v*T = 2*%pi*r, T)$
+Teq: solve(v*T = 2*%pi*r, T)$
+ev( rhs(Teq[1]), r:(0.1 ` m), numer );
+
+"2 (f)"$
+omega: 2*%pi*f$
+ev( omega, f:(2450 ` MHz), numer )$
+% `` 1/s;
+
+"2 (g)"$
+kill(B);
+Beq: solve(eom, B);
+B: ev(rhs(Beq[1]), v:r*omega);
+ev( B, f:(2450 ` MHz), m:(9.11E-31 ` kg), e:(1.60E-19 ` C))$
+ev(%, bfloat) `` T;
+
+"2 (h)"$
+ev( B, f:(2500 ` MHz), m:(9.11E-31 ` kg), e:(1.60E-19 ` C), bfloat)$
+% `` T;
+
+/* Problem 3 */
+"3 (a)"$
+kill(E)$
+(0.012 ` m^2)*(0.020 ` T/s)$
+E: (% `` V);
+
+"3 (b)"$
+kill(I,R)$
+I: E/R $ 
+ev( I, R:(5.0 ` Ohm) ) `` A;
+
+"3 (c)"$
+kill(I, R)$
+(0.010 ` T) * (0.25 ` m^2/s);
+E: (% `` V);
+I: E/R$ 
+ev( I, R:(2.5 ` ohm), bfloat ) `` A;
+
+"3 (d)"$
+kill(E)$
+E: ev(B*L*v*dt/dt, B: (0.60 ` T), L:(0.1 ` m), v:(2.5 ` m/s) ) `` V; 
+
+"3 (e)"$
+ev( I:E/R, R:(0.030 ` ohm)) `` A;
+
+"3 (f)"$
+kill(q,v,B,I)$
+F: q*v*B$
+F: ev(F, q: I*dt, v:l/dt);
+
+"3 (g)"$
+ev(F, B:(0.60 ` T), I:(5.0 ` A), l:(0.1 ` m)) `` N;
+
+"3 (h), (i), (j)"$
+ev(F*v, B:(0.60 ` T), I:(5.0 ` A), l:(0.1 ` m), v:(2.5 ` m/s)) `` W;
+ev(E*I, I:(5.0 ` A)) `` W;
+ev(R*I^2, R:(0.030 ` Ohm), I:(5.0 ` A)) `` W;
+

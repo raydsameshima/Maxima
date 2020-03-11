@@ -1,0 +1,153 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("mid2.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/mid2.mac
+(%i2) kill(all)
+(%o0)                                done
+(%i1) load(physical_constants)
+(%i2) "1 (from Ex.19.11 Recharging a battery)"
+(%i3) "1 (a)"
+(%i4) I1:1 ` A
+(%i5) I2:3 ` A
+(%i6) R1:4 ` Ohm
+(%i7) R2:1 ` Ohm
+(%i8) declare_units(r,Ohm)
+(%i9) declare_units(E,V)
+(%i10) E2:9 ` V
+(%i11) j1:I = I1+I2
+(%o11)                             I = 4 ` A
+(%i12) I:ev(I,linsolve(j1,I))
+(%o12)                               4 ` A
+(%i13) "1 (b)"
+(%i14) l1:0 = (-R1)*I1+E2+(-r)*I
+(%i15) l2:0 = (-R1)*I1-E+R2*I2
+(%i16) l3:0 = (-R2)*I2+E+E2+(-r)*I
+(%i17) rE:at(linsolve([l1,l2],[r,E]),linsolve(j1,I))
+(%i18) r:rhs(rE[1]) `` Ohm
+                                    5
+(%o18)                              - ` Ohm
+                                    4
+(%i19) E:rhs(rE[2]) `` V
+(%o19)                             (- 1) ` V
+(%i20) "1 (c)"
+(%i21) ev(l3,expand)
+(%o21)                     0 = 8 ` V + (- 8) ` A Ohm
+(%i22) % `` V
+(%o22)                          0 `` V = 0 ` V
+(%i23) "1 (d), (e) and (f)"
+(%i24) "The power in and out, and its check."
+(%i25) P:E*I2+E2*I
+(%i26) P `` W
+(%o26)                              33 ` W
+(%i27) R1*I1^2+R2*I2^2+r*I^2
+(%i28) % `` W
+(%o28)                              33 ` W
+(%i29) "2 (from Ex.20.2 Electron motion in a mircowave oven)"
+(%i30) kill(e,v,B,m,v,r)
+(%i31) "2 (b)"
+(%i32) eom:e*v*B = (m*v^2)/r
+                                            2
+                                         m v
+(%o32)                           B e v = ----
+                                          r
+(%i33) "2 (c)"
+(%i34) req:solve(eom,r)
+                                        m v
+(%o34)                             [r = ---]
+                                        B e
+(%i35) ev(rhs(req[1]),m:9.11e-31 ` kg,v:10000000.0 ` m/s,e:1.6e-19 ` C,B
+                                                                        :0.1
+                                                                          ` T)
+(%i36) % `` m
+(%o36)                          5.69375e-4 ` m
+(%i37) "2 (d)"
+(%i38) kill(v)
+(%i39) veq:solve(eom,v)
+                                   B e r
+(%o39)                        [v = -----, v = 0]
+                                     m
+(%i40) ev(rhs(veq[1]),B:0.1 ` T,e:1.6e-19 ` C,r:0.1 ` m,m:9.11e-31 ` kg)
+(%i41) v:% `` m/s
+                                                  m
+(%o41)                     1.756311745334797e+9 ` -
+                                                  s
+(%i42) "2 (e)"
+(%i43) declare_units(T,s)
+(%i44) solve(v*T = 2*%pi*r,T)
+
+rat: replaced 1.756311745334797e+9 by 1201317233809/684 = 1.756311745334795e+9
+(%i45) Teq:solve(v*T = 2*%pi*r,T)
+
+rat: replaced 1.756311745334797e+9 by 1201317233809/684 = 1.756311745334795e+9
+(%i46) ev(rhs(Teq[1]),r:0.1 ` m,numer)
+(%o46)                     3.577488634275381e-10 ` s
+(%i47) "2 (f)"
+(%i48) omega:2*%pi*f
+(%i49) ev(omega,f:2450 ` MHz,numer)
+(%i50) % `` 1/s
+                                                   1
+(%o50)                     1.539380400258999e+10 ` -
+                                                   s
+(%i51) "2 (g)"
+(%i52) kill(B)
+(%o52)                               done
+(%i53) Beq:solve(eom,B)
+                                        m v
+(%o53)                             [B = ---]
+                                        e r
+(%i54) B:ev(rhs(Beq[1]),v:r*omega)
+                                   2 %pi f m
+(%o54)                             ---------
+                                       e
+(%i55) ev(B,f:2450 ` MHz,m:9.11e-31 ` kg,e:1.6e-19 ` C)
+(%i56) ev(%,bfloat) `` T
+(%o56)                     8.764847153974674b-2 ` T
+(%i57) "2 (h)"
+(%i58) ev(B,f:2500 ` MHz,m:9.11e-31 ` kg,e:1.6e-19 ` C,bfloat)
+(%i59) % `` T
+(%o59)                     8.943721585688443b-2 ` T
+(%i60) "3 (a)"
+(%i61) kill(E)
+(%i62) (0.012 ` m^2)*(0.02 ` T/s)
+(%i63) E:% `` V
+(%o63)                            2.4e-4 ` V
+(%i64) "3 (b)"
+(%i65) kill(I,R)
+(%i66) I:E/R
+(%i67) ev(I,R:5.0 ` Ohm) `` A
+(%o67)                            4.8e-5 ` A
+(%i68) "3 (c)"
+(%i69) kill(I,R)
+(%i70) (0.01 ` T)*(0.25 ` m^2/s)
+                                             2
+                                          T m
+(%o70)                           0.0025 ` ----
+                                           s
+(%i71) E:% `` V
+(%o71)                            0.0025 ` V
+(%i72) I:E/R
+(%i73) ev(I,R:2.5 ` ohm,bfloat) `` A
+(%o73)                            1.0b-3 ` A
+(%i74) "3 (d)"
+(%i75) kill(E)
+(%i76) E:ev((B*L*v*dt)/dt,B:0.6 ` T,L:0.1 ` m,v:2.5 ` m/s) `` V
+(%o76)                             0.15 ` V
+(%i77) "3 (e)"
+(%i78) ev(I:E/R,R:0.03 ` ohm) `` A
+(%o78)                              5.0 ` A
+(%i79) "3 (f)"
+(%i80) kill(q,v,B,I)
+(%i81) F:q*v*B
+(%i82) F:ev(F,q:I*dt,v:l/dt)
+(%o82)                               B I l
+(%i83) "3 (g)"
+(%i84) ev(F,B:0.6 ` T,I:5.0 ` A,l:0.1 ` m) `` N
+(%o84)                              0.3 ` N
+(%i85) "3 (h), (i), (j)"
+(%i86) ev(F*v,B:0.6 ` T,I:5.0 ` A,l:0.1 ` m,v:2.5 ` m/s) `` W
+(%o86)                             0.75 ` W
+(%i87) ev(E*I,I:5.0 ` A) `` W
+(%o87)                             0.75 ` W
+(%i88) ev(R*I^2,R:0.03 ` Ohm,I:5.0 ` A) `` W
+(%o88)                             0.75 ` W
+(%o89)           /home/rds/Documents/Maxima/NYCCT/Lec/mid2.mac
