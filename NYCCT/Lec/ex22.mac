@@ -1,0 +1,139 @@
+/* ex22.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"1"$
+"West (<-), (perpendicular) into, north, respectively."$
+
+"2"$
+"East (->), (perpendicular) out, south, respectively."$
+
+"3"$
+"West (<-), (perpendicular) out, north, respectively."$
+
+"5"$
+"(perpendicular) out, east, (perpendicular) into."$
+
+"6"$
+"(perpendicular) into, west, (perpendicular) out."$
+
+"9"$
+v: (5.00E7 ` m/s);
+F: (1.70E-16 ` N);
+declare_units(B, T);
+eqn: F= %%e*v*B*cos(45 *%pi/180);
+linsolve(eqn, B);
+ev(constvalue(rhs(%[1])), bfloat) `` T;
+
+"It is consistent; see section 22.4, B_earth ~ 5e-5 [T]"$
+
+"10"$
+kill(v,B,F)$
+
+v: (4.00e3 ` m/s);
+B: (1.25 ` T);
+F: (1.40e-16 ` N);
+
+declare_units(cosine, 1);
+linsolve( F = (-1)*%%e*v*B*cosine, cosine );
+ev( 180/%pi * acos( ev(constvalue(ev((cosine `` 1), %)), numer)), numer);
+
+
+"12"$
+kill(v,B)$
+v: (7.50e6 ` m/s);
+B:  (1.00e-5 ` T);
+declare_units(r, m);
+eqn: %m_e*v^2/r = %%e*v*B;
+solve(eqn, r);
+constvalue(% `` m), numer;
+rhs(%[1]);
+
+
+"13"$
+kill(v,B,r)$
+declare_units(B,T);
+r: (0.800 ` m);
+mp: (1.6726219E-27 ` kg);
+v: (7.50e7 ` m/s);
+eqn: mp*v^2/r = %%e*v*B;
+solve(eqn, B) `` T;
+constvalue(rhs(%[1])), numer;
+
+"17"$
+kill(v,B)$
+B: (0.100 ` T);
+declare_unit(E, V/m);
+v: (4.00e6 ` m/s);
+eqn: v*B = E;
+solve(eqn, E) `` V/m;
+ev(rhs(%[1]), bfloat) `` V/m;
+E:%$
+VV: (E *(1 ` cm)) `` V;
+
+"31"$
+"east (->), (perpendicular) into, north, no-where, east, south, respectively."$
+
+"32"$
+"west (<-), (perpendicular) out, north, respectively."$
+
+"33"$
+"(perpendicular) into, west (<-), (perpendicular) out, respectively."$
+
+"35"$
+ev(( (1000 ` A) * (100 ` m) * (5.00e-5 ` T) * cos(30 *%pi/180) ), bfloat) `` N;
+
+"37"$
+( (2.16 ` N)/( (30.0 ` A)*(4.00 ` cm) ) ) `` T;
+
+"39"$
+kill(B)$
+f: (8.00 ` A)*(50.0 ` cm)*(1.20 ` T) `` N;
+solve( (2.40 ` N) = f*cosine, cosine);
+solve( cos(t*%pi/180) = rhs(%[1]) , t);
+
+"42, based on eq.(22.21)."$
+kill(w,Num,I,B, torque)$
+w: (18.0 ` cm);
+Num: 150;
+I: (50.0 ` A);
+B: (1.60 ` T);
+torque(t):= (Num*I*(w^2)*B*sin(t) `` N*m);
+constvalue(torque(%pi/2)), numer;
+ev(torque(10.9*%pi/180), numer) `` N*m;
+
+"43"$
+kill(torque,I,B, w)$
+declare_unit(I, A);
+torque: (9.00 ` N*m);
+w: (15.0 ` cm);
+B: (0.800 ` T);
+I:  (torque/( 50*(w^2)*B )) `` A;
+
+"? 48"$
+
+"51"$
+kill(I,f,r)$
+eqn: f = %mu_0*I^2/( 2*%pi*r ) ;
+sol:solve(eqn, I);
+
+r: (2.00 ` cm);
+f: (0.225 ` N/m);
+ev(constvalue(sol), bfloat)$
+rhs(%[2]) `` A;
+
+"repulsive"$
+
+"53"$
+kill(f,I,J,r)$
+eqn: f = %mu_0*I*J/(2*%pi*r);
+sol:solve(eqn, r);
+
+I: (400 ` A);
+J: (5.00 ` A);
+f: (4.00e-3 ` N/m);
+
+ev(constvalue(sol), bfloat);
+
+"parallel, i.e., the same direction"$

@@ -1,0 +1,127 @@
+/* ex23.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"1"$
+"zero";
+
+"4"$
+"anti clockwise; since the magnetic flux, which is (perpendicular) \"into\" direction around the coil, induces anti clockwise current as if it induces (perpendicular) \"from\" direction magnetic field."$
+
+"5"$
+"This is a L-circuit."$
+deq: E-L*diff(I(t),t,1) = 0;
+atvalue(I(t),t=0,0);
+sol1: desolve(deq, I(t)); /* I(t) = E*t/L linear! */
+
+"So the current increases linearly in t."$
+"Coil 2 feels a downward increasing magnetic flux. Anti clockwise current is induced."$
+"Coil 3 has no magnetic flux change; so current is induced."$
+"Coil 1 also feels a downward increasing magnetic flux. Anti clockwise current is induced."$
+"The linearity does not change in time, so the same induced current"$
+"After the switch off, there still is decreasing current (linear in time), the opposite directions."$
+
+
+"If we set a resistance r in this circuit, this \"pathological\" linear behavior becomes the exponentially saturation (RL-circuit)."$
+deqr: E-L*diff(Ir(t),t,1)-r*Ir(t) = 0;
+atvalue(Ir(t),t=0,0);
+sol2: desolve(deqr, Ir(t)), rat; 
+
+plot2d( 
+  subst([E=1, L=1, r=1], [rhs(sol1), rhs(sol2), E/r]), 
+  [t,0,5],
+  [gnuplot_preamble, "set term wxt 0"]
+);
+"In this more realistic situation, the current increases in time first, then gets a steady state."$
+"So, the induced current on, e.g., coil 2, is a) anticlockwise but gradually decreasing, b) no current at all c) clockwise, decreasing."$
+
+"8"$
+turns: 50;
+dA: (0.250 ` m^2);
+dt: (0.100 ` s);
+B: (1.50 ` T);
+"Since the area decreases, hence the magnetic flux also decreases, and the current is induced so that it suppport the magnetic field."$
+"Therefore, the induced current is clockwise direction."$
+turns * B * dA/dt `` V;
+
+"17"$
+width : (75.0 ` m);
+dL: (280 ` m);
+dt: (1 ` s);
+B: (3.00e-5 ` T);
+1 * B* width*dL/dt `` V;
+
+"19"$
+kill(emf,B,l)$
+solv: solve( emf= 1*B*l*v, v);
+emf: (1.00 ` V);
+B: (1.50 ` T);
+l: (30 ` cm);
+ev(solv);
+rhs(%[1]) `` m/s;
+
+"20"$
+kill(emf,B,l)$
+solB: solve( emf= 1*B*l*v, B);
+l: (12.0 ` cm);
+v: (4.00 ` m/s);
+emf: (95.0 ` V);
+ev(rhs(solB[1])) `` T;
+
+"47"$
+solVs: solve(Vs/Vp = Ns/Np, Vs);
+Np: 500;
+Ns: 4;
+Vp: (120 ` V);
+Vs: ev(Vs, solVs);
+%, numer;
+
+solIp: solve(Is/Ip = Np/Ns, Ip);
+Is:(4.00 ` A);
+Ip: ev(Ip, solIp);
+%, numer;
+
+Pp: Vp*Ip `` W;
+Ps: Vs*Is `` W;
+
+"55"$
+kill(emf2, M, dI1, dt)$
+declare_unit(M,H);
+solM: solve( emf2= -M*dI1/dt, M);
+dI1: (-5.00 ` A);
+dt: (1.00 ` ms);
+emf2: (9.00 ` V);
+M: ev(M, solM) `` H;
+
+"66, eq.(23.37)"$
+kill(L,emf, dI, dt);
+soldt: solve( emf= -L*dI/dt, dt);
+dI: (-150 ` A);
+L: (0.250 ` H);
+emf: (75.0 ` V);
+ev(soldt) `` s;
+
+"69"$
+kill(tau,L,R);
+solL: solve(tau = L/R, L); 
+tau: (1.00 ` s);
+R: (500 ` Ohm);
+L: ev(L, solL) `` H;
+
+"74"$
+(25.0 ` mH)/(4.00 ` Ohm) `` s; /* 0.00625 ` s */
+I(t):= (12.0 / 4.00)*(1-exp(-t/0.00625))$
+I(12.5e-3), numer;
+
+plot2d( 
+  [I(t),[parametric, 12.5e-3, t, [t,-1,4]]],
+  [x,0, 0.04],
+  [y,-1, 4],
+  [gnuplot_preamble, "set term wxt 1"]
+);
+
+
+
+
+
