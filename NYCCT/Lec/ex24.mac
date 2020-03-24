@@ -1,0 +1,12 @@
+/* ex24.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"1"$
+get(%c, description);
+ev(constvalue(%c), bfloat) `` m/s;
+
+get(%mu_0, description);
+get(%e_0, description);
+ev( constvalue(1/sqrt( %mu_0* %e_0 )), bfloat) `` m/s;
