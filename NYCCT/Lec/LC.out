@@ -1,0 +1,109 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("LC.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/LC.mac
+(%i2) "Let us consider an LC circuit and a SHO (a spring)."
+(%i3) "First, a SHO (simple harmonic oscilator) consists of a spring (k) with a mass: "
+(%i4) assume(m > 0)
+(%i5) assume(k > 0)
+(%i6) "The EOM is the following:"
+(%i7) deq:m*'diff(y(t),t,2) = (-k)*y(t)
+                               2
+                              d
+(%o7)                      m (--- (y(t))) = - k y(t)
+                                2
+                              dt
+(%i8) "To obserce its motion, let us consider the following two cases: 1) starting with initial displacement but from the rest, or 2) starting with initial velocity from the center (the origin)."
+(%i9) "The first case is nothing but the following initial condition:"
+(%i10) atvalue(y(t),t = 0,y0)
+(%o10)                                y0
+(%i11) atvalue('diff(y(t),t,1),t = 0,0)
+(%o11)                                 0
+(%i12) "Solving the EOM (as a DE), we obtain the following periodic motion:"
+(%i13) atvalue(y(t),t = 0,y0)
+(%o13)                                y0
+(%i14) atvalue('diff(y(t),t,1),t = 0,0)
+(%o14)                                 0
+(%i15) desolve(deq,y(t))
+                                      sqrt(k) t
+(%o15)                     y(t) = cos(---------) y0
+                                       sqrt(m)
+(%i16) define(y_y0(t),ev(y(t),%))
+                                        sqrt(k) t
+(%o16)                   y_y0(t) := cos(---------) y0
+                                         sqrt(m)
+(%i17) "The second cases can be expressed with the following (different) initial condition:"
+(%i18) atvalue(y(t),t = 0,0)
+(%o18)                                 0
+(%i19) atvalue('diff(y(t),t,1),t = 0,v0)
+(%o19)                                v0
+(%i20) desolve(deq,y(t))
+                                          sqrt(k) t
+                              sqrt(m) sin(---------) v0
+                                           sqrt(m)
+(%o20)                 y(t) = -------------------------
+                                       sqrt(k)
+(%i21) define(y_v0(t),ev(y(t),%))
+                                            sqrt(k) t
+                                sqrt(m) sin(---------) v0
+                                             sqrt(m)
+(%o21)               y_v0(t) := -------------------------
+                                         sqrt(k)
+(%i22) plot2d(ev([y_y0(t),y_v0(t)],m:k:v0:y0:1),[t,0,5],[legend,"y0","v0"],
+              [ylabel,"displacement"],[xlabel,"time"],[gnuplot_term,dumb])
+                                                                               
+                      1 +--------------------------------------------+         
+                        |  ***   +##     #+#       +        +        |         
+                    0.8 |-+  **###          ##            y0 ******+-|         
+                    0.6 |-+   ##*            ###          v0 ######+-|         
+                        |   ###  **            ##                    |         
+                    0.4 |-+##     **            ##                 +-|         
+                        | ##       **            ##                  |         
+                    0.2 |-+         **            ##               +-|         
+                      0 |--------------------------------------------|         
+ displacement           |             **            ##            *  |         
+                   -0.2 |-+            **            ##         ** +-|         
+                        |               **            ##       **    |         
+                   -0.4 |-+              **             ##    **   +-|         
+                        |                  **            ##  **      |         
+                   -0.6 |-+                 **            ##**     +-|         
+                   -0.8 |-+                  ***          *###     +-|         
+                        |        +        +    *** +   **** +###     |         
+                     -1 +--------------------------------------------+         
+                        0        1        2        3        4        5         
+                                            time                               
+                                                                               
+(%o22)           [/tmp/maxout17422.gnuplot, /tmp/maxplot.txt]
+(%i23) "Let us, next, consider an LC circuit.
+The Kirchhoff's loop rule becomes the following DE:"
+(%i24) assume(L > 0)
+(%i25) assume(C > 0)
+(%i26) deqLC:0 = Q(t)/C+L*'diff(Q(t),t,2)
+                                   2
+                                  d             Q(t)
+(%o26)                     0 = L (--- (Q(t))) + ----
+                                    2            C
+                                  dt
+(%i27) "Note that the first term Q/C is the voltage across C and the second term is (-1)*(-L*diff(I(t),t,1)) is the induced emf over the (self-inductance) L."
+(%i28) "Again, we can take two extreame situations: 1) no charge on the condenser but non-zero current flow I0, or 2) no current but the initial charge Q0."
+(%i29) "The first case becomes:"
+(%i30) atvalue(Q(t),t = 0,0)
+(%o30)                                 0
+(%i31) atvalue('diff(Q(t),t,1),t = 0,I0)
+(%o31)                                I0
+(%i32) desolve(deqLC,Q(t))
+                                                     t
+(%o32)          Q(t) = sqrt(C) I0 sqrt(L) sin(---------------)
+                                              sqrt(C) sqrt(L)
+(%i33) "And the second case is"
+(%i34) atvalue(Q(t),t = 0,Q0)
+(%o34)                                Q0
+(%i35) atvalue('diff(Q(t),t,1),t = 0,0)
+(%o35)                                 0
+(%i36) desolve(deqLC,Q(t))
+                                             t
+(%o36)                  Q(t) = Q0 cos(---------------)
+                                      sqrt(C) sqrt(L)
+(%i37) "So, from DE view point, these two physical models, namely a SHO and a LC circuit are essentially the same!"
+(%i38) "If we compare the two DEs, we can associate the self-inductance L as the mass of the oscilator, the reciprocal of the capacitance 1/C as the spring constant."
+(%o39)            /home/rds/Documents/Maxima/NYCCT/Lec/LC.mac

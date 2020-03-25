@@ -1,0 +1,64 @@
+/* AC.mac */
+
+"(section 23.11 Reactance, Inductive and Capacitive)"$
+
+
+"Fact: when a sinusoidal voltage, e.g.,
+  V ~ cos(wt)
+is applied on L, the voltage \"leads\" the current by 1/4 of a cycle, i.e., 90[deg]:
+  I ~ cos(wt - 90[deg]) = sin(t).
+
+This \"fact\" can be verified using DE; let us set the input voltage in cosine form.
+Assumeing I(0) = 0 as an initial condition, we can write the Kirchhoff's loop rule as the following DE:
+"$
+
+assume(w>0)$
+depends(IL,t)$
+atvalue(IL(t),t=0,0);
+deqL: V0*cos(w*t) - L*'diff(IL(t), t, 1) = 0;
+
+"where w (we usually denote \"omega\") stands for the angular frequency.
+One cycle is equal to 2*%pi rotation, hence w = 2*%pi*f = 2*%pi/T, where f is the ordinary frequency [Hz] and T is the period [sec]."$
+
+desolve(deqL, IL(t));
+define(IL(t), ev(IL(t), %));
+define(V(t), V0*cos(w*t));
+
+plot2d(
+  ev( [V(t), IL(t)], w:V0:L:1 ),
+  [t,0,3*%pi/2],
+  [y,-1, 1.5],
+  [title, "the reaction IL(t) with cosine V(t)"],
+  [legend, "V(t)", "IL(t)"],
+  [gnuplot_preamble, "set key top"], 
+  [gnuplot_term, dumb]
+);
+
+"Let us consider the prefactor of I(t):"$
+coeff(I(t), sin(w*t));
+
+"We denote it V/XL, where XL := w*L = 2*%pi*f*L is called the inductive reactance."$
+
+
+"Similarly, we consider a capacitor under a sinusoidal voltage.
+Fact: when a sinusoidal voltage
+  V ~ cos(wt)
+the voltage \"follows\" the current 1/4 of a cycle:
+  I ~ cos(wt + 90[deg]) = (-1)*sin(wt).
+"$
+
+solve( V0*cos(w*t) = Q/C, Q);
+define(Q(t), rhs(%[1]));
+
+define(V(t), V0*cos(w*t));
+define(IC(t), diff(Q(t),t,1));
+
+plot2d(
+  ev( [V(t), IC(t)], w:V0:Q:C:1 ),
+  [t,0,3*%pi/2],
+  [y,-1, 1.5],
+  [title, "the reaction IC(t) with cosine V(t)"],
+  [legend, "V(t)", "IC(t)"],
+  [gnuplot_preamble, "set key center top"], 
+  [gnuplot_term, dumb]
+);

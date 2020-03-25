@@ -1,0 +1,63 @@
+/* LC.mac */
+
+"Let us consider an LC circuit and a SHO (a spring)."$
+
+"First, a SHO (simple harmonic oscilator) consists of a spring (k) with a mass: "$
+assume(m > 0)$
+assume(k > 0)$
+
+"The EOM is the following:"$
+deq:m*'diff(y(t),t,2) = -k*y(t);
+
+"To obserce its motion, let us consider the following two cases: 1) starting with initial displacement but from the rest, or 2) starting with initial velocity from the center (the origin)."$
+
+"The first case is nothing but the following initial condition:"$
+atvalue(y(t),t = 0,y0);
+atvalue('diff(y(t),t,1),t = 0,0);
+
+"Solving the EOM (as a DE), we obtain the following periodic motion:"$
+
+atvalue(y(t),t = 0,y0);
+atvalue('diff(y(t),t,1),t = 0,0);
+desolve(deq,y(t));
+define(y_y0(t),ev(y(t),%));
+
+"The second cases can be expressed with the following (different) initial condition:"$
+atvalue(y(t),t = 0,0);
+atvalue('diff(y(t),t,1),t = 0,v0);
+desolve(deq,y(t));
+define(y_v0(t),ev(y(t),%));
+
+plot2d(
+  ev([y_y0(t),y_v0(t)],m:k:v0:y0:1),
+  [t,0,5],
+  [legend,"y0","v0"],
+  [ylabel,"displacement"],
+  [xlabel,"time"]/*,
+  [gnuplot_term, dumb] */
+);
+
+
+"Let us, next, consider an LC circuit.
+The Kirchhoff's loop rule becomes the following DE:"$
+assume(L>0)$
+assume(C>0)$
+deqLC:0 = Q(t)/C+L*'diff(Q(t),t,2);
+
+"Note that the first term Q/C is the voltage across C and the second term is (-1)*(-L*diff(I(t),t,1)) is the induced emf over the (self-inductance) L."$
+
+"Again, we can take two extreame situations: 1) no charge on the condenser but non-zero current flow I0, or 2) no current but the initial charge Q0."$
+
+"The first case becomes:"$
+atvalue(Q(t),t = 0,0);
+atvalue('diff(Q(t),t,1),t = 0,I0);
+desolve(deqLC,Q(t));
+
+"And the second case is"$
+atvalue(Q(t),t = 0,Q0);
+atvalue('diff(Q(t),t,1),t = 0,0);
+desolve(deqLC,Q(t));
+
+"So, from DE view point, these two physical models, namely a SHO and a LC circuit are essentially the same!"$
+
+"If we compare the two DEs, we can associate the self-inductance L as the mass of the oscilator, the reciprocal of the capacitance 1/C as the spring constant."$

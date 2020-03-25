@@ -2,40 +2,224 @@ maxima_userdir is  /home/rds/.maxima
 (%i1) batch("DC.mac")
 
 read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/DC.mac
-(%i2) kill(Q,E,C,R,t)
-(%o2)                                done
-(%i3) deq:'diff(Q(t),t,1) = (E-Q(t)/C)/R
-                                             Q(t)
-                                         E - ----
-                             d                C
-(%o3)                        -- (Q(t)) = --------
-                             dt             R
-(%i4) atvalue(Q(t),t = 0,0)
-(%o4)                                  0
-(%i5) sol:desolve(deq,Q(t))
+(%i2) "Let us study some DC-circuits with Maxima.
+(section 21.6 DC circuits)
+Let us consider RC-circuit; a single loop with an EMF (E[V]), a resistor (R[Ohm]), and a condenser (C[F])."
+(%i3) kill(Q,E,C,R,t)
+(%i4) "Around this circuit, the Kirchhoff's loop rule becomes the following DE:"
+(%i5) deq:0 = E-R*'diff(Q(t),t,1)+(-Q(t))/C
+                                 d             Q(t)
+(%o5)                  0 = (- R (-- (Q(t)))) - ---- + E
+                                 dt             C
+(%i6) "where we have used the following fact: the current I is defined as the flow of the charge, i.e., the rate of charge change in time is current:"
+(%i7) "Setting the initial condition, \"no charge\" at t=0, we can solve this DE:"
+(%i8) atvalue(Q(t),t = 0,0)
+(%o8)                                  0
+(%i9) sol:desolve(deq,Q(t))
                                                  t
                                               - ---
                                                 C R
-(%o5)                      Q(t) = C E - C E %e
-(%i6) define(Q(t),rhs(sol))
+(%o9)                      Q(t) = C E - C E %e
+(%i10) "So we obtain the charge as a function of time t:"
+(%i11) define(Q(t),rhs(sol))
                                                   t
                                                - ---
                                                  C R
-(%o6)                      Q(t) := C E - C E %e
-(%i7) define(I(t),diff(Q(t),t,1))
+(%o11)                     Q(t) := C E - C E %e
+(%i12) "Since the current I is defined as the charge-flow:"
+(%i13) define(I(t),diff(Q(t),t,1))
                                               t
                                            - ---
                                              C R
                                        E %e
-(%o7)                          I(t) := ---------
+(%o13)                         I(t) := ---------
                                            R
-(%i8) define(V(t),Q(t)/C)
+(%i14) "Finally, we can define the voltage across the condenser.
+Note that the capacitance is defined as the proportional constant Q vs. V.
+Thus, the behavior of V is essentially the same as Q."
+(%i15) define(V(t),Q(t)/C)
                                                   t
                                                - ---
                                                  C R
                                    C E - C E %e
-(%o8)                      V(t) := -----------------
+(%o15)                     V(t) := -----------------
                                            C
-(%i9) plot2d(ev(V(t),E:R:C:1),[t,0,4])
-(%o9)         [/tmp/maxout28245.gnuplot_pipes, /tmp/maxplot.wxt]
-(%o10)            /home/rds/Documents/Maxima/NYCCT/Lec/DC.mac
+(%i16) "As we can see, the denominator in the exponential, namely (C*R) is called the time constant of RC-circuit."
+(%i17) plot2d(ev([Q(t),I(t)],E:R:C:1),[t,0,4],[legend,"Q(t)","I(t)"],
+              [title,"Charging phase of RC-circuit"],
+              [gnuplot_preamble,"set key center right"],[gnuplot_term,dumb])
+                                                                               
+                          Charging phase of RC-circuit                         
+                                                                               
+                  1 +----------------------------------------+                 
+                    |#   +    +    +     +  **+****+****+    |                 
+                    |##               *******                |                 
+                0.8 |-+#           ****                    +-|                 
+                    |  ##       ****                         |                 
+                    |   ##    ***                            |                 
+                0.6 |-+  ##  **                            +-|                 
+                    |     ##*                                |                 
+                    |     *##                   Q(t) ******* |                 
+                0.4 |-+  **  ##                 I(t) ######+-|                 
+                    |   **    ###                            |                 
+                    |  **       ####                         |                 
+                0.2 |-+*           ####                    +-|                 
+                    |**               #######                |                 
+                    |*   +    +    +     +  ##+####+####+    |                 
+                  0 +----------------------------------------+                 
+                    0   0.5   1   1.5    2   2.5   3   3.5   4                 
+                                        t                                      
+                                                                               
+(%o17)           [/tmp/maxout18481.gnuplot, /tmp/maxplot.txt]
+(%i18) kill(R,Q,C)
+(%i19) "After a long enough time, we can assume that the condenser is fully charged.
+Removing the battery (i.e., the EMF) we close the circuit:"
+(%i20) deq2:Q(t)/C+R*'diff(Q(t),t,1) = 0
+                              d            Q(t)
+(%o20)                     R (-- (Q(t))) + ---- = 0
+                              dt            C
+(%i21) "Setting the initial condition, \"fully charged\" at t=0, we can solve this DE:"
+(%i22) atvalue(Q(t),t = 0,Q0)
+(%o22)                                Q0
+(%i23) sol2:desolve(deq2,Q(t))
+                                              t
+                                           - ---
+                                             C R
+(%o23)                         Q(t) = Q0 %e
+(%i24) "So this is dis-charging phase:"
+(%i25) define(Q2(t),rhs(sol2))
+                                               t
+                                            - ---
+                                              C R
+(%o25)                        Q2(t) := Q0 %e
+(%i26) define(I2(t),diff(Q2(t),t,1))
+                                                t
+                                             - ---
+                                               C R
+                                        Q0 %e
+(%o26)                       I2(t) := - ----------
+                                           C R
+(%i27) plot2d(ev([Q2(t),I2(t)],Q0:R:C:1),[t,0,4],[legend,"Q2(t)","I2(t)"],
+              [title,"Dis-charging phase of RC-circuit"],
+              [gnuplot_preamble,"set key top right"],[gnuplot_term,dumb])
+                                                                               
+                        Dis-charging phase of RC-circuit                       
+                                                                               
+                  1 +----------------------------------------+                 
+                    |**  +    +    +     +    +    +    +    |                 
+                    | ***                      Q2(t) ******* |                 
+                    |   ***                    I2(t) ####### |                 
+                0.5 |-+    ***                             +-|                 
+                    |         ****                           |                 
+                    |             ********                   |                 
+                  0 |----------------------------------------|                 
+                    |                    ####################|                 
+                    |             ########                   |                 
+                    |         ####                           |                 
+               -0.5 |-+    ###                             +-|                 
+                    |   ###                                  |                 
+                    | ###                                    |                 
+                    |##  +    +    +     +    +    +    +    |                 
+                 -1 +----------------------------------------+                 
+                    0   0.5   1   1.5    2   2.5   3   3.5   4                 
+                                        t                                      
+                                                                               
+(%o27)           [/tmp/maxout18481.gnuplot, /tmp/maxplot.txt]
+(%i28) "(section 23.10 RL circuit)
+Let us consider another circuit, RL-circuit.
+The first stage consists of EMF, R and L.
+Around the loop, we can write the Kirchhoff's loop rule as the following DE:
+"
+(%i29) kill(V,R,I,L)
+(%i30) deq3:V-R*I(t)+(-L)*'diff(I(t),t,1) = 0
+                            d
+(%o30)                (- L (-- (I(t)))) - R I(t) + V = 0
+                            dt
+(%i31) atvalue(I(t),t = 0,0)
+(%o31)                                 0
+(%i32) sol3:desolve(deq3,I(t))
+                                              R t
+                                            - ---
+                                               L
+                                    V   V %e
+(%o32)                       I(t) = - - ---------
+                                    R       R
+(%i33) define(I(t),ev(I(t),sol3))
+                                               R t
+                                             - ---
+                                                L
+                                     V   V %e
+(%o33)                       I(t) := - - ---------
+                                     R       R
+(%i34) plot2d(ev(I(t),V:R:L:1),[t,0,4],[legend,"I(t)"],
+              [title,"Charging phase of RL-circuit"],[ylabel,"current"],
+              [gnuplot_preamble,"set key center"],[gnuplot_term,dumb])
+                                                                               
+                              Charging phase of RL-circuit                     
+                                                                               
+                      1 +---------------------------------------+              
+                    0.9 |-+  +    +    +    +  **+****+****+  +-|              
+                        |                 ******                |              
+                    0.8 |-+            ****                   +-|              
+                    0.7 |-+         ***                       +-|              
+                        |         ***                           |              
+                    0.6 |-+     ***                           +-|              
+                    0.5 |-+    **                             +-|              
+         current        |     **      I(t) *******              |              
+                    0.4 |-+  **                               +-|              
+                    0.3 |-+ *                                 +-|              
+                        |  *                                    |              
+                    0.2 |-+*                                  +-|              
+                    0.1 |-+                                   +-|              
+                        |*   +    +    +    +    +    +    +    |              
+                      0 +---------------------------------------+              
+                        0   0.5   1   1.5   2   2.5   3   3.5   4              
+                                            t                                  
+                                                                               
+(%o34)           [/tmp/maxout18481.gnuplot, /tmp/maxplot.txt]
+(%i35) "After reaching steady current status (a cirtain time after), remove the EMF.
+The circuit now becomes the discharging phase:"
+(%i36) kill(I)
+(%i37) deq4:(-R)*I(t)+(-L)*'diff(I(t),t,1) = 0
+                              d
+(%o37)                  (- L (-- (I(t)))) - R I(t) = 0
+                              dt
+(%i38) atvalue(I(t),t = 0,I0)
+(%o38)                                I0
+(%i39) sol4:desolve(deq4,I(t))
+                                             R t
+                                           - ---
+                                              L
+(%o39)                         I(t) = I0 %e
+(%i40) define(I(t),ev(I(t),sol4))
+                                             R t
+                                           - ---
+                                              L
+(%o40)                        I(t) := I0 %e
+(%i41) plot2d(ev(I(t),I0:R:L:1),[t,0,4],[legend,"I(t)"],
+              [title,"Dis-charging phase of RL-circuit"],[ylabel,"current"],
+              [gnuplot_preamble,"set key center"],[gnuplot_term,dumb])
+                                                                               
+                            Dis-charging phase of RL-circuit                   
+                                                                               
+                      1 +---------------------------------------+              
+                    0.9 |-+  +    +    +    +    +    +    +  +-|              
+                        |**                                     |              
+                    0.8 |-+*                                  +-|              
+                    0.7 |-+*                                  +-|              
+                        |   *                                   |              
+                    0.6 |-+  **                               +-|              
+                    0.5 |-+   **                              +-|              
+         current        |      **     I(t) *******              |              
+                    0.4 |-+     ***                           +-|              
+                    0.3 |-+       ***                         +-|              
+                        |           ***                         |              
+                    0.2 |-+            ****                   +-|              
+                    0.1 |-+               ******              +-|              
+                        |    +    +    +    +  **+****+****+    |              
+                      0 +---------------------------------------+              
+                        0   0.5   1   1.5   2   2.5   3   3.5   4              
+                                            t                                  
+                                                                               
+(%o41)           [/tmp/maxout18481.gnuplot, /tmp/maxplot.txt]
+(%o42)            /home/rds/Documents/Maxima/NYCCT/Lec/DC.mac
