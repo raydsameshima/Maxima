@@ -10,3 +10,43 @@ ev(constvalue(%c), bfloat) `` m/s;
 get(%mu_0, description);
 get(%e_0, description);
 ev( constvalue(1/sqrt( %mu_0* %e_0 )), bfloat) `` m/s;
+
+"3"$
+"Using eq.(24.3), we obtain:"$
+E : %c * (5.00E-4 ` T)$
+constvalue(E), numer;
+% `` V/m;
+
+"11"$
+wl: (15.0 ` micrometer);
+f: %c/wl;
+constvalue(f), bfloat;
+% `` Hz;
+
+"19"$
+f: (50.0 ` Hz);
+wl: (%c/f);
+constvalue(wl), bfloat;
+% `` m;
+
+E: (13.0 ` kV)/(1 ` m) `` V/m;
+B: E/%c;
+constvalue(E), bfloat;
+% `` V/m;
+
+
+"31"$
+B: (4.00E-9 ` T);
+I: (%c*B^2)/(2*%mu_0);
+constvalue(I), bfloat;
+% `` W/m^2;
+
+"33"$
+"Under the assumed condition (with a hint), 25.0 kW energy are distributed on the half-sphare surface."$
+I : (50.0 ` kW)/2 /( %pi* (30 ` km)^2 );
+ev(I, bfloat) `` W/m^2;
+
+sol:solve(I= %c*%e_0*E0^2/2, E0);
+constvalue(rhs(sol[2])) `` V/m;
+%, bfloat;
+

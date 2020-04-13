@@ -115,10 +115,11 @@ I(t):= (12.0 / 4.00)*(1-exp(-t/0.00625))$
 I(12.5e-3), numer;
 
 plot2d( 
-  [I(t),[parametric, 12.5e-3, t, [t,-1,4]]],
+  [I(t),[parametric, 12.5e-3, s, [s,-1,4]]], 
+  [t,-1,4],
   [x,0, 0.04],
   [y,-1, 4],
-  [gnuplot_preamble, "set term wxt 1"]
+  [gnuplot_preamble, "set term wxt 1"] 
 );
 
 

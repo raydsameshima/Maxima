@@ -1,6 +1,9 @@
 /* AC.mac */
 
-"(section 23.11 Reactance, Inductive and Capacitive)
+"The materials covered in this note is:
+
+  23.11 Reactance, Inductive and Capacitive
+  23.12 RLC Series AC Circuits
 
 Fact: when a sinusoidal voltage, e.g.,
   V ~ cos(wt)
@@ -65,3 +68,5 @@ plot2d(
   [gnuplot_preamble, "set key center top"], 
   [gnuplot_term, dumb]
 );
+
+
