@@ -1,0 +1,43 @@
+/* ex25.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"2"$
+"theta1 + theta2 = 90[degree]"$
+
+
+"7"$
+n: %c/(2.012E8 ` m/s);
+constvalue(n), bfloat;
+"From table 25.1, we can conclude that it is made by Polystyrene"$
+
+"10"$
+sol: solve( 1*sin(t*%pi/180) = 1.333*sin(25*%pi/180), t); 
+ev( rhs(sol[1]), numer);
+
+"16"$
+"Since Snell's law is transitive: n1*sin(t1) = n2*sin(t2), n2*sin(t2) = n3*sin(t3) => n1*sin(t1) = n3*sin(t3)"$
+
+"22"$
+nf: 1.66;
+nc: 1.52;
+
+sol: solve( nf*sin(t*%pi/180) = nc, t);
+ev( rhs(sol[1]), numer);
+
+"26"$
+ct: atan(13.4/ 15.0);
+1/sin(ct), numer;
+"From table 15.1, it is the Benzene liquid."$
+
+"29"$
+kill(n)$
+nr: 1.331;
+nv: 1.342;
+sol: solve( 1*sin(%pi*75/180) = n*sin(t*%pi/180),t);
+ev( sol[1], n:nr, numer);
+ev( sol[1], n:nv, numer);
+
+
+
