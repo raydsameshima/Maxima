@@ -1,0 +1,131 @@
+/* fe.mac */
+
+kill(all);
+load(physical_constants)$ 
+
+"1 (a)"$
+(1 ` m/s)*sqrt( (1 ` kg)/(1 ` N/m))$
+% `` m;
+
+"1 (b)"$
+assume(k>0 and m>0)$
+deq: m*diff(x(t),t,2)+k*x(t) = 0;
+
+atvalue (x(t),t=0, 0); atvalue ('diff(x(t),t,1), t=0, v0);
+desolve (deq, x(t));
+define(xa(t),rhs(%))$
+diff(xa(t),t,2)*m + k*xa(t);
+
+atvalue (x(t),t=0, x0); atvalue ('diff(x(t),t,1), t=0, 0);
+desolve (deq, x(t));
+define(xb(t),rhs(%))$
+diff(xb(t),t,2)*m + k*xb(t);
+
+"1 (c)"$
+m/2*(diff(xa(t),t))^2 + k/2*(xa(t))^2$
+trigsimp(%);
+m/2*(diff(xb(t),t))^2 + k/2*(xb(t))^2$
+trigsimp(%);
+
+"1 (d)"$
+linsolve( sqrt(k/m)*T = 2*%pi, T);
+
+"1 (e), (f), (g), (h)"$
+assume(C>0 and L>0)$
+deq2: 0= Q(t)/C - (-L*diff(Q(t),t,2));
+
+atvalue (Q(t),t=0, 0); atvalue ('diff(Q(t),t,1), t=0, I0);
+desolve (deq2, Q(t));
+define(Qa(t),rhs(%))$
+
+atvalue (Q(t),t=0, Q0); atvalue ('diff(Q(t),t,1), t=0, 0);
+desolve (deq2, Q(t));
+define(Qb(t),rhs(%))$
+
+"1 (i)"$
+linsolve(T/sqrt(C*L) = 2*%pi, T);
+
+"1 (j)"$
+deq3: Q(t)/C-(-L)*diff(Q(t),t,2)+f*diff(Q(t),t,1);
+atvalue (Q(t),t=0, Q0); atvalue ('diff(Q(t),t,1), t=0, 0);
+desolve( ev( deq3, f:1/10, C:L:1), Q(t));
+define(Q(t), rhs(%));
+
+plot2d( ev(Q(t), Q0:1),
+  [t,0,30], 
+  [legend, "Q(t)"], 
+  [title, "SHO with friction"],
+  [ylabel, "Q(t)"],
+  [gnuplot_term, dumb] 
+);
+
+
+"2 (a)"$
+I1: (1 ` A)$
+I2: (4 ` A)$
+R1: (5 ` Ohm)$
+R2: (0.6 ` Ohm)$
+declare_units(r, Ohm)$ 
+declare_units(E, V)$ 
+E2: (18 ` V)$
+
+j1: I = I1 + I2;
+
+I: ev(I, linsolve(j1, I));
+
+/* outer circuit */
+l1: 0 = -R1*I1 + E2 - r*I $
+
+/* left half */
+l2: 0 = -R1*I1 - E + R2*I2 $
+
+/* right half */
+l3: 0 = -R2*I2 + E + E2 - r*I $
+
+rE: at(linsolve([l1,l2],[r,E])
+      , linsolve(j1, I))$
+r: rhs(rE[1]) `` Ohm;
+E: rhs(rE[2]) `` V;
+
+ev(l3, expand);
+% `` V;
+
+"2 (b)"$
+"The power in and out, and its check."$
+P: E*I2 + E2*I$
+P `` W;
+R1*I1^2 + R2*I2^2 + r*I^2$
+% `` W;
+
+
+"3 (a)"$
+declare_units(f123, cm);
+solve(1/f123=1/(9 ` cm) + 1/(7 ` cm), f123);
+f123: rhs(%[1]);
+f123, bfloat;
+
+"3(b) "$
+declare_units(f12, cm);
+solve(1/f12= 1/(7 ` cm) + 1/(5 ` cm), f12);
+f12: rhs(%[1]);
+declare_units(f3, cm);
+solve(1/f123 = 1/f12 + 1/f3, f3);
+f3: rhs(%[1]);
+f3, bfloat;
+
+"3 (c)"$
+declare_units(f1, cm);
+declare_units(f23, cm);
+solve(1/f23 = 1/(9 ` cm) + 1/(11 ` cm), f23);
+f23: rhs(%[1]);
+solve(1/f123 = 1/f1 + 1/f23, f1);
+f1: rhs(%[1]);
+f1, bfloat;
+
+declare_units(f2, cm);
+solve( 1/f12 = 1/f1 + 1/f2, f2);
+f2: rhs(%[1]);
+f2, bfloat;
+
+[f1,f2,f3];
+%, numer;
