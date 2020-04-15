@@ -46,17 +46,18 @@ define(Qb(t),rhs(%))$
 linsolve(T/sqrt(C*L) = 2*%pi, T);
 
 "1 (j)"$
-deq3: Q(t)/C-(-L)*diff(Q(t),t,2)+f*diff(Q(t),t,1);
+deq3: 0=Q(t)/C-(-L)*diff(Q(t),t,2)+r*diff(Q(t),t,1);
 atvalue (Q(t),t=0, Q0); atvalue ('diff(Q(t),t,1), t=0, 0);
-desolve( ev( deq3, f:1/10, C:L:1), Q(t));
+desolve( ev( deq3, r:1/10, C:L:1), Q(t));
 define(Q(t), rhs(%));
+define(I(t), diff(Q(t),t,1));
 
-plot2d( ev(Q(t), Q0:1),
-  [t,0,30], 
-  [legend, "Q(t)"], 
-  [title, "SHO with friction"],
-  [ylabel, "Q(t)"],
-  [gnuplot_term, dumb] 
+plot2d( ev([Q(t), I(t)], Q0:1),
+  [t,0,300], 
+  [legend, "Q(t)", "I(t)"], 
+  [title, "LC circuit with a small resistance"],
+  [ylabel, "Q(t)"]/*,
+  [gnuplot_term, dumb] */
 );
 
 
