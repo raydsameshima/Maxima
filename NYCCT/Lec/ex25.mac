@@ -40,4 +40,43 @@ ev( sol[1], n:nr, numer);
 ev( sol[1], n:nv, numer);
 
 
+/* 35 */
 
+"45"$
+solve(1/22 = 1/d + 1/33, d);
+ev(d,%)/33;
+
+"49"$
+"Before we attack on the question 49, let us consider the example 25.7 again:"$
+f: (10.0 ` cm);
+d_o: (7.50 ` cm);
+declare_units(d_i, cm)$
+sol: solve( 1/f = 1/d_i + 1/d_o, d_i);
+
+"The nagative d implies the system has no real image, i.e., it is a magnifying glass."$
+d_i: ev(d_i, sol);
+
+"The magnification is given by:"$
+abs( d_i/d_o );
+
+"let d_o be 8.50 cm:"$
+d_o: (8.50 ` cm)$
+kill(d_i)$
+declare_units(d_i, cm)$
+sol: solve( 1/f = 1/d_i + 1/d_o, d_i)$
+d_i: ev(d_i, sol)$
+abs( d_i/d_o );
+
+d_o: (9.50 ` cm)$
+kill(d_i)$
+declare_units(d_i, cm)$
+sol: solve( 1/f = 1/d_i + 1/d_o, d_i)$
+d_i: ev(d_i, sol)$
+abs( d_i/d_o );
+
+
+"52"$
+kill(f)$
+sol:solve(1/f = 1/dO + 1/dI, dI);
+(-1)* ev(dI, sol)/dO;
+ev(%, f: 10.0, dO:7.50);

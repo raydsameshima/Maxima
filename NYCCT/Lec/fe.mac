@@ -4,21 +4,34 @@ kill(all);
 load(physical_constants)$ 
 
 "1 (a)"$
+"The spring const. k has:"$
+1 ` N/m;
+fundamental_units(%);
+
 (1 ` m/s)*sqrt( (1 ` kg)/(1 ` N/m))$
 % `` m;
 
 "1 (b)"$
+"Let us first solve DE:"$
 assume(k>0 and m>0)$
 deq: m*diff(x(t),t,2)+k*x(t) = 0;
 
-atvalue (x(t),t=0, 0); atvalue ('diff(x(t),t,1), t=0, v0);
+"Then we obtain xa(t):"$
+atvalue (x(t),t=0, 0)$ 
+atvalue ('diff(x(t),t,1), t=0, v0)$
 desolve (deq, x(t));
 define(xa(t),rhs(%))$
+"This shows eq.(6)."$
+
 diff(xa(t),t,2)*m + k*xa(t);
 
-atvalue (x(t),t=0, x0); atvalue ('diff(x(t),t,1), t=0, 0);
+"Similarly, we obtain xb(t):"$
+atvalue (x(t),t=0, x0)$ 
+atvalue ('diff(x(t),t,1), t=0, 0)$
 desolve (deq, x(t));
 define(xb(t),rhs(%))$
+"This shows eq.(8)."$
+
 diff(xb(t),t,2)*m + k*xb(t);
 
 "1 (c)"$
@@ -52,9 +65,9 @@ desolve( ev( deq3, r:1/10, C:L:1), Q(t));
 define(Q(t), rhs(%));
 define(I(t), diff(Q(t),t,1));
 
-plot2d( ev([Q(t), I(t)], Q0:1),
-  [t,0,300], 
-  [legend, "Q(t)", "I(t)"], 
+plot2d( ev([Q(t), I(t), exp(-t/20)], Q0:1),
+  [t,0,100], 
+  [legend, "Q(t)", "I(t)", "exp(-t/20)"], 
   [title, "LC circuit with a small resistance"],
   [ylabel, "Q(t)"]/*,
   [gnuplot_term, dumb] */
@@ -100,27 +113,27 @@ R1*I1^2 + R2*I2^2 + r*I^2$
 
 
 "3 (a)"$
-declare_units(f123, cm);
+declare_units(f123, cm)$
 solve(1/f123=1/(9 ` cm) + 1/(7 ` cm), f123);
-f123: rhs(%[1]);
+f123: rhs(%[1])$
 f123, bfloat;
 
 "3(b) "$
-declare_units(f12, cm);
+declare_units(f12, cm)$
 solve(1/f12= 1/(7 ` cm) + 1/(5 ` cm), f12);
-f12: rhs(%[1]);
-declare_units(f3, cm);
+f12: rhs(%[1])$
+declare_units(f3, cm)$
 solve(1/f123 = 1/f12 + 1/f3, f3);
-f3: rhs(%[1]);
+f3: rhs(%[1])$
 f3, bfloat;
 
 "3 (c)"$
-declare_units(f1, cm);
-declare_units(f23, cm);
+declare_units(f1, cm)$
+declare_units(f23, cm)$
 solve(1/f23 = 1/(9 ` cm) + 1/(11 ` cm), f23);
-f23: rhs(%[1]);
+f23: rhs(%[1])$
 solve(1/f123 = 1/f1 + 1/f23, f1);
-f1: rhs(%[1]);
+f1: rhs(%[1])$
 f1, bfloat;
 
 declare_units(f2, cm);
@@ -130,3 +143,62 @@ f2, bfloat;
 
 [f1,f2,f3];
 %, numer;
+
+"4 Joule heating"$
+kill(W,Q)$
+W: ev(R*I^2*t, R:3, I:2, t:660);
+Q: ev( (mw*cw + mc*cc + mh*ch)*(Tf-Ti)
+     , mh:0.015, mc:0.050, mw:0.070, cw:4186, cc:ch:910, Tf:45.2, Ti:24.4);
+"So, the dissipated energy is given by Q-W:"$
+W-Q;
+ev( (mw*cw + mc*cc + mh*ch)/I^2 * the_slope
+  , mh:0.015, mc:0.050, mw:0.070, cw:4186, cc:ch:910, I:2, the_slope:0.0321);
+
+"5"$
+load(solve_rec)$
+
+"Let us first solve the system of ladders. 
+This system is determined, naturally, the recurrence relation:"$
+kill(R,r);
+req: 1/r[n+1] = 1/r[n] + 1/(3*R);
+rsol: solve_rec(req, r[n], r[0] = R);
+define(r[n], ev(r[n], rsol))$
+
+"5 (a)"$
+makelist(r[n], n,0,4);
+makelist(1/r[n+1]-1/r[n], n,0,4);
+
+"5 (b)"$
+r[2020], expand;
+1/( ev(sum(1/(3*R),j,0,2019), simpsum:true) + 1/R), radcan;
+
+"5 (c)"$
+limit(r[n], n, inf);
+
+"5 (d)"$
+kill(c,C)$
+ceq: c[n+1] = c[n] + 1/(3*C);
+csol: solve_rec(ceq, c[n], c[0] = C);
+define(c[n], ev(c[n], csol))$
+limit(c[n], n, inf);
+
+
+"6 Relativistic Velocity Addition"$
+kill(u,v,u_)$
+ev(1 - u, u:(v+u_)/(1+v*u_), expand), factor;
+
+kill(v)$
+req: v[n+1] = (v[n] + 1/10)/(1 + v[n]/10);
+solve_rec(req, v[n], v[0]=0);
+define(v[n], ev(v[n],%))$
+makelist(v[n],n,0,5);
+%, numer;
+[v[14], v[15]], numer;
+
+[v[49], v[50]], numer;
+
+req: v2[n+1] = (v2[n] - 1/10)/(1 - v2[n]/10);
+solve_rec(req, v2[n], v2[0]=1/2);
+define(v2[n], ev(v2[n],%))$
+makelist(v2[n],n,0,5);
+[v2[4], v2[5], v2[6]], numer;
