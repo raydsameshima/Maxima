@@ -1,0 +1,44 @@
+/* ex27.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"8"$
+constructive_eq: d*sin(t) = m*l;
+
+linsolve(constructive_eq, d);
+%, l:(610 ` nm), m:1, t:30/180*%pi;
+% `` micrometer, numer;
+
+"11"$
+solve(constructive_eq, l);
+%, d:(2.00 ` micrometer), m:3, t:60/180*%pi$
+%, numer;
+
+"18"$
+plot2d( [t, sin(t), tan(t)], [t,0,1]);
+"Since y is given by x*tan(theta) ~ x*sin(theta) ~ x*theta when theta is sufficiently small, 
+  d* dTheta = (m+1 - m)*lambda = lambda
+So we obtain
+  dY = x*dTheta = x*lambda/d."$
+
+"19"$
+ev( x*l/d, x:(3.00 ` m), l: (0.633 ` micrometer), d: (0.0800 ` mm) );
+% `` mm;
+
+"21"$
+sol: solve(constructive_eq, t);
+ev(ev(t, sol), d:((1 ` cm)/2000) `` m, m:1, l:(0.520 ` micrometer) `` m );
+ev(%*180/%pi, numer);
+
+"43"$
+"Perhaps there is a typo in this problem, since the sine-value is greater than 1."$
+"When we are to take d=10.0 micrometer, then we may use the same equation as the destructive condition:"$
+ev(ev(t, sol), l:(0.550 ` micrometer), d:(10.00 ` micrometer), m:2 );
+ev(%*180/%pi, numer);
+
+"49"$
+ev(ev(t, sol), l:(0.589 ` micrometer), d:(7.50 ` micrometer), m:2 );
+ev(%*180/%pi, numer);
+
+ev( 1/(l*m/d), l:0.589, m:1, d:7.50);

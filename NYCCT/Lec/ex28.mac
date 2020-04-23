@@ -1,0 +1,20 @@
+/* ex28.mac */
+
+kill(all)$
+load(physical_constants)$ 
+
+"6"$
+solve(1/sqrt(1-v^2)=2065/900, v);
+v: ev(abs(rhs(%[1])), numer);
+constvalue(%c*v) `` m/s;
+
+"13"$
+kill(v)$
+solve(1/sqrt(1-v^2)=6.0/5.5, v);
+v: ev(abs(rhs(%[1])), numer);
+constvalue(%c*v) `` m/s;
+
+"20"$
+ev( (v+u)/(1+v*u), u:3/4, v:1/2 ), numer;
+ev( (v+u)/(1+v*u), u:3/4, v:-1/2 ), numer;
+
