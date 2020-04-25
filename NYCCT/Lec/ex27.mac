@@ -8,12 +8,13 @@ constructive_eq: d*sin(t) = m*l;
 
 linsolve(constructive_eq, d);
 %, l:(610 ` nm), m:1, t:30/180*%pi;
-% `` micrometer, numer;
+rhs(%[1]) `` micrometer, numer;
 
 "11"$
 solve(constructive_eq, l);
 %, d:(2.00 ` micrometer), m:3, t:60/180*%pi$
 %, numer;
+rhs(%[1]) `` nm, numer;
 
 "18"$
 plot2d( [t, sin(t), tan(t)], [t,0,1]);
