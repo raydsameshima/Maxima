@@ -1,0 +1,133 @@
+/* ch01.mac 
+
+J.A. Bergou and M. Hillery 
+Introduction to the Theory of Quantum Information Processing
+
+*/
+
+
+
+load("qinf.mac");
+"1.1 The Qubit
+
+Brock spare: (t, p), where 0<= t <= %pi and 0<= p <= 2*%pi.
+"$
+
+state: cos(t/2)*ketz(0) + exp(%i*p)*sin(t/2)*ketz(1);
+
+"Such state is represented by a point on the unit sphere:"$
+ctranspose(state) . state;
+trigsimp(%);
+
+"The state of n qubits is spanned by the tensor product basis, namely within qinf.mac we can use ket_n, ketx, etc:"$
+ketz(0,0,1);
+ket_n(3,1,1,1);
+
+"1.2 Quantum Gates
+
+A quantum gate is a unitary op.
+
+An illustrating counter-example is (classical) AND gate, which takes two bits and returns one.
+Indeed, (00), (01), or (10) returns 0 and clearly irreversible, hence AND gate can not be 
+represented as a quantum gate (can not be represented as a unitary operator).
+
+However, NOT gate can be:"$
+
+state_: a*ketz(0) + b*ketz(1);
+X: pauli[1];
+
+X . state_;
+
+"An important instance of quantum gates is Hadamard gate:"$
+H: hadamard(1,1);
+
+H.ketz(0);
+H.ketz(1);
+
+"There is no classical analogue of this gate; since H takes the computational basis and 
+returns thier superposition.
+Note that:"$
+
+H.H;
+
+"Third important gate is the Controlled NOT (C-NOT) gate:"$
+
+cn:cnot(2,2,1);
+
+cn . ketz(0,0);
+cn . ketz(0,1);
+cn . ketz(1,0);
+cn . ketz(1,1);
+
+"The qinf's implementation takes three inputs: the number of qubits (2), the target index 
+(the lower one) (2) and the control qubit (1)."$
+
+"1.4 The Deutsch Algorithm"$
+"Let us first define the initial state as in eq.(1.10):"$
+state0 : ketz(0) otimes ( ketz(0) - ketz(1) )/sqrt(2);
+
+H1: (H otimes pauli[0]);
+
+"The key ingredient of this process is how to implement the f-CNOT gate.
+Here is my attemp:"$
+/* The action of f-CNOT gate: */
+f2argument(f,xy) := block(
+  [x,y],
+
+  x:xy[1],
+  y:xy[2],
+  return([x, mod(y+apply(f,[x]),2)])
+);
+
+from0to3 : [[0,0], [0,1], [1,0], [1,1]];
+Uf_(f) := makelist(makelist( apply(braz,i) . apply(ketz, lambda([s],f2argument(f,s))(j)),j,from0to3),i,from0to3);
+Uf(f) := apply(matrix, Uf_(f));
+
+"This way, we can play with f=id case:"$
+state1: H1 . state0;
+state2: Uf(lambda([x],x)) . state1;
+state3: H1 . state2;
+
+"Let me call the outcome deutsch_state(f), where f can be the following four functions:"$
+deutsch_state(f) := H1 . Uf(f) . H1 . state0;
+
+II: lambda([x],x); /* the identity */
+SW: lambda([x], mod(x+1,2)); /* the swap, i.e., not */
+I0: lambda([x],0);
+I1: lambda([x],1);
+"namely, the identity, swap (not?), and two constants."$
+
+"The balanced cases:"$
+deutsch_state(II);
+deutsch_state(SW);
+
+"Two constant cases:"$
+deutsch_state(I0);
+deutsch_state(I1);
+
+"Examining the outcomes, we can see whether the function is balanced or being just a constant,
+by looking at the first qubit, namely the first two slots on these vectors.
+The reason why it works is that what goes in the f-CNOT gate is a
+  superposition
+of two input values |0> and |1>, and the function is evaluated on BOTH of them at once,
+in the second state.
+"$
+
+"If we use a different initial state, we cannot obtain such a gain of superposition:"$
+
+deutsch_state_(f) := H1 . Uf(f) . H1 . (ketz(0,0) + ketz(0,1))/sqrt(2);
+deutsch_state_(II);
+deutsch_state_(SW);
+deutsch_state_(I0);
+deutsch_state_(I1);
+
+"1.5 Problems"$
+"1
+
+As we have examined, Hadamard gate and C-NOT gate are:"$
+H;
+cn;
+is(H = ctranspose(H));
+is(cn = ctranspose(cn));
+
+
