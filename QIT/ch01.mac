@@ -123,11 +123,76 @@ deutsch_state_(I1);
 
 "1.5 Problems"$
 "1
+Find the matrix rep. of Hadamard gate (in the computational basis).
+Find the C-NOT gate in two-qubits computational basis.
+Check that they are unitary.
 
 As we have examined, Hadamard gate and C-NOT gate are:"$
 H;
 cn;
-is(H = ctranspose(H));
-is(cn = ctranspose(cn));
 
+"Their unitarity can be proved directly:"$
+H . ctranspose(H);
+ctranspose(H) . H;
+cn . ctranspose(cn);
+ctranspose(cn) . cn;
+
+
+"2
+
+"$
+ket_plus : (ketz(0) + ketz(1))/sqrt(2);
+ket_minus: (ketz(0) - ketz(1))/sqrt(2);
+
+cn . ((a*ketz(0) + b*ketz(1)) otimes ket_plus );
+cn . ((a*ketz(0) + b*ketz(1)) otimes ket_minus);
+
+cn . ((a*ketz(0) + b*ketz(1)) otimes (cos(t)*ket_plus +%i*sin(t)*ket_minus));
+state4: factor( exponentialize(%) );
+
+state5: 
+  (a*exp( %i*t)*ketz(0) + b*exp(-%i*t)*ketz(1)) otimes ketz(0)/sqrt(2)
+ +(a*exp(-%i*t)*ketz(0) + b*exp( %i*t)*ketz(1)) otimes ketz(1)/sqrt(2);
+is(state4 = state5);
+
+"So the probabilities to find the target qubit (second slot) are both 1/2."$
+
+state6: (a*exp( %i*t)*ketz(0) + b*exp(-%i*t)*ketz(1)); 
+state7: matrixexp(%i*t*pauli[3]) . (a*ketz(0) + b*ketz(1));
+is(state6 = state7);
+
+"3
+We had four (boolean) functions.
+The followings are the truth tables and the corresponding f-CNOT gate in the computational basis.
+"$
+map(II, [0,1]);
+Uf(II);
+
+map(SW, [0,1]);
+Uf(SW);
+
+map(I0, [0,1]);
+Uf(I0);
+
+map(I1, [0,1]);
+Uf(I1);
+
+"4"$
+/* cn: cnot(2,2,1) */
+cn_: cnot(2,1,2);
+
+initial_state: ((a*ketz(0) + b*ketz(1)) otimes (c*ketz(0) + d*ketz(1)));
+final_state: cn . cn_ . cn . initial_state;
+
+is( initial_state = sublis([a=c, b=d, c=a, d=b], final_state));
+
+"qinf has a build in swap function, which is impremented as three cnots:"$
+swap(2,1,2) . initial_state;
+final_state;
+is(%th(1) = %th(2));
+
+"qinf has a build in cphase function."$
+cphase(2,1,2);
+
+is(hadamard(2,2) . cnot(2,2,1) . hadamard(2,2) = cphase(2,1,2));
 
