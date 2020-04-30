@@ -56,11 +56,12 @@ rho1: ident(2)/2;
 rho2: (ketz(0).braz(0) + ketz(1).braz(1))/2;
 rho3: ( p_state . ctranspose(p_state) + m_state . ctranspose(m_state) )/2;
 
-u_p: normalize_vector( (sqrt(2) + 1)*ketz(0) + ketz(1) )
-u_m: normalize_vector( (sqrt(2) - 1)*ketz(0) + ketz(1) )
+"Another example:"$
+u_p: normalize_vector( (sqrt(2) + 1)*ketz(0) + ketz(1) );
+u_m: normalize_vector( (sqrt(2) - 1)*ketz(0) - ketz(1) );
 
-rho4: (ketz(0) . braz(0) + p_state . ctranspose(p_state))/2;
-rho5: (1/2 + sqrt(2)/4)*(u_p . ctranspose(u_p)) + (1/2 - sqrt(2)/4)*(u_m . ctranspose(u_m));
+rho4: ( ketz(0) . braz(0) + p_state . ctranspose(p_state) )/2;
+rho5: radcan( (1/2 + sqrt(2)/4)*(u_p . ctranspose(u_p)) + (1/2 - sqrt(2)/4)*(u_m . ctranspose(u_m)));
 
 
 
