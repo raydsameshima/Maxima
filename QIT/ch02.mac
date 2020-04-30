@@ -1,0 +1,66 @@
+/* ch01.mac
+   The Density Matrix
+*/
+
+load("qinf.mac")$
+"2.1 Ensembles and Subsystems"$
+
+"Consider an example, eq.(2.6):"$
+rho: (ketz(0) . braz(0) + ketz(1) . braz(1))/2;
+
+"Suppose we want to find the expectation value of pauli[3] in this ensemble:"$
+rho . pauli[3];
+mat_trace(%); /* 0 */
+
+"Next, we have a two-qubits state:"$
+state: normalize_vector(ketz(0,1) + ketz(1,0));
+s: state . ctranspose(state);
+
+"The reduced density matrix for the subsystem (of the first slot) as in eq.(2.9):"$
+rho_A: ptracen(2,s,1); 
+
+"We obtain the following (eq.(2.10)):"$
+mat_trace( (pauli[3] otimes ident(2)) . s );
+mat_trace( pauli[3] . rho_A);
+
+"2.2 Properties"$
+
+"2.3 Pure States and Mixed States of a Qubit
+
+If we extend Bloch sphere to include its interior, we can express mixed states of qubits as well.
+"$
+
+"Eq.(2.18) and (2.19) of a general expression for 2 by 2 matrix:"$
+kill(rho)$
+rho(n1,n2,n3) := (pauli[0] + sum(concat(n,i)*pauli[i],i,1,3))/2;
+rho(nx,ny,nz);
+radcan(determinant(%));
+"The positive det. condition for the density matrix rho implies that 
+the three-dimensional vector [nx,ny,nz] lies in the unit 3-sphere."$
+
+"The 2 by 2 trace does not depend on the vector [nx,ny,nz]:"$
+mat_trace( rho(nx,ny,nz) ), expand;
+
+"Therefore, if |n|=1, then we obtain det = 0; one of two (non-negative) eigenvalue is 1 and the other is 0.
+Taking the eigenvector u, and the density matrix is given by the dyadic of u, hence the state is a pure state.
+"$
+
+"Given a qubit density matrix, which of course is 2 by 2, we can project the components:"$
+makelist( ev(mat_trace(rho(nx,ny,nz) . pauli[i]), expand), i,1,3);
+
+"In general, a density matrix can be written as several ways:"$
+p_state: normalize_vector(ketz(0) + ketz(1));
+m_state: normalize_vector(ketz(0) - ketz(1));
+
+rho1: ident(2)/2;
+rho2: (ketz(0).braz(0) + ketz(1).braz(1))/2;
+rho3: ( p_state . ctranspose(p_state) + m_state . ctranspose(m_state) )/2;
+
+u_p: normalize_vector( (sqrt(2) + 1)*ketz(0) + ketz(1) )
+u_m: normalize_vector( (sqrt(2) - 1)*ketz(0) + ketz(1) )
+
+rho4: (ketz(0) . braz(0) + p_state . ctranspose(p_state))/2;
+rho5: (1/2 + sqrt(2)/4)*(u_p . ctranspose(u_p)) + (1/2 - sqrt(2)/4)*(u_m . ctranspose(u_m));
+
+
+
