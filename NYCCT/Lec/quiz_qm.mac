@@ -1,0 +1,21 @@
+/* quize on qm */
+load(physical_constants);
+declare_unit_conversion(eV = 1.602176634*10^(-19)*J);
+
+declare_units(KE,eV);
+declare_units(v,m/s);
+
+sol: solve((%m_e*v^2)/2 = KE,v);
+
+va: ev(rhs(sol[2]), KE: (60 ` eV));
+
+ev(ev( constvalue(va) `` m/s, numer), bfloat);
+( 1/sqrt( 1- (%/%c)^2) );
+constvalue(%), numer;
+
+%h/(%m_e*va)$
+constvalue(%) `` m, numer;
+% `` nm;
+
+ev(%*1/(sin(1*%pi/180)) `` m, numer);
+% `` nm;

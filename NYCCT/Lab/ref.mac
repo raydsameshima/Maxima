@@ -1,0 +1,49 @@
+/* reflection and refraction */
+load("nycct_prelude.mac");
+ys:makelist(10*i,i,1,8);
+
+"Let me examine the water (n=1.33):"$
+xs1:[7,14,21,27.5,34,39,44,46];
+
+deg2rad(t) := t*%pi/180$
+sind(t) := sin(deg2rad(t))$
+
+xys(xs):= merge_xs_and_ys(map(sind,xs), map(sind,ys))$
+
+xys1: (xys(xs1))$
+plot_data(xys1);
+
+ev( best_fit(ev(xys1,numer)), numer);
+
+plot_data_and_fit(ev(xys1,numer));
+
+"Let me examine the water (n=1.50):"$
+xs2: [6, 12.5, 19, 24, 30, 34, 37.5, 40];
+xys2: (xys(xs2))$
+plot_data(xys2);
+
+ev( best_fit(ev(xys2,numer)), numer);
+
+plot_data_and_fit(ev(xys2,numer));
+
+"Let me examine the tery A(n=???):"$
+xs3: [4, 7.5, 11, 15, 17.5, 20, 22, 24];
+xys1: (xys(xs3))$
+
+plot_data_and_fit(ev(xys1,numer));
+
+ev( best_fit(ev(xys1,numer)), numer);
+1/sind(25), numer;
+1/sind(26), numer;
+
+
+
+"Let me examine the tery B(n=???):"$
+xs3: [6, 14, 20, 26, 32, 37, 41, 44];
+xys1: (xys(xs3))$
+
+plot_data_and_fit(ev(xys1,numer));
+
+ev( best_fit(ev(xys1,numer)), numer);
+1/sind(46), numer;
+

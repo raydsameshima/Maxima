@@ -1,0 +1,17 @@
+/* relativity_quiz.mac */
+load(solve_rec);
+req:u[n+1] = (u[n]+1/2)/(1+(u[n]*1)/2);
+sol:solve_rec(req,u[n],u[0] = 0);
+define(u(n),rhs(sol));
+makelist(u(n),n,0,4);
+ev(makelist(u(n),n,0,4),numer);
+makelist(1/sqrt(1-u(n)^2),n,0,4);
+ev(makelist(1/sqrt(1-u(n)^2),n,0,4),numer);
+
+ev(makelist(u(n),n,0,10),numer);
+
+ev(is(u(n) > 0.998),n:7);
+ev(is(u(n) > 0.998),n:6);
+
+ev(is(u(n) > 0.9999),n:10);
+ev(is(u(n) > 0.9999),n:9);
