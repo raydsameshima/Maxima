@@ -25,7 +25,7 @@ kill(all)$
  The entropy is continuous and differentiable and is a monotonically 
  increasing function of the energy."$
 
-"Postulate 4. (Nernst postulate or third law os TD)
+"Postulate 4. (Nernst postulate or third law of TD)
  The entropy of any system vanishes in the state for which
    diff(U,S) = 0
  that is, at the zero of temperature."$
