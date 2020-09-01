@@ -1,0 +1,92 @@
+1)
+
+Not a few students use the following discussion:
+  [L/T] * [T^(-1)] =? [L]
+but, [T^(-1)] stands for [1/T] and the above right hand side becomes
+  [L/T^2]
+which, of course, is not [L].
+You can consult any material, but you have to check the logical flow.
+
+The coefficient (a pre factor) of x_a is not sqrt(k/m), but sqrt(m/k).
+
+All questions in (1) must be on both cases.
+Many students do not consider one, and lose pts.
+
+Total mechanical energy must have the same unit of KE and PE.
+Therefore
+  m*(v_0)^2/2
+  k*(x_0)^2/2
+are fine.
+(m*(x_0)^2 or k*(v_0)^2 have wrong unit for being energy, for example.)
+You must check the unit after you obtain the result, in particular, the coefficients for cosine and sine must be the same.
+
+The minus sign in the self-inductance is important.
+You must remember Lenz's law, see eq.(23.36) and the following discussion:
+  https://openstax.org/books/college-physics/pages/23-9-inductance
+If you omit the very negative sign, the corresponding DE becomes different one, hence the solutions are not, too.
+They are, indeed, divergent/decaying solutions, and never osculate.
+
+Once you see the pattern:
+  m ~ L
+  k ~ 1/C
+what is the corresponding period for LC circuit, if the period of the mechanical oscillator is
+  2*pi*sqrt(m/k)
+See
+  https://openstax.org/books/college-physics/pages/16-3-simple-harmonic-motion-a-special-periodic-motion
+  https://openstax.org/books/college-physics/pages/23-12-rlc-series-ac-circuits
+
+3)
+
+Depending upon which convention you use, namely
+  1/di +(-)1/do
+for the lens equation, you must follow the same notion.
+(This difference comes from whether coordinates(displacements) or distances(absolute values).)
+Do not mix these two conventions:
+  1/di - 1/do
+    and
+  do=+9[cm], di=7[cm]
+(If you write negative nine centimeter, it is completely fine.)
+
+If you are to write
+  1/fa = 1/9 + 1/7 = 16/63 =? 3.9375[cm]
+this is clearly wrong, isn't it?
+You must show what you did (want to do), how you did, and the outcome(s), clearly and step-by-step.
+(From the above example, once you write
+  1/fa = 16/63
+then flipping num/den, write your final answer as:
+  fa = 63/16 = ...)
+
+You may use the previous results to proceed, but you need to take more digits than the final result(s), otherwise, you loose significant figures.
+Another option is to use rational numbers.
+
+4)
+
+You can read our lab manual (of our first source) to find the formula, the work done by current in eq.(3), page 59.
+You can also convince yourself by counting the unit of your expression, if you write I*R^2*t.
+Does this expression have [J] as its unit?
+Check it (or simply open the page 59).
+
+5)
+
+Why did you leave
+  9/15 * R
+without canceling the common factor 3 to write it as
+  3/5 * R ?
+
+Without knowing R3, you can not estimate
+  1/R3 - 1/R2.
+
+
+6)
+
+If you need such a high accurate computation, you have to use rational numbers, otherwise you must be extremely careful on the significant figures.
+See
+  https://en.wikipedia.org/wiki/Loss_of_significance
+For example, the 14th stage of the rocket has
+  178436520564140/201313313019101
+of speed of light, check your calculation.
+
+The last two questions use the stages OPPOSITELY, i.e., the system is de-accelerating.
+Within 5-percent of speed of light means 
+  -0.05*c<x<0.05*c
+

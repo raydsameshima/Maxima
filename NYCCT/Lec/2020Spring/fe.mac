@@ -57,6 +57,7 @@ define(Qb(t),rhs(%))$
 
 "1 (i)"$
 linsolve(T/sqrt(C*L) = 2*%pi, T);
+sqrt( (1 ` F)*(1 ` H) ) `` s;
 
 "1 (j)"$
 deq3: 0=Q(t)/C-(-L)*diff(Q(t),t,2)+r*diff(Q(t),t,1);
@@ -122,6 +123,8 @@ f123, bfloat;
 declare_units(f12, cm)$
 solve(1/f12= 1/(7 ` cm) + 1/(5 ` cm), f12);
 f12: rhs(%[1])$
+f12, bfloat;
+
 declare_units(f3, cm)$
 solve(1/f123 = 1/f12 + 1/f3, f3);
 f3: rhs(%[1])$
@@ -132,6 +135,8 @@ declare_units(f1, cm)$
 declare_units(f23, cm)$
 solve(1/f23 = 1/(9 ` cm) + 1/(11 ` cm), f23);
 f23: rhs(%[1])$
+f23, bfloat;
+
 solve(1/f123 = 1/f1 + 1/f23, f1);
 f1: rhs(%[1])$
 f1, bfloat;
@@ -151,8 +156,11 @@ Q: ev( (mw*cw + mc*cc + mh*ch)*(Tf-Ti)
      , mh:0.015, mc:0.050, mw:0.070, cw:4186, cc:ch:910, Tf:45.2, Ti:24.4);
 "So, the dissipated energy is given by Q-W:"$
 W-Q;
-ev( (mw*cw + mc*cc + mh*ch)/I^2 * the_slope
-  , mh:0.015, mc:0.050, mw:0.070, cw:4186, cc:ch:910, I:2, the_slope:0.0321);
+Re: ev( (mw*cw + mc*cc + mh*ch)/I^2 * the_slope
+      , mh:0.015, mc:0.050, mw:0.070, cw:4186, cc:ch:910, I:2, the_slope:0.0321);
+
+load("nycct_prelude.mac")$
+percent_err(Re, 3);
 
 "5"$
 load(solve_rec)$
@@ -161,8 +169,8 @@ load(solve_rec)$
 This system is determined, naturally, the recurrence relation:"$
 kill(R,r);
 req: 1/r[n+1] = 1/r[n] + 1/(3*R);
-rsol: solve_rec(req, r[n], r[0] = R);
-define(r[n], ev(r[n], rsol))$
+rsol: ev(solve_rec(req, r[n], r[0] = R), ratsimp);
+define(r[n], ev(r[n], rsol, radcan))$
 
 "5 (a)"$
 makelist(r[n], n,0,4);
@@ -177,8 +185,8 @@ limit(r[n], n, inf);
 
 "5 (d)"$
 kill(c,C)$
-ceq: c[n+1] = c[n] + 1/(3*C);
-csol: solve_rec(ceq, c[n], c[0] = C);
+ceq: c[n+1] = c[n] + C/3;
+csol: ev(solve_rec(ceq, c[n], c[0] = C), ratsimp);
 define(c[n], ev(c[n], csol))$
 limit(c[n], n, inf);
 
@@ -194,11 +202,20 @@ define(v[n], ev(v[n],%))$
 makelist(v[n],n,0,5);
 %, numer;
 [v[14], v[15]], numer;
+is(v[14]>0.90);
+is(v[15]>0.90);
+
+[v[37], v[38]], numer;
+is(v[37]>0.999);
+is(v[38]>0.999);
 
 [v[49], v[50]], numer;
+is(v[49]>0.9999);
+is(v[50]>0.9999);
 
 req: v2[n+1] = (v2[n] - 1/10)/(1 - v2[n]/10);
 solve_rec(req, v2[n], v2[0]=1/2);
 define(v2[n], ev(v2[n],%))$
 makelist(v2[n],n,0,5);
+%, numer;
 [v2[4], v2[5], v2[6]], numer;

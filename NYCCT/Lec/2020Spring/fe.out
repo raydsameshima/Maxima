@@ -1,0 +1,361 @@
+maxima_userdir is  /home/rds/.maxima 
+(%i1) batch("fe.mac")
+
+read and interpret /home/rds/Documents/Maxima/NYCCT/Lec/fe.mac
+(%i2) kill(all)
+(%o0)                                done
+(%i1) load(physical_constants)
+(%i2) "1 (a)"
+(%i3) "The spring const. k has:"
+(%i4) 1 ` N/m
+                                         N
+(%o4)                                1 ` -
+                                         m
+(%i5) fundamental_units(%)
+                                      kg
+(%o5)                                 --
+                                       2
+                                      s
+(%i6) (1 ` m/s)*sqrt((1 ` kg)/(1 ` N/m))
+(%i7) % `` m
+(%o7)                                1 ` m
+(%i8) "1 (b)"
+(%i9) "Let us first solve DE:"
+(%i10) assume(k > 0 and m > 0)
+(%i11) deq:m*diff(x(t),t,2)+k*x(t) = 0
+                              2
+                             d
+(%o11)                    m (--- (x(t))) + k x(t) = 0
+                               2
+                             dt
+(%i12) "Then we obtain xa(t):"
+(%i13) atvalue(x(t),t = 0,0)
+(%i14) atvalue('diff(x(t),t,1),t = 0,v0)
+(%i15) desolve(deq,x(t))
+                                          sqrt(k) t
+                              sqrt(m) sin(---------) v0
+                                           sqrt(m)
+(%o15)                 x(t) = -------------------------
+                                       sqrt(k)
+(%i16) define(xa(t),rhs(%))
+(%i17) "This shows eq.(6)."
+(%i18) diff(xa(t),t,2)*m+k*xa(t)
+(%o18)                                 0
+(%i19) "Similarly, we obtain xb(t):"
+(%i20) atvalue(x(t),t = 0,x0)
+(%i21) atvalue('diff(x(t),t,1),t = 0,0)
+(%i22) desolve(deq,x(t))
+                                      sqrt(k) t
+(%o22)                     x(t) = cos(---------) x0
+                                       sqrt(m)
+(%i23) define(xb(t),rhs(%))
+(%i24) "This shows eq.(8)."
+(%i25) diff(xb(t),t,2)*m+k*xb(t)
+(%o25)                                 0
+(%i26) "1 (c)"
+(%i27) (m/2)*diff(xa(t),t)^2+(k/2)*xa(t)^2
+(%i28) trigsimp(%)
+                                         2
+                                     m v0
+(%o28)                               -----
+                                       2
+(%i29) (m/2)*diff(xb(t),t)^2+(k/2)*xb(t)^2
+(%i30) trigsimp(%)
+                                         2
+                                     k x0
+(%o30)                               -----
+                                       2
+(%i31) "1 (d)"
+(%i32) linsolve(sqrt(k/m)*T = 2*%pi,T)
+                                   2 %pi sqrt(m)
+(%o32)                        [T = -------------]
+                                      sqrt(k)
+(%i33) "1 (e), (f), (g), (h)"
+(%i34) assume(C > 0 and L > 0)
+(%i35) deq2:0 = Q(t)/C-(-L)*diff(Q(t),t,2)
+                                   2
+                                  d             Q(t)
+(%o35)                     0 = L (--- (Q(t))) + ----
+                                    2            C
+                                  dt
+(%i36) atvalue(Q(t),t = 0,0)
+(%o36)                                 0
+(%i37) atvalue('diff(Q(t),t,1),t = 0,I0)
+(%o37)                                I0
+(%i38) desolve(deq2,Q(t))
+                                                     t
+(%o38)          Q(t) = sqrt(C) I0 sqrt(L) sin(---------------)
+                                              sqrt(C) sqrt(L)
+(%i39) define(Qa(t),rhs(%))
+(%i40) atvalue(Q(t),t = 0,Q0)
+(%o40)                                Q0
+(%i41) atvalue('diff(Q(t),t,1),t = 0,0)
+(%o41)                                 0
+(%i42) desolve(deq2,Q(t))
+                                             t
+(%o42)                  Q(t) = Q0 cos(---------------)
+                                      sqrt(C) sqrt(L)
+(%i43) define(Qb(t),rhs(%))
+(%i44) "1 (i)"
+(%i45) linsolve(T/sqrt(C*L) = 2*%pi,T)
+(%o45)                    [T = 2 %pi sqrt(C) sqrt(L)]
+(%i46) "1 (j)"
+(%i47) deq3:0 = Q(t)/C-(-L)*diff(Q(t),t,2)+r*diff(Q(t),t,1)
+                           2
+                          d                d            Q(t)
+(%o47)             0 = L (--- (Q(t))) + r (-- (Q(t))) + ----
+                            2              dt            C
+                          dt
+(%i48) atvalue(Q(t),t = 0,Q0)
+(%o48)                                Q0
+(%i49) atvalue('diff(Q(t),t,1),t = 0,0)
+(%o49)                                 0
+(%i50) desolve(ev(deq3,r:1/10,C:L:1),Q(t))
+                                  sqrt(399) t
+                        10 Q0 sin(-----------)
+                - t/20                20                   sqrt(399) t
+              %e       (---------------------- + 10 Q0 cos(-----------))
+                              sqrt(399)                        20
+(%o50) Q(t) = ----------------------------------------------------------
+                                          10
+(%i51) define(Q(t),rhs(%))
+                                   sqrt(399) t
+                         10 Q0 sin(-----------)
+                 - t/20                20                   sqrt(399) t
+               %e       (---------------------- + 10 Q0 cos(-----------))
+                               sqrt(399)                        20
+(%o51) Q(t) := ----------------------------------------------------------
+                                           10
+(%i52) define(I(t),diff(Q(t),t,1))
+                                sqrt(399) t                     sqrt(399) t
+                         Q0 cos(-----------)   sqrt(399) Q0 sin(-----------)
+                 - t/20             20                              20
+               %e       (------------------- - -----------------------------)
+                                  2                          2
+(%o52) I(t) := --------------------------------------------------------------
+                                             10
+                                         sqrt(399) t
+                               10 Q0 sin(-----------)
+                       - t/20                20                   sqrt(399) t
+                     %e       (---------------------- + 10 Q0 cos(-----------))
+                                     sqrt(399)                        20
+                   - ----------------------------------------------------------
+                                                200
+(%i53) plot2d(ev([Q(t),I(t),exp((-t)/20)],Q0:1),[t,0,100],
+              [legend,"Q(t)","I(t)","exp(-t/20)"],
+              [title,"LC circuit with a small resistance"],[ylabel,"Q(t)"])
+(%o53)         [/tmp/maxout8298.gnuplot_pipes, /tmp/maxplot.wxt]
+(%i54) "2 (a)"
+(%i55) I1:1 ` A
+(%i56) I2:4 ` A
+(%i57) R1:5 ` Ohm
+(%i58) R2:0.6 ` Ohm
+(%i59) declare_units(r,Ohm)
+(%i60) declare_units(E,V)
+(%i61) E2:18 ` V
+(%i62) j1:I = I1+I2
+(%o62)                             I = 5 ` A
+(%i63) I:ev(I,linsolve(j1,I))
+(%o63)                               5 ` A
+(%i64) l1:0 = (-R1)*I1+E2+(-r)*I
+(%i65) l2:0 = (-R1)*I1-E+R2*I2
+(%i66) l3:0 = (-R2)*I2+E+E2+(-r)*I
+(%i67) rE:at(linsolve([l1,l2],[r,E]),linsolve(j1,I))
+(%i68) r:rhs(rE[1]) `` Ohm
+                                   13
+(%o68)                             -- ` Ohm
+                                   5
+(%i69) E:rhs(rE[2]) `` V
+(%o69)                            (- 2.6) ` V
+(%i70) ev(l3,expand)
+(%o70)                  0 = 15.4 ` V + (- 15.4) ` A Ohm
+(%i71) % `` V
+(%o71)                         0 `` V = 0.0 ` V
+(%i72) "2 (b)"
+(%i73) "The power in and out, and its check."
+(%i74) P:E*I2+E2*I
+(%i75) P `` W
+(%o75)                             79.6 ` W
+(%i76) R1*I1^2+R2*I2^2+r*I^2
+(%i77) % `` W
+(%o77)                             79.6 ` W
+(%i78) "3 (a)"
+(%i79) declare_units(f123,cm)
+(%i80) solve(1/f123 = 1/(9 ` cm)+1/(7 ` cm),f123)
+                                       63
+(%o80)                         [f123 = -- ` cm]
+                                       16
+(%i81) f123:rhs(%[1])
+(%i82) ev(f123,bfloat)
+(%o82)                           3.9375b0 ` cm
+(%i83) "3(b) "
+(%i84) declare_units(f12,cm)
+(%i85) solve(1/f12 = 1/(7 ` cm)+1/(5 ` cm),f12)
+                                       35
+(%o85)                          [f12 = -- ` cm]
+                                       12
+(%i86) f12:rhs(%[1])
+(%i87) declare_units(f3,cm)
+(%i88) solve(1/f123 = 1/f12+1/f3,f3)
+                                       45
+(%o88)                        [f3 = (- --) ` cm]
+                                       4
+(%i89) f3:rhs(%[1])
+(%i90) ev(f3,bfloat)
+(%o90)                         (- 1.125b1) ` cm
+(%i91) "3 (c)"
+(%i92) declare_units(f1,cm)
+(%i93) declare_units(f23,cm)
+(%i94) solve(1/f23 = 1/(9 ` cm)+1/(11 ` cm),f23)
+                                       99
+(%o94)                          [f23 = -- ` cm]
+                                       20
+(%i95) f23:rhs(%[1])
+(%i96) solve(1/f123 = 1/f1+1/f23,f1)
+                                      77
+(%o96)                          [f1 = -- ` cm]
+                                      4
+(%i97) f1:rhs(%[1])
+(%i98) ev(f1,bfloat)
+(%o98)                           1.925b1 ` cm
+(%i99) declare_units(f2,cm)
+(%o99)                                cm
+(%i100) solve(1/f12 = 1/f1+1/f2,f2)
+                                      55
+(%o100)                         [f2 = -- ` cm]
+                                      16
+(%i101) f2:rhs(%[1])
+                                    55
+(%o101)                             -- ` cm
+                                    16
+(%i102) ev(f2,bfloat)
+(%o102)                          3.4375b0 ` cm
+(%i103) [f1,f2,f3]
+                         77       55          45
+(%o103)                 [-- ` cm, -- ` cm, (- --) ` cm]
+                         4        16          4
+(%i104) ev(%,numer)
+(%o104)            [19.25 ` cm, 3.4375 ` cm, (- 11.25) ` cm]
+(%i105) "4 Joule heating"
+(%i106) kill(W,Q)
+(%i107) W:ev(R*I^2*t,R:3,I:2,t:660)
+(%o107)                              7920
+(%i108) Q:ev((mw*cw+mc*cc+mh*ch)*(Tf-Ti),mh:0.015,mc:0.05,mw:0.07,cw:4186,
+             cc:ch:910,Tf:45.2,Ti:24.4)
+(%o108)                        7325.136000000002
+(%i109) "So, the dissipated energy is given by Q-W:"
+(%i110) W-Q
+(%o110)                        594.8639999999978
+(%i111) ev(((mw*cw+mc*cc+mh*ch)/I^2)*the_slope,mh:0.015,mc:0.05,mw:0.07,
+           cw:4186,cc:ch:910,I:2,the_slope:0.0321)
+(%o111)                           2.82616425
+(%i112) "5"
+(%i113) load(solve_rec)
+(%i114) "Let us first solve the system of ladders. 
+This system is determined, naturally, the recurrence relation:"
+(%i115) kill(R,r)
+(%o115)                              done
+(%i116) req:1/r[n+1] = 1/r[n]+1/(3*R)
+                                 1      1     1
+(%o116)                        ------ = -- + ---
+                               r        r    3 R
+                                n + 1    n
+(%i117) rsol:solve_rec(req,r[n],r[0] = R)
+                                 3 R (n + 4)
+(%o117)                     r  = ----------- - 3 R
+                             n      n + 3
+(%i118) define(r[n],ev(r[n],rsol,radcan))
+(%i119) "5 (a)"
+(%i120) makelist(r[n],n,0,4)
+                                 3 R  3 R  R  3 R
+(%o120)                      [R, ---, ---, -, ---]
+                                  4    5   2   7
+(%i121) makelist(1/r[n+1]-1/r[n],n,0,4)
+                             1    1    1    1    1
+(%o121)                    [---, ---, ---, ---, ---]
+                            3 R  3 R  3 R  3 R  3 R
+(%i122) "5 (b)"
+(%i123) ev(r[2020],expand)
+                                     3 R
+(%o123)                              ----
+                                     2023
+(%i124) ev(1/(ev(sum(1/(3*R),j,0,2019),simpsum:true)+1/R),radcan)
+                                     3 R
+(%o124)                              ----
+                                     2023
+(%i125) "5 (c)"
+(%i126) limit(r[n],n,inf)
+(%o126)                                0
+(%i127) "5 (d)"
+(%i128) kill(c,C)
+(%i129) ceq:c[n+1] = c[n]+1/(3*C)
+                                              1
+(%o129)                        c      = c  + ---
+                                n + 1    n   3 C
+(%i130) csol:solve_rec(ceq,c[n],c[0] = C)
+                                       n
+(%o130)                          c  = --- + C
+                                  n   3 C
+(%i131) define(c[n],ev(c[n],csol))
+(%i132) limit(c[n],n,inf)
+(%o132)                               inf
+(%i133) "6 Relativistic Velocity Addition"
+(%i134) kill(u,v,u_)
+(%i135) ev(ev(1-u,u:(v+u_)/(1+v*u_),expand),factor)
+                               (u_ - 1) (v - 1)
+(%o135)                        ----------------
+                                   u_ v + 1
+(%i136) kill(v)
+(%i137) req:v[n+1] = (v[n]+1/10)/(1+v[n]/10)
+                                             1
+                                        v  + --
+                                         n   10
+(%o137)                        v      = -------
+                                n + 1   v
+                                         n
+                                        -- + 1
+                                        10
+(%i138) solve_rec(req,v[n],v[0] = 0)
+                                 n + 1    n + 1
+                               11      + 9
+(%o138)                   v  = ---------------- - 10
+                           n         n    n
+                                   11  + 9
+(%i139) define(v[n],ev(v[n],%))
+(%i140) makelist(v[n],n,0,5)
+                           1   20   301   4040   51001
+(%o140)                [0, --, ---, ----, -----, ------]
+                           10  101  1030  10601  110050
+(%i141) ev(%,numer)
+(%o141) [0, 0.1, 0.198019801980198, 0.2922330097087379, 0.3810961230072635, 
+                                                            0.4634348023625625]
+(%i142) ev([v[14],v[15]],numer)
+(%o142)            [0.8863622474247865, 0.9060531194964749]
+(%i143) ev([v[49],v[50]],numer)
+(%o143)            [0.9998926880510695, 0.9999121984579507]
+(%i144) req:v2[n+1] = (v2[n]-1/10)/(1-v2[n]/10)
+                                              1
+                                        v2  - --
+                                          n   10
+(%o144)                       v2      = --------
+                                n + 1       v2
+                                              n
+                                        1 - ---
+                                            10
+(%i145) solve_rec(req,v2[n],v2[0] = 1/2)
+                                  n + 1         n + 1
+                           3 (- 9)      + (- 11)
+(%o145)              v2  = -------------------------- + 10
+                       n              n         n
+                               3 (- 9)  + (- 11)
+(%i146) define(v2[n],ev(v2[n],%))
+(%i147) makelist(v2[n],n,0,5)
+                        1  8   61   428   2521    8048
+(%o147)                [-, --, ---, ----, -----, ------]
+                        2  19  182  1759  17162  169099
+(%i148) ev(%,numer)
+(%o148) [0.5, 0.4210526315789473, 0.3351648351648351, 0.2433200682205799, 
+                                       0.1468943013634774, 0.04759342160509524]
+(%i149) ev([v2[4],v2[5],v2[6]],numer)
+(%o149) [0.1468943013634774, 0.04759342160509524, - 0.05265719198879104]
+(%o150)           /home/rds/Documents/Maxima/NYCCT/Lec/fe.mac

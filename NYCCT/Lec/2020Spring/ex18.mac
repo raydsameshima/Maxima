@@ -6,8 +6,6 @@ load(physical_constants)$
 "ex. 18.1 (section 18.3):"$
 
 k:8.99e+9;
-%k: 1/(4*%pi*%e_0);
-constvalue( %k ), numer;
 
 "eq.(18.5) - eq.(18.7) "$
 ev( Fc:k*q1*q2/r^2, q1:q2:1.6e-19, r:5.3e-11);
@@ -58,51 +56,10 @@ total_num_of_e: 29*mol*avogadro_const;
 "The fraction of electrons that has been removed:"$
 num_of_e / total_num_of_e, bfloat;
 
-"12: "$
-(5 ` N)/(3^2);
-%, numer;
-
-"13: "$
-1/( 1/5)^2;
-"Hence, the separation is decreased by a factor of 1/5."$
-
-"16: "$
-/* 6     2     4
-     5cm   5cm
-*/
-f16: %k * (2 * 10^(-6) ` C) * (6 * 10^(-6) ` C)/( 5 ` cm )^2 /* -> */
-     + 
-     (-1)* %k * (2 * 10^(-6) ` C) * (4 * 10^(-6) ` C)/( 5 ` cm )^2; /* <- */
-constvalue( ev(f16 `` N) ), numer;
-"The direction is away-from 6."$
-
 "21: "$
 Fc: ev( k*q1*q2/r^2, q1:q2:1.6e-19);
 Fg: ev( G*m*M/r^2, G:6.67e-11,m:M:9.11e-31);
 Fc/Fg; /* 4.157546058731729e+42 <- 2.26797871826623e+39 (p-e of a hydrogen) */
-
-"24: "$
-kill(q)$
-eq24: 0.150 = k*(8.00*10^(-6)-q)*q/( 0.500 )^2;
-sol24: solve( eq24, q);
-sol24, numer;
-8.00*10^(-6)-map(rhs,%);
-
-eq24_2: -0.150 = k*(8.00*10^(-6)-q)*q/( 0.500 )^2;
-sol24_2: solve( eq24_2, q);
-sol24_2, numer;
-8.00*10^(-6)-map(rhs,%);
-
-/*
-"? 25: "$
-eq25: 0= 5/r^2 - 3/(0.25-r)^2;
-sol25:solve(eq25,r);
-sol25, numer;
-0.25 - map(rhs, %);
-"Both must be positive, hence the second solution is the answer."$
-sol25[2], numer;
-*/
-
 
 "28: "$
 "Since the charge > 0, the direction still is east."$
