@@ -112,18 +112,4 @@ sol25[2], numer;
 "An electron is negatively charged, the direction of e-field is eastward."$
 4.80E-17 / e; /* 300.0 */
 
-/*
-"44: "$
-kill(q,x);
-Q: 2.00E-9;
-e1(x) := k*(-2*q)/(x-1 )^2;
-e2(x) := k*q     /(x-5 )^2;
-e3(x) := k*3*q   /(x-8 )^2;
-e4(x) := k*(-q)  /(x-14)^2;
 
-e(x) := e1(x) + e2(x) + e3(x) + e4(x);
-ev( Q*e(4), q: 4.00E-2 );
-
-solve(e(x)=0, x); 
-map('e, [-1,0,2,3,4,6,7,9,10,11,12,13]);
-*/
