@@ -1,0 +1,16 @@
+/* 2020 fall online lab. Q/A */
+
+load(physical_constants)$
+
+"2. Coulomb law"$
+
+1/( 9 ` cm )^2/ (1 / (9/sqrt(2) ` cm)^2);
+"Hence, we have"$
+ev( 9/sqrt(2) ` cm, numer );
+
+%k: 1/(4*%pi*%e_0)$
+constvalue( %k `` N*m^2/C^2 );
+
+F: %k* (1.75 ` mC)*(-0.34 ` mC)/( 250 ` m)^2$
+constvalue(F `` N), bfloat;
+
