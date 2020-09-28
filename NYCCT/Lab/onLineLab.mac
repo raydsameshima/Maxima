@@ -8,9 +8,18 @@ load(physical_constants)$
 "Hence, we have"$
 ev( 9/sqrt(2) ` cm, numer );
 
+/* The Coulomb constant */
 %k: 1/(4*%pi*%e_0)$
-constvalue( %k `` N*m^2/C^2 );
+
+ev( constvalue( %k `` N*m^2/C^2 ), bfloat);
 
 F: %k* (1.75 ` mC)*(-0.34 ` mC)/( 250 ` m)^2$
 constvalue(F `` N), bfloat;
 
+"3. Electric Field"$
+
+ev( constvalue( (%k * (-0.2e-3 ` C)/( (0.1 ` m)^2 )) `` N/C ), numer);
+ev( constvalue( (%k * (-0.2e-3 ` C)/( (0.1 ` m) )) `` V ), numer);
+
+"4. Capacitor"$
+ev( 1/( 1/((15 ` pF) + (20 ` pF)) + 1/(10 ` pF)), numer);

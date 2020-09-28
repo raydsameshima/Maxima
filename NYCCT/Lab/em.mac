@@ -1,5 +1,5 @@
 /* e/m ratio experiments */
-load(nycct_prelude . mac);
+load("nycct_prelude.mac");
 load(physical_constants);
 
 declare_units(I,A);

@@ -3,6 +3,9 @@ Lab 3
 Addition of Vectors
 */
 kill(all);
+
+/*
+
 print("
 The list of functions:
   mag_deg2
@@ -49,3 +52,51 @@ print(mag_deg3(120,0, 100,30,120,90));
 print(mag_deg3(100,0, 100,60,120,120));
 print("Q1")$
 print(mag_deg3(100,30, 50,45,150,90));
+
+*/
+
+mag_deg1(x,y) := block(
+  [mag, deg:0],
+  mag: sqrt( x^2 + y^2 ),
+
+  deg: if x=0.0
+          then 90*signum(y) /* +90 or -90 deg.*/
+          else ev(180*atan2(y,x)/%pi, numer),
+  
+  return( ev([mag, deg], numer))
+);
+
+print("2020 fall:");
+print("Exercise 6");
+print( mag_deg1(-2.952, 0.000) );
+print( mag_deg1( 0.000,-3.848) );
+print( mag_deg1( 2.452,-5.000) );
+print( mag_deg1(-6.939, 4.000) );
+
+vec_A: [3.0,1.0]$
+vec_B: [1.0,4.0]$
+vec_C: [-3.0,0.0]$
+vec_D: [0.0,-1.5]$
+
+mag_deg1_(v) := mag_deg1(v[1],v[2]);
+
+print("A: ", mag_deg1_(vec_A));
+print("B: ", mag_deg1_(vec_B));
+print("C: ", mag_deg1_(vec_C));
+print("D: ", mag_deg1_(vec_D));
+
+print("K: ", vec_A + vec_B, "; mag and deg:", mag_deg1_(vec_A + vec_B));
+print("M: ", 3.0*vec_B - 1.5*vec_C + vec_D, "; mag and deg: ", mag_deg1_(3.0*vec_B - 1.5*vec_C + vec_D));
+
+print( vec_A . vec_B );
+print( vec_A . vec_C );
+print( vec_C . vec_D );
+
+print(ev( acos((vec_A . vec_B)/ sqrt( (vec_A.vec_A)*(vec_B.vec_B) )) * 180/%pi, numer ));
+print(ev( acos((vec_A . vec_C)/ sqrt( (vec_A.vec_A)*(vec_C.vec_C) )) * 180/%pi, numer ));
+print(ev( acos((vec_C . vec_D)/ sqrt( (vec_C.vec_C)*(vec_D.vec_D) )) * 180/%pi, numer ));
+
+print("Ftotal: let us take F2 direction as our positive x axis:");
+F_total: [1500,0] + 1000*[cos(20/180*%pi),sin(20/180*%pi)];
+print("Ftotal is: ", mag_deg1_(F_total));
+
