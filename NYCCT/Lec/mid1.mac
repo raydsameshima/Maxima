@@ -1,0 +1,170 @@
+/* mid1.mac */
+/* 2020 Fall OL25[28263] first mid term test */
+
+kill(all)$
+load(physical_constants)$ 
+
+k: 1/(4 * %pi * %e_0)$ 
+ev( constvalue(k), bfloat );
+q1: (-4e-6 ` C)$
+q2: ( 4e-6 ` C)$
+q3: ( 3e-6 ` C)$
+
+"1 Coulomb's law: double point charges"$
+"(a)"$
+declare_units([r13,r23], m)$
+r13:r23: ev( sqrt( r^2 + r^2 ), r:(0.25 ` m) );
+
+"(b)"$
+"North-East, i.e., %pi/4";
+
+"(c)"$
+F1: k*abs(q1*q3)/ r13^2$
+(constvalue(F1) `` N), bfloat;
+
+"(d)"$
+F1x: cos(%pi/4)*F1$
+F1y: sin(%pi/4)*F1$
+F1Components: ev( constvalue([F1x, F1y]), bfloat);
+
+"(e)"$
+F2: k*abs(q2*q3)/ r23^2$
+(constvalue(F2) `` N), bfloat;
+
+F2x: cos(3*%pi/4)*F2$
+F2y: sin(3*%pi/4)*F2$
+F2Components: ev( constvalue([F2x, F2y]), bfloat);
+
+"(f)"$
+F1Components + F2Components;
+% `` N;
+
+"2 Parallel plates, electric gun"$
+"(a)"$
+"sketch"$
+
+"(b)"$
+kill(E)$
+
+Voltage: (24 ` V)$
+distance: (2.54 ` cm)$
+E: Voltage/distance$
+ev(E, bfloat) `` V/m;
+
+"(c) and (d)"$
+%m_e, constvalue;
+eqn: %m_e/2*v^2 = %%e*Voltage;
+
+sol: ev(constvalue(solve(eqn, v)), bfloat) `` m/s$
+vf1: rhs(sol[2]);
+
+"(e)"$
+constvalue(%%e*E/%m_e) `` m/s^2; 
+
+kill(eqn, vf)$
+declare_units(acc, (m/s^2))$
+eqn: ev( %%e*E = %m_e* acc)$
+
+declare_units(vf, m/s)$
+/*
+acc: (vf^2 - 0)/(2*distance)$
+acc `` m/s^2;
+*/
+sol:solve( subst([acc = vf^2/(2*distance)], eqn), vf)$
+vf2: ev(constvalue(rhs(sol[2])), bfloat) `` m/s;
+
+vf1-vf2;
+
+"3 from a Lab: Ohms' law"$
+"(a)"$
+"Yes, it does."$
+
+"(b)"$
+R: (6.41 ` V/A) `` Ohm;
+
+"(c)"$
+L:(1 ` m)$
+A:(5.00e-5 ` m)^2$
+
+rho: R*A/L `` Ohm*m;
+
+"(d)"$
+"silver"$
+abs(1.59-1.6025)/1.59 * 100;
+
+
+/* Take Home Examp */
+
+
+"Take Home Exam 1 Coulomb's law: double point charges"$
+kill(q1,q2,q3)$
+
+q1: ( 2e-6 ` C)$
+q2: ( 8e-6 ` C)$
+q3: (-5e-6 ` C)$
+ 
+kill(r13,r23);
+declare_units([r13,r23], m)$
+r13: sqrt( (0.15 ` m)^2 + ( 0.20 ` m)^2 );
+r23: sqrt( (0.40 ` m)^2 + ( 0.30 ` m)^2 );
+
+theta13: atan(0.20/0.15);
+%/%pi*180, numer;
+
+theta23: atan( 0.30/0.40);
+%/%pi*180, numer;
+
+F1: k*abs(q1*q3)/ r13^2$
+(constvalue(F1) `` N), bfloat;
+
+F1x: cos(theta13)*F1$
+F1y: sin(theta13)*F1$
+F1Components: ev( constvalue([F1x, F1y]), bfloat);
+
+F2: k*abs(q2*q3)/ r23^2$
+(constvalue(F2) `` N), bfloat;
+
+F2x: cos(theta23)*F2$
+F2y: sin(theta23)*F2$
+F2Components: ev( constvalue([F2x, F2y]), bfloat);
+
+FComponents: F1Components + F2Components;
+FComponents `` N;
+apply(lambda([a,b], sqrt(a^2+b^2)), FComponents) `` N; 
+apply(lambda([a,b], atan(b/a) ), FComponents) *180/%pi, numer;
+
+"Take Home Exam 2 Parallel plates, electric gun"$
+
+E: (5000 ` V/m)$
+distance: (1.27 ` cm)$
+
+Voltage: E*distance `` V;
+
+eqn: %m_e/2*v^2 = %%e*Voltage$
+
+sol: ev(constvalue(solve(eqn, v)), bfloat) `` m/s$
+vf1: rhs(sol[2]);
+
+constvalue(%%e*E/%m_e) `` m/s^2; 
+
+declare_units(acc, (m/s^2))$
+eqn: ev( %%e*E = %m_e* acc)$
+
+declare_units(vf, m/s)$
+
+sol:solve( subst([acc = vf^2/(2*distance)], eqn), vf)$
+vf2: ev(constvalue(rhs(sol[2])), bfloat) `` m/s;
+
+vf1-vf2;
+
+"Take Home Exam 3 from a Lab: Ohms' law"$
+R: ev(1/(480 ` A/V), bfloat) `` Ohm;
+
+L:(0.25 ` m)$
+A: %pi*(1 ` mm)^2$
+
+rho: R*A/L `` Ohm*m$
+ev( rho, bfloat ) `` Ohm*m;
+
+"gold"$
+abs(2.44-2.62)/2.44 * 100;
