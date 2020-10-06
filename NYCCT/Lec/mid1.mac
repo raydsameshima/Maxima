@@ -25,7 +25,7 @@ F1: k*abs(q1*q3)/ r13^2$
 "(d)"$
 F1x: cos(%pi/4)*F1$
 F1y: sin(%pi/4)*F1$
-F1Components: ev( constvalue([F1x, F1y]), bfloat);
+F1Components: (ev( constvalue([F1x, F1y]), bfloat) `` N);
 
 "(e)"$
 F2: k*abs(q2*q3)/ r23^2$
@@ -33,11 +33,11 @@ F2: k*abs(q2*q3)/ r23^2$
 
 F2x: cos(3*%pi/4)*F2$
 F2y: sin(3*%pi/4)*F2$
-F2Components: ev( constvalue([F2x, F2y]), bfloat);
+F2Components: (ev( constvalue([F2x, F2y]), bfloat) `` N);
 
 "(f)"$
 F1Components + F2Components;
-% `` N;
+/* % `` N; */
 
 "2 Parallel plates, electric gun"$
 "(a)"$
