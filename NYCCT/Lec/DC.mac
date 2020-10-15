@@ -1,0 +1,119 @@
+/* DC.mac */
+
+"Let us study some DC-circuits with Maxima.
+
+The materials in this note is
+  section 21.6  DC circuits
+  section 23.10 RL circuit
+
+"$
+
+kill(Q,E,C,R,t)$
+"Let us first consider RC-circuit 
+
+  Figure 21.38
+
+which is consist of a single loop with an EMF (E[V]), a resistor (R[Ohm]), and a condenser (C[F]).
+Around this circuit, the Kirchhoff's loop rule becomes the following DE:"$
+deq: 0=E- R*'diff(Q(t),t,1)-Q(t)/C;
+"where we have used the following fact: the current I is defined as the flow of the charge (see eq.(20.1)), i.e., the rate of charge change in time is current."$
+
+"Setting the initial condition, no-charge at t=0, we can solve this DE:"$
+atvalue (Q(t),t=0, 0);
+sol: desolve (deq, Q(t));
+
+"So we obtain the charge as a function of time t:"$
+define(Q(t), rhs(sol));
+
+"Since the current I is defined as the charge-flow-rate (eq.(20.1)), we can define the current as the time derivative of charge:"$
+define(I(t), diff(Q(t), t, 1));
+
+"Finally, we can define the voltage across the condenser.
+Note that the capacitance is defined as the proportional constant Q vs. V (see eq.(19.48)).
+Thus, the behavior of V is essentially the same as Q."$
+define(V(t), expand(Q(t)/C));
+
+"As we can see, the denominator in the exponential, namely (C*R) is called the time constant of RC-circuit (see eq.(21.78)).
+
+The following plot shows the behavior of charge and current in charging phase:
+"$
+
+plot2d( 
+  ev([Q(t),I(t)], E:R:C:1), 
+  [t,0,4], 
+  [legend, "Q(t)", "I(t)"], 
+  [title, "Charging phase of RC-circuit (Fig. 21.38(b))"],
+  [gnuplot_preamble, "set key center right"], 
+  [gnuplot_term, dumb]
+);
+
+kill(R,Q,C)$
+
+"After a long enough time, we can assume that the condenser is fully charged (theoretically speaking, it takes infinite time, though).
+Removing the battery (i.e., the EMF) we close the circuit:"$
+deq2: Q(t)/C + R*'diff(Q(t),t,1) = 0;
+
+"Setting the initial condition, fully-charged at t=0, we can solve this DE:"$
+atvalue (Q(t),t=0, Q0);
+sol2: desolve (deq2, Q(t));
+
+"So this is dis-charging phase, both current and charge are dissipating:"$
+define(Q2(t), rhs(sol2));
+define(I2(t), diff(Q2(t), t, 1));
+
+"In the discharging phase, Q and I are shown in the following plot: "$
+
+plot2d( 
+  ev([Q2(t),I2(t)], Q0:R:C:1), 
+  [t,0,4], 
+  [legend, "Q2(t)", "I2(t)"], 
+  [title, "Dis-charging phase of RC-circuit (Fig.21.39 (b))"],
+  [gnuplot_preamble, "set key top right"], 
+  [gnuplot_term, dumb]
+);
+
+"Let us consider another circuit, RL-circuit.
+
+  section 23.10 RL circuit
+
+The first stage consists of EMF, R and L (Figure 23.44 of 1).
+Around the loop, we can write the Kirchhoff's loop rule as the following DE:
+"$
+kill(V,R,I,L)$
+deq3: V-R*I(t) + (-L*'diff(I(t),t,1))=0;
+atvalue (I(t),t=0,0);
+"where we have used  eq.(23.37) for the induced emf at the inductance L."$
+
+"Solveing the DE, we obtain the current as a function of t:"$
+
+sol3: desolve (deq3, I(t));
+define(I(t), ev(I(t), sol3));
+
+plot2d( 
+  ev( I(t), V:R:L:1 ), 
+  [t,0,4],
+  [legend, "I(t)"], 
+  [title, "Charging phase of RL-circuit (Fig. 23.44 (b))"],
+  [ylabel, "current"],
+  [gnuplot_preamble, "set key center"], 
+  [gnuplot_term, dumb]
+);
+
+"After reaching steady current status (a cirtain time after, theoretically speaking after infinite time!), let's remove the EMF.
+The circuit now becomes the discharging phase when we short the circuit, namely Figure 23.44 of 2.:"$
+kill(I)$
+deq4: -R*I(t) + (-L*'diff(I(t),t,1))=0;
+atvalue (I(t),t=0,I0);
+
+sol4: desolve (deq4, I(t));
+define(I(t), ev(I(t), sol4));
+
+plot2d( 
+  ev( I(t), I0:R:L:1 ), 
+  [t,0,4],
+  [legend, "I(t)"], 
+  [title, "Dis-charging phase of RL-circuit (Fig. 23.44 (c))"],
+  [ylabel, "current"],
+  [gnuplot_preamble, "set key center"], 
+  [gnuplot_term, dumb]
+);

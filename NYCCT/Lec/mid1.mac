@@ -93,15 +93,15 @@ rho: R*A/L `` Ohm*m;
 abs(1.59-1.6025)/1.59 * 100;
 
 
-/* Take Home Examp */
+/* additional materials */
 
 
-"Take Home Exam 1 Coulomb's law: double point charges"$
+"1 Coulomb's law: double point charges"$
 kill(q1,q2,q3)$
 
-q1: ( 2e-6 ` C)$
-q2: ( 8e-6 ` C)$
-q3: (-5e-6 ` C)$
+q1: ( 3e-6 ` C)$
+q2: (12e-6 ` C)$
+q3: (-1.5e-6 ` C)$
  
 kill(r13,r23);
 declare_units([r13,r23], m)$
@@ -130,12 +130,13 @@ F2Components: ev( constvalue([F2x, F2y]), bfloat);
 
 FComponents: F1Components + F2Components;
 FComponents `` N;
-apply(lambda([a,b], sqrt(a^2+b^2)), FComponents) `` N; 
-apply(lambda([a,b], atan(b/a) ), FComponents) *180/%pi, numer;
+box( apply(lambda([a,b], sqrt(a^2+b^2)), FComponents) `` N ); 
+box( ev(apply(lambda([a,b], atan(b/a) ), FComponents) *180/%pi, numer) );
 
-"Take Home Exam 2 Parallel plates, electric gun"$
 
-E: (5000 ` V/m)$
+"2 Parallel plates, electric gun"$
+
+E: (2400 ` V/m)$
 distance: (1.27 ` cm)$
 
 Voltage: E*distance `` V;
@@ -143,7 +144,8 @@ Voltage: E*distance `` V;
 eqn: %m_e/2*v^2 = %%e*Voltage$
 
 sol: ev(constvalue(solve(eqn, v)), bfloat) `` m/s$
-vf1: rhs(sol[2]);
+vf1: rhs(sol[2])$
+box( vf1 );
 
 constvalue(%%e*E/%m_e) `` m/s^2; 
 
@@ -153,18 +155,21 @@ eqn: ev( %%e*E = %m_e* acc)$
 declare_units(vf, m/s)$
 
 sol:solve( subst([acc = vf^2/(2*distance)], eqn), vf)$
-vf2: ev(constvalue(rhs(sol[2])), bfloat) `` m/s;
+vf2: ev(constvalue(rhs(sol[2])), bfloat) `` m/s$
+box( vf2 );
 
 vf1-vf2;
 
-"Take Home Exam 3 from a Lab: Ohms' law"$
-R: ev(1/(480 ` A/V), bfloat) `` Ohm;
+"3 from a Lab: Ohms' law"$
+R: ev(1/(480 ` A/V), bfloat) `` Ohm$
+box( R );
 
-L:(0.25 ` m)$
-A: %pi*(1 ` mm)^2$
+L:(0.30 ` m)$
+A: (0.002 ` m)^2$
 
 rho: R*A/L `` Ohm*m$
-ev( rho, bfloat ) `` Ohm*m;
+rho: ev( rho, bfloat ) `` Ohm*m$
+box( rho );
 
-"gold"$
-abs(2.44-2.62)/2.44 * 100;
+box( print("gold"));
+box( ev(abs(2.44e-8 - qty(rho) )/(2.44e-8) * 100, fpprec:3) );
