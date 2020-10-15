@@ -1,4 +1,5 @@
 /* Kirchhoff.mac */
+kill(all)$
 " 
  For two loop circuit:             
                                     
@@ -16,6 +17,22 @@
     *------------*-------------*    
           I1 ->    -> I3            
 "$                                  
+Junction_rule: 0 = I1-I2-I3 $
+Loop_rule1: 0 = -E1+I2*R2+I1*R1 $
+Loop_rule2: 0 =  E2+I3*R3-I2*R2 $
+Eqs: [Junction_rule, Loop_rule1, Loop_rule2]$
+
+"Kirchhoff's equations are the following:"$
+for j in Eqs do disp( box(j) );
+
+"Let us solve the above three linear equations for three unknown [I1,I2,I3]:"$
+s1: linsolve( [Junction_rule, Loop_rule1, Loop_rule2], [I1,I2,I3] );
+[I1,I2,I3]: map(rhs, s1)$
+
+"So the symbolic solutions are:"$
+for i in s1 do disp( box(i) );
+
+/*
 s1: linsolve
       ([ 0 = I1-I2-I3
        , 0 = -E1+I2*R2+I1*R1
@@ -28,6 +45,7 @@ ev(s1, R1:50, R2:200, R3:500, E1:6, E2:12);
 %, numer;
 ev(s1, R1:4000, R2:700, R3:3500, E1:-6, E2:12, numer);
 ev(s1, R1:4000, R2:700, R3:3500, E1:6, E2:12, numer);
+*/
 
 /*
 for three loop circuit
@@ -61,6 +79,7 @@ s2:solve([ -I1+I2-I5
      ,[I1,I2,I3,I4,I5]);
 */
 
+/*
 "Exercise; no matter which two loops from three, we can solve them."$
 ex_loop1: E - 6*3 -6*4;
 ex_loop2: -6*3 - R*2 + 28;
@@ -68,3 +87,4 @@ ex_loop3: -E + 6*4 -R*2 +28;
 linsolve([ex_loop1, ex_loop2], [E,R]);
 linsolve([ex_loop1, ex_loop3], [E,R]);
 linsolve([ex_loop3, ex_loop2], [E,R]);
+*/
